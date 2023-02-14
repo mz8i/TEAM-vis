@@ -1,0 +1,100 @@
+TDVSID,ScenarioID,CountryID,Year,TechID,VehCatID,NumVeh,VehTypeID,VehTypeNA,MassCatID,MassCatNA,FuelID,FuelNA,EngineID,EngineNA,TransTypeID,TransTypeNA,HybridFlag,HybridNA,SecondHandImportFlag,SecondHandImportNA,VehCatNA
+0,1,9,2012,10,S,441.1794974942412,2,Motorcycle,4,Average moto,1,Gasoline,10,2-Stroke Standard 1,1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Scrapped
+0,1,9,2012,10,T,11580.503410290536,2,Motorcycle,4,Average moto,1,Gasoline,10,2-Stroke Standard 1,1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Total
+0,1,9,2012,20,S,4.6391566454001624e-4,2,Motorcycle,4,Average moto,12,Electricity,10,2-Stroke Standard 1,1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Scrapped
+0,1,9,2012,20,T,0.012177304171672176,2,Motorcycle,4,Average moto,12,Electricity,10,2-Stroke Standard 1,1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Total
+0,1,9,2012,25,N,405.5742492675781,2,Motorcycle,4,Average moto,12,Electricity,11,2-Stroke Standard 2,1,Passenger Transport,0,Not hybrid,0,Not second-hand import,New
+0,1,9,2012,25,S,24.054862533946526,2,Motorcycle,4,Average moto,12,Electricity,11,2-Stroke Standard 2,1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Scrapped
+0,1,9,2012,25,T,631.4151477813721,2,Motorcycle,4,Average moto,12,Electricity,11,2-Stroke Standard 2,1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Total
+0,1,9,2012,30,S,30253.933061457283,2,Motorcycle,4,Average moto,1,Gasoline,11,2-Stroke Standard 2,1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Scrapped
+0,1,9,2012,30,T,794134.30810546875,2,Motorcycle,4,Average moto,1,Gasoline,11,2-Stroke Standard 2,1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Total
+0,1,9,2012,40,N,154185.90625,2,Motorcycle,4,Average moto,1,Gasoline,12,2-Stroke Economic,1,Passenger Transport,0,Not hybrid,0,Not second-hand import,New
+0,1,9,2012,40,S,12518.534349320778,2,Motorcycle,4,Average moto,1,Gasoline,12,2-Stroke Economic,1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Scrapped
+0,1,9,2012,40,T,328598.51953125,2,Motorcycle,4,Average moto,1,Gasoline,12,2-Stroke Economic,1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Total
+0,1,9,2012,70,S,3193.542419007844,3,Car,1,Small,1,Gasoline,1,Conventional (pre-EURO),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Scrapped
+0,1,9,2012,70,T,56285.03704375146,3,Car,1,Small,1,Gasoline,1,Conventional (pre-EURO),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Total
+0,1,9,2012,80,N,458329.96875,3,Car,1,Small,1,Gasoline,14,Euro 5 (2009-14),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,New
+0,1,9,2012,80,S,102465.86131271602,3,Car,1,Small,1,Gasoline,14,Euro 5 (2009-14),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Scrapped
+0,1,9,2012,80,T,1805923.96875,3,Car,1,Small,1,Gasoline,14,Euro 5 (2009-14),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Total
+0,1,9,2012,90,S,1473.7604419250981,3,Car,1,Small,1,Gasoline,3,Euro 1 (1992-96),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Scrapped
+0,1,9,2012,90,T,25974.49796616149,3,Car,1,Small,1,Gasoline,3,Euro 1 (1992-96),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Total
+0,1,9,2012,91,S,1.1986873222878342e-13,3,Car,1,Small,1,Gasoline,14,Euro 5 (2009-14),1,Passenger Transport,2,Plug-in hybrid,0,Not second-hand import,Scrapped
+0,1,9,2012,100,S,53107.15638567089,3,Car,1,Small,1,Gasoline,4,Euro 2 (1996-2001),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Scrapped
+0,1,9,2012,100,T,935994.5390625,3,Car,1,Small,1,Gasoline,4,Euro 2 (1996-2001),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Total
+0,1,9,2012,110,S,119342.85626858161,3,Car,1,Small,1,Gasoline,5,Euro 3 (2001-05),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Scrapped
+0,1,9,2012,110,T,2103374.9375,3,Car,1,Small,1,Gasoline,5,Euro 3 (2001-05),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Total
+0,1,9,2012,120,S,98569.96269761695,3,Car,1,Small,1,Gasoline,6,Euro 4 (2005-09),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Scrapped
+0,1,9,2012,120,T,1737260.15625,3,Car,1,Small,1,Gasoline,6,Euro 4 (2005-09),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Total
+0,1,9,2012,130,S,4129.397137406719,3,Car,2,Medium,1,Gasoline,1,Conventional (pre-EURO),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Scrapped
+0,1,9,2012,130,T,72779.14001202048,3,Car,2,Medium,1,Gasoline,1,Conventional (pre-EURO),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Total
+0,1,9,2012,140,N,694126.4375,3,Car,2,Medium,1,Gasoline,14,Euro 5 (2009-14),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,New
+0,1,9,2012,140,S,152695.20323607203,3,Car,2,Medium,1,Gasoline,14,Euro 5 (2009-14),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Scrapped
+0,1,9,2012,140,T,2691198.0625,3,Car,2,Medium,1,Gasoline,14,Euro 5 (2009-14),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Total
+0,1,9,2012,150,S,1905.6400529302198,3,Car,2,Medium,1,Gasoline,3,Euro 1 (1992-96),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Scrapped
+0,1,9,2012,150,T,33586.220847680706,3,Car,2,Medium,1,Gasoline,3,Euro 1 (1992-96),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Total
+0,1,9,2012,160,S,55761.28942376642,3,Car,2,Medium,1,Gasoline,4,Euro 2 (1996-2001),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Scrapped
+0,1,9,2012,160,T,982772.6796875,3,Car,2,Medium,1,Gasoline,4,Euro 2 (1996-2001),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Total
+0,1,9,2012,161,N,519.7474365234375,3,Car,2,Medium,1,Gasoline,14,Euro 5 (2009-14),1,Passenger Transport,2,Plug-in hybrid,0,Not second-hand import,New
+0,1,9,2012,161,S,37.89777244342584,3,Car,2,Medium,1,Gasoline,14,Euro 5 (2009-14),1,Passenger Transport,2,Plug-in hybrid,0,Not second-hand import,Scrapped
+0,1,9,2012,161,T,667.9346149147386,3,Car,2,Medium,1,Gasoline,14,Euro 5 (2009-14),1,Passenger Transport,2,Plug-in hybrid,0,Not second-hand import,Total
+0,1,9,2012,170,S,190781.7708827825,3,Car,2,Medium,1,Gasoline,5,Euro 3 (2001-05),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Scrapped
+0,1,9,2012,170,T,3362460.125,3,Car,2,Medium,1,Gasoline,5,Euro 3 (2001-05),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Total
+0,1,9,2012,181,S,147463.31992356371,3,Car,2,Medium,1,Gasoline,6,Euro 4 (2005-09),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Scrapped
+0,1,9,2012,181,T,2598988,3,Car,2,Medium,1,Gasoline,6,Euro 4 (2005-09),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Total
+0,1,9,2012,190,S,581.8754808742069,3,Car,3,Large,1,Gasoline,1,Conventional (pre-EURO),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Scrapped
+0,1,9,2012,190,T,10255.34616384721,3,Car,3,Large,1,Gasoline,1,Conventional (pre-EURO),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Total
+0,1,9,2012,191,N,286.9217529296875,3,Car,3,Large,1,Gasoline,14,Euro 5 (2009-14),1,Passenger Transport,2,Plug-in hybrid,0,Not second-hand import,New
+0,1,9,2012,191,S,48.93559444330468,3,Car,3,Large,1,Gasoline,14,Euro 5 (2009-14),1,Passenger Transport,2,Plug-in hybrid,0,Not second-hand import,Scrapped
+0,1,9,2012,191,T,862.4722595214844,3,Car,3,Large,1,Gasoline,14,Euro 5 (2009-14),1,Passenger Transport,2,Plug-in hybrid,0,Not second-hand import,Total
+0,1,9,2012,200,N,274760.15625,3,Car,3,Large,1,Gasoline,14,Euro 5 (2009-14),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,New
+0,1,9,2012,200,S,56190.4635146771,3,Car,3,Large,1,Gasoline,14,Euro 5 (2009-14),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Scrapped
+0,1,9,2012,200,T,990336.71875,3,Car,3,Large,1,Gasoline,14,Euro 5 (2009-14),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Total
+0,1,9,2012,210,S,268.5246940440621,3,Car,3,Large,1,Gasoline,3,Euro 1 (1992-96),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Scrapped
+0,1,9,2012,210,T,4732.651196825997,3,Car,3,Large,1,Gasoline,3,Euro 1 (1992-96),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Total
+0,1,9,2012,220,S,8819.989080287723,3,Car,3,Large,1,Gasoline,4,Euro 2 (1996-2001),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Scrapped
+0,1,9,2012,220,T,155449.13671875,3,Car,3,Large,1,Gasoline,4,Euro 2 (1996-2001),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Total
+0,1,9,2012,230,S,43888.55434315889,3,Car,3,Large,1,Gasoline,5,Euro 3 (2001-05),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Scrapped
+0,1,9,2012,230,T,773519.9921875,3,Car,3,Large,1,Gasoline,5,Euro 3 (2001-05),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Total
+0,1,9,2012,240,S,44861.20228547505,3,Car,3,Large,1,Gasoline,6,Euro 4 (2005-09),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Scrapped
+0,1,9,2012,240,T,790662.5625,3,Car,3,Large,1,Gasoline,6,Euro 4 (2005-09),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Total
+0,1,9,2012,250,S,678.0491211444953,3,Car,2,Medium,2,Diesel,1,Conventional (pre-EURO),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Scrapped
+0,1,9,2012,250,T,11950.371998803033,3,Car,2,Medium,2,Diesel,1,Conventional (pre-EURO),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Total
+0,1,9,2012,260,N,301154.125,3,Car,2,Medium,2,Diesel,14,Euro 5 (2009-14),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,New
+0,1,9,2012,260,S,68663.0938103046,3,Car,2,Medium,2,Diesel,14,Euro 5 (2009-14),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Scrapped
+0,1,9,2012,260,T,1210162.34375,3,Car,2,Medium,2,Diesel,14,Euro 5 (2009-14),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Total
+0,1,9,2012,261,S,42.5806970708622,3,Car,2,Medium,8,"Biodiesel (FT, synthetic)",7,Standard 1,1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Scrapped
+0,1,9,2012,261,T,750.4694779431867,3,Car,2,Medium,8,"Biodiesel (FT, synthetic)",7,Standard 1,1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Total
+0,1,9,2012,265,N,555481.4375,3,Car,1,Small,2,Diesel,14,Euro 5 (2009-14),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,New
+0,1,9,2012,265,S,114313.97886991373,3,Car,1,Small,2,Diesel,14,Euro 5 (2009-14),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Scrapped
+0,1,9,2012,265,T,2014742.78125,3,Car,1,Small,2,Diesel,14,Euro 5 (2009-14),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Total
+0,1,9,2012,270,S,312.907024913056,3,Car,2,Medium,2,Diesel,3,Euro 1 (1992-96),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Scrapped
+0,1,9,2012,270,T,5514.8738227667045,3,Car,2,Medium,2,Diesel,3,Euro 1 (1992-96),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Total
+0,1,9,2012,275,S,6.634460403287818e-15,3,Car,1,Small,12,Electricity,6,Euro 4 (2005-09),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Scrapped
+0,1,9,2012,276,N,31.08612060546875,3,Car,1,Small,12,Electricity,14,Euro 5 (2009-14),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,New
+0,1,9,2012,276,S,2.129492196905966,3,Car,1,Small,12,Electricity,14,Euro 5 (2009-14),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Scrapped
+0,1,9,2012,276,T,37.531534409512915,3,Car,1,Small,12,Electricity,14,Euro 5 (2009-14),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Total
+0,1,9,2012,280,S,16692.03994213132,3,Car,2,Medium,2,Diesel,4,Euro 2 (1996-2001),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Scrapped
+0,1,9,2012,280,T,294191.203125,3,Car,2,Medium,2,Diesel,4,Euro 2 (1996-2001),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Total
+0,1,9,2012,290,S,42173.07653274026,3,Car,2,Medium,2,Diesel,5,Euro 3 (2001-05),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Scrapped
+0,1,9,2012,290,T,743285.3125,3,Car,2,Medium,2,Diesel,5,Euro 3 (2001-05),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Total
+0,1,9,2012,291,S,84.5155689213883,3,Car,2,Medium,8,"Biodiesel (FT, synthetic)",8,Standard 2,1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Scrapped
+0,1,9,2012,291,T,1489.556518554697,3,Car,2,Medium,8,"Biodiesel (FT, synthetic)",8,Standard 2,1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Total
+0,1,9,2012,295,S,69689.1182846251,3,Car,1,Small,2,Diesel,5,Euro 3 (2001-05),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Scrapped
+0,1,9,2012,295,T,1228245.65625,3,Car,1,Small,2,Diesel,5,Euro 3 (2001-05),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Total
+0,1,9,2012,300,S,65308.77716404993,3,Car,2,Medium,2,Diesel,6,Euro 4 (2005-09),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Scrapped
+0,1,9,2012,300,T,1151043.71875,3,Car,2,Medium,2,Diesel,6,Euro 4 (2005-09),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Total
+0,1,9,2012,302,S,90.64757675785675,3,Car,2,Medium,1,Gasoline,6,Euro 4 (2005-09),1,Passenger Transport,1,Hybrid,0,Not second-hand import,Scrapped
+0,1,9,2012,302,T,1597.6309521911317,3,Car,2,Medium,1,Gasoline,6,Euro 4 (2005-09),1,Passenger Transport,1,Hybrid,0,Not second-hand import,Total
+0,1,9,2012,305,S,93565.23295461878,3,Car,1,Small,2,Diesel,6,Euro 4 (2005-09),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Scrapped
+0,1,9,2012,305,T,1649053.59375,3,Car,1,Small,2,Diesel,6,Euro 4 (2005-09),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Total
+0,1,9,2012,310,S,95.51582507294792,3,Car,3,Large,2,Diesel,1,Conventional (pre-EURO),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Scrapped
+0,1,9,2012,310,T,1683.4320785898894,3,Car,3,Large,2,Diesel,1,Conventional (pre-EURO),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Total
+0,1,9,2012,320,N,31157.857421875,3,Car,2,Medium,1,Gasoline,14,Euro 5 (2009-14),1,Passenger Transport,1,Hybrid,0,Not second-hand import,New
+0,1,9,2012,320,S,4428.4879082734215,3,Car,2,Medium,1,Gasoline,14,Euro 5 (2009-14),1,Passenger Transport,1,Hybrid,0,Not second-hand import,Scrapped
+0,1,9,2012,320,T,78050.50732421875,3,Car,2,Medium,1,Gasoline,14,Euro 5 (2009-14),1,Passenger Transport,1,Hybrid,0,Not second-hand import,Total
+0,1,9,2012,330,S,44.078793795666755,3,Car,3,Large,2,Diesel,3,Euro 1 (1992-96),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Scrapped
+0,1,9,2012,330,T,776.8728941461077,3,Car,3,Large,2,Diesel,3,Euro 1 (1992-96),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Total
+0,1,9,2012,340,S,4712.936695658573,3,Car,3,Large,2,Diesel,4,Euro 2 (1996-2001),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Scrapped
+0,1,9,2012,340,T,83063.81494140625,3,Car,3,Large,2,Diesel,4,Euro 2 (1996-2001),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Total
+0,1,9,2012,350,S,16152.348526033686,3,Car,3,Large,2,Diesel,5,Euro 3 (2001-05),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Scrapped
+0,1,9,2012,350,T,284679.3359375,3,Car,3,Large,2,Diesel,5,Euro 3 (2001-05),1,Passenger Transport,0,Not hybrid,0,Not second-hand import,Total
