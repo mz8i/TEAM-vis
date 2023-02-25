@@ -56,7 +56,7 @@ export const ChipSelect: FC<ChipSelectProps> = ({
         icon={<Check fontSize="small" />}
         clickable
         onClick={(e) => onSelected?.(Array.from(values))}
-        disabled={disabled}
+        disabled={disabled || selectedSet.size === values.length}
       />
       <Chip
         variant="outlined"
@@ -65,7 +65,7 @@ export const ChipSelect: FC<ChipSelectProps> = ({
         icon={<Clear fontSize="small" />}
         clickable
         onClick={(e) => onSelected?.([])}
-        disabled={disabled}
+        disabled={disabled || selectedSet.size === 0}
       />
     </Stack>
   );

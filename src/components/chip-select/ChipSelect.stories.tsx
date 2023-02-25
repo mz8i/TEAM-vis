@@ -22,17 +22,17 @@ export const Deselected: Story = {
   },
 };
 
-export const OneSelected: Story = {
-  args: {
-    values: VALUES,
-    selected: ['Aeroplanes'],
-  },
-};
-
 export const SomeSelected: Story = {
   args: {
     values: VALUES,
     selected: ['Aeroplanes', 'Ships'],
+  },
+};
+
+export const AllSelected: Story = {
+  args: {
+    values: VALUES,
+    selected: VALUES,
   },
 };
 
