@@ -1,11 +1,36 @@
-import { Box, CssBaseline, Stack, Toolbar, Typography } from '@mui/material';
+import { Box, Stack, Toolbar, Typography } from '@mui/material';
+import { CheckerReturnType, object } from '@recoiljs/refine';
 import { Outlet } from 'react-router';
 import { Link } from 'react-router-dom';
 
+import { AppRoot } from '../AppRoot';
+import { load } from '../data/load';
+import { allScenariosChecker } from '../data/models/scenario';
+import { ScenarioPanel } from '../logic/scenario/ScenarioPanel';
+import { allScenariosState } from '../logic/scenario/scenario-state';
+import { StateSetter } from '../utils/recoil/StateSetter';
+import { TypedLoaderFunction, useCheckedLoaderData } from '../utils/router';
+
+const rootDataChecker = object({
+  scenarios: allScenariosChecker,
+});
+
+type RootData = CheckerReturnType<typeof rootDataChecker>;
+
+export const rootLoader: TypedLoaderFunction<RootData> = async ({
+  request,
+}) => {
+  return {
+    scenarios: await load('/data/scenarios.json', { request }),
+  };
+};
+
 export const Root = () => {
+  const { scenarios } = useCheckedLoaderData<RootData>(rootDataChecker);
+
   return (
-    <>
-      <CssBaseline />
+    <AppRoot>
+      <StateSetter value={scenarios} state={allScenariosState} />
       <Box display="flex">
         <Box height="100vh" width="400px" bgcolor="whitesmoke">
           <Stack direction="column" height="100%">
@@ -15,7 +40,7 @@ export const Root = () => {
               </Link>
             </Toolbar>
             <Box height={200} border="1px dashed gray">
-              <Typography variant="h4">Scenario Selection</Typography>
+              <ScenarioPanel />
             </Box>
             <Box flexGrow={1} border="1px dashed gray">
               <Typography variant="h4">About</Typography>
@@ -33,6 +58,6 @@ export const Root = () => {
           <Outlet />
         </Box>
       </Box>
-    </>
+    </AppRoot>
   );
 };

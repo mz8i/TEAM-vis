@@ -1,0 +1,14 @@
+[
+  {
+    "id": 0,
+    "slug": "led0",
+    "name": "LED0",
+    "description": "The LED0 scenario's description"
+  },
+  {
+    "id": 1,
+    "slug": "led1",
+    "name": "LED1",
+    "description": "The LED1 scenario's description"
+  }
+]
