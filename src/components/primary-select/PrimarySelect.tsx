@@ -3,8 +3,8 @@ import { Stack } from '@mui/material';
 import produce from 'immer';
 import { useCallback } from 'react';
 
-import { ChipSelect } from './ChipSelect';
-import { ChipToggle } from './ChipToggle';
+import { ChipSelect } from '../chip-select/ChipSelect';
+import { ChipToggle } from '../chip-toggle/ChipToggle';
 
 interface DataSelectState<T> {
   aggregate: boolean;
