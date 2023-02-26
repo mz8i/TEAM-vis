@@ -1,6 +1,8 @@
-import { Checker, CheckerReturnType, assertion } from '@recoiljs/refine';
 import axios from 'axios';
-import { request } from 'http';
+
+const axiosInstance = axios.create({
+  baseURL: import.meta.env.BASE_URL,
+});
 
 interface LoadOptions {
   request?: Request;
@@ -10,7 +12,7 @@ export async function load(
   path: string,
   { request }: LoadOptions
 ): Promise<unknown> {
-  const res = await axios.get(path, {
+  const res = await axiosInstance.get(path, {
     signal: request?.signal,
   });
 

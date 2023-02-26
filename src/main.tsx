@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client';
 
 import './index.css';
 
-import axios from 'axios';
 import {
   Route,
   RouterProvider,
@@ -16,8 +15,6 @@ import About from './routes/about.mdx';
 import { DataTab } from './routes/data-tab';
 import { DataView, dataViewLoader } from './routes/data-view';
 import { Root, rootLoader } from './routes/root';
-
-axios.defaults.baseURL = import.meta.env.BASE_URL;
 
 const router = createHashRouter(
   createRoutesFromElements(
