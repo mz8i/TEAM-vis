@@ -32,7 +32,13 @@ export const DataView = () => {
         <TabContext value={tab}>
           <TabList variant="scrollable">
             {views.map(({ slug, label }) => (
-              <Tab label={label} value={slug} component={Link} to={slug} />
+              <Tab
+                key={slug}
+                label={label}
+                value={slug}
+                component={Link}
+                to={slug}
+              />
             ))}
           </TabList>
         </TabContext>

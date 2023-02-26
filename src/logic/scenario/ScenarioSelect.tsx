@@ -19,7 +19,9 @@ export const ScenarioSelect = () => {
         onChange={(e) => setScenarioSlug(e.target.value)}
       >
         {allScenarios.map((sc) => (
-          <MenuItem value={sc.slug}>{sc.name}</MenuItem>
+          <MenuItem key={sc.slug} value={sc.slug}>
+            {sc.name}
+          </MenuItem>
         ))}
       </Select>
     </FormControl>
