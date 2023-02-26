@@ -5,7 +5,7 @@ import { defineConfig } from 'vite';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [{ enforce: 'pre', ...mdx() }, react()],
-  base: '/TEAM-vis',
+  base: '/TEAM-vis/',
   server: {
     open: true,
   },
