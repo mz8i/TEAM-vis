@@ -6,8 +6,8 @@ import { Link } from 'react-router-dom';
 import { AppRoot } from '../AppRoot';
 import { load } from '../data/load';
 import { allScenariosChecker } from '../data/models/scenario';
-import { ScenarioPanel } from '../logic/scenario/ScenarioPanel';
-import { allScenariosState } from '../logic/scenario/scenario-state';
+import { ScenarioPanel } from '../sections/scenario/ScenarioPanel';
+import { allScenariosState } from '../sections/scenario/scenario-state';
 import { StateSetter } from '../utils/recoil/StateSetter';
 import { TypedLoaderFunction, useCheckedLoaderData } from '../utils/router';
 
