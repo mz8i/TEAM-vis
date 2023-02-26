@@ -1,4 +1,4 @@
-import { CheckerReturnType, object, string } from '@recoiljs/refine';
+import { CheckerReturnType, array, object, string } from '@recoiljs/refine';
 
 export const viewChecker = object({
   slug: string(),
@@ -6,3 +6,5 @@ export const viewChecker = object({
 });
 
 export type View = CheckerReturnType<typeof viewChecker>;
+
+export const allViewsChecker = array(viewChecker);
