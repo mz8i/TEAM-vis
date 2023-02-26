@@ -2,7 +2,7 @@ import { useLayoutEffect } from 'react';
 import { RecoilState, useSetRecoilState } from 'recoil';
 
 interface StateSetterProps<T> {
-  value: T;
+  value: Readonly<T>;
   state: RecoilState<T>;
 }
 export const StateSetter = <T,>({ value, state }: StateSetterProps<T>) => {

@@ -5,11 +5,13 @@ import { Outlet, useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 
 import { load } from '../data/load';
-import { allViewsChecker } from '../data/models/view';
+import { allDataTabsChecker } from '../data/models/data-tab';
+import { allTabsState } from '../sections/data-tab/data-tab-state';
+import { StateSetter } from '../utils/recoil/StateSetter';
 import { TypedLoaderFunction, useCheckedLoaderData } from '../utils/router';
 
 const dataViewDataChecker = object({
-  views: allViewsChecker,
+  dataTabs: allDataTabsChecker,
 });
 
 type DataViewData = CheckerReturnType<typeof dataViewDataChecker>;
@@ -18,20 +20,21 @@ export const dataViewLoader: TypedLoaderFunction<DataViewData> = async ({
   request,
 }) => {
   return {
-    views: await load('/data/views.json', { request }),
+    dataTabs: await load('/data/data-tabs.json', { request }),
   };
 };
 
-export const DataView = () => {
+export const AllTabsRoute = () => {
   const { tab } = useParams() as { tab: string };
-  const { views } = useCheckedLoaderData(dataViewDataChecker);
+  const { dataTabs } = useCheckedLoaderData(dataViewDataChecker);
 
   return (
     <>
+      <StateSetter value={dataTabs} state={allTabsState} />
       <Toolbar>
         <TabContext value={tab}>
           <TabList variant="scrollable">
-            {views.map(({ slug, label }) => (
+            {dataTabs.map(({ slug, label }) => (
               <Tab
                 key={slug}
                 label={label}

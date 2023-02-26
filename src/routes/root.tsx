@@ -25,7 +25,7 @@ export const rootLoader: TypedLoaderFunction<RootData> = async ({
   };
 };
 
-export const Root = () => {
+export const RootRoute = () => {
   const { scenarios } = useCheckedLoaderData<RootData>(rootDataChecker);
 
   return (

@@ -1,0 +1,92 @@
+[
+  {
+    "slug": "vehicle-stock",
+    "label": "Vehicle Stock",
+    "content": {
+      "variables": ["NumVeh_Total", "NumVeh_New", "NumVeh_Scrapped"],
+      "primarySelect": "VehType",
+      "secondarySelect": [
+        "MassCat",
+        "Fuel",
+        "Engine",
+        "TransType",
+        "Hybrid",
+        "SecondHandImport"
+      ]
+    }
+  },
+  {
+    "slug": "vehicle-km",
+    "label": "Vehicle KM",
+    "content": {
+      "variables": ["VehKM"],
+      "primarySelect": "VehType",
+      "secondarySelect": [
+        "MassCat",
+        "Fuel",
+        "Engine",
+        "TransType",
+        "Hybrid",
+        "SecondHandImport"
+      ]
+    }
+  },
+  {
+    "slug": "ghg-emissions",
+    "label": "GHG Emissions",
+    "content": {
+      "variables": ["ET", "ED"],
+      "primarySelect": "VehType",
+      "secondarySelect": [
+        "MassCat",
+        "Fuel",
+        "Engine",
+        "TransType",
+        "Hybrid",
+        "SecondHandImport"
+      ]
+    }
+  },
+  {
+    "slug": "air-pollutants",
+    "label": "Air Pollutants",
+    "content": {
+      "variables": [
+        "CO",
+        "NMVOC",
+        "PM25",
+        "NOX",
+        "SO2",
+        "C6H6",
+        "C2H4",
+        "HCHO",
+        "PM10",
+        "PM>10"
+      ],
+      "primarySelect": "VehType",
+      "secondarySelect": [
+        "MassCat",
+        "Fuel",
+        "Engine",
+        "TransType",
+        "Hybrid",
+        "SecondHandImport"
+      ]
+    }
+  },
+  {
+    "slug": "travel-demand",
+    "label": "Travel Demand",
+    "content": {
+      "variables": ["td"],
+      "primarySelect": null,
+      "secondarySelect": [],
+      "operations": {
+        "modeName": {
+          "aggregate": false,
+          "filter": null
+        }
+      }
+    }
+  }
+]
