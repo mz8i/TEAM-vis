@@ -1,24 +1,28 @@
-import { Check, Clear, Close } from '@mui/icons-material';
+import { Check, Clear } from '@mui/icons-material';
 import { Chip, Stack } from '@mui/material';
-import { FC, MouseEvent, useCallback, useMemo } from 'react';
+import { toString } from 'lodash';
+import { MouseEvent, useCallback, useMemo } from 'react';
 
+import { LabelFn } from '../../types/data';
 import { toggleInArray } from '../utils/toggle-in-array';
 
-export interface ChipSelectProps {
-  values: string[];
-  selected: string[];
-  onSelected?: (newSelected: string[]) => void;
+export interface ChipSelectProps<T> {
+  values: T[];
+  selected: T[];
+  onSelected?: (newSelected: T[]) => void;
   disabled?: boolean;
+  getLabel?: LabelFn<T>;
 }
 
-export const ChipSelect: FC<ChipSelectProps> = ({
+export const ChipSelect = <T,>({
   values,
   selected,
   onSelected,
   disabled = false,
-}) => {
+  getLabel = toString,
+}: ChipSelectProps<T>) => {
   const handleClick = useCallback(
-    (e: MouseEvent<HTMLDivElement>, v: string) => {
+    (e: MouseEvent<HTMLDivElement>, v: T) => {
       onSelected?.(toggleInArray(selected, v));
     },
     [selected]
@@ -30,10 +34,12 @@ export const ChipSelect: FC<ChipSelectProps> = ({
       {values.map((v) => {
         const sel = selectedSet.has(v);
 
+        const label = getLabel(v);
+
         return (
           <Chip
-            key={v}
-            label={v}
+            key={label}
+            label={label}
             variant={sel ? 'filled' : 'outlined'}
             sx={{
               '&.MuiChip-filled': {

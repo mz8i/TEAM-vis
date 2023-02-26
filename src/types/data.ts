@@ -28,3 +28,5 @@ export interface DataDomain<T> {
    */
   allowed: T[];
 }
+
+export type LabelFn<T> = (x: T) => string;

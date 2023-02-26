@@ -1,6 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react';
 
 import { DataDomain } from '../../types/data';
+import { Complex, getComplexLabel, v1, v2 } from '../_storybook/values';
 import { SecondarySelect } from './SecondarySelect';
 
 const meta = {
@@ -10,7 +11,7 @@ const meta = {
 
 export default meta;
 
-type Story = StoryObj<typeof meta>;
+type Story<T = string> = StoryObj<Meta<typeof SecondarySelect<T>>>;
 
 const VALUES = [
   'Diesel',
@@ -44,5 +45,20 @@ export const Disaggregated: Story = {
       aggregate: false,
       filter: [],
     },
+  },
+};
+
+export const ComplexValues: Story<Complex> = {
+  args: {
+    title: 'Complex Variable',
+    domain: {
+      values: [v1, v2],
+      allowed: [v1, v2],
+    },
+    value: {
+      aggregate: false,
+      filter: [v2],
+    },
+    getLabel: getComplexLabel,
   },
 };

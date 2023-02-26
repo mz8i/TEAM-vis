@@ -1,14 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
+import { Complex, getComplexLabel, v1, v2 } from '../_storybook/values';
 import { PrimarySelect } from './PrimarySelect';
 
-const meta = {
+export default {
   title: 'PrimarySelect',
-  component: PrimarySelect,
-} satisfies Meta<typeof PrimarySelect>;
+  component: PrimarySelect<string>,
+} satisfies Meta<typeof PrimarySelect<string>>;
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+type Story<T = string> = StoryObj<Meta<typeof PrimarySelect<T>>>;
 
 export const Aggregated: Story = {
   args: {
@@ -27,5 +27,16 @@ export const Disaggregated: Story = {
       filter: ['Aeroplanes', 'Cars'],
     },
     domain: ['Aeroplanes', 'Cars', 'Ships'],
+  },
+};
+
+export const ComplexValues: Story<Complex> = {
+  args: {
+    value: {
+      aggregate: false,
+      filter: [v1],
+    },
+    domain: [v1, v2],
+    getLabel: getComplexLabel,
   },
 };

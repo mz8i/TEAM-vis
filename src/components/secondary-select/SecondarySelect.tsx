@@ -1,24 +1,27 @@
 import { Stack } from '@mui/material';
-import produce from 'immer';
+import produce, { castDraft } from 'immer';
+import { toString } from 'lodash';
 import { FC, useCallback } from 'react';
 
-import { DataDomain, DataSelectionValue } from '../../types/data';
+import { DataDomain, DataSelectionValue, LabelFn } from '../../types/data';
 import { ChipToggle } from '../chip-toggle/ChipToggle';
 import { FilterList } from './FilterList';
 
 export interface SecondarySelectProps<T = string> {
   title: string;
   value: DataSelectionValue<T>;
-  onValue?: (newVale: DataSelectionValue<T>) => void;
+  onValue?: (newValue: DataSelectionValue<T>) => void;
   domain: DataDomain<T>;
+  getLabel?: LabelFn<T>;
 }
 
-export const SecondarySelect: FC<SecondarySelectProps> = ({
+export const SecondarySelect = <T,>({
   title,
   value,
   onValue,
   domain,
-}) => {
+  getLabel = toString,
+}: SecondarySelectProps<T>) => {
   const disaggregate = !value.aggregate;
   const selected = value.filter;
 
@@ -33,10 +36,10 @@ export const SecondarySelect: FC<SecondarySelectProps> = ({
     [onValue, value]
   );
 
-  const handleSelected = useCallback((selected: string[]) => {
+  const handleSelected = useCallback((selected: T[]) => {
     onValue?.(
       produce(value, (draft) => {
-        draft.filter = selected;
+        draft.filter = castDraft(selected);
       })
     );
   }, []);
@@ -54,6 +57,7 @@ export const SecondarySelect: FC<SecondarySelectProps> = ({
         selected={selected ?? domain.values}
         onSelected={handleSelected}
         disabled={!disaggregate}
+        getLabel={getLabel}
       />
     </Stack>
   );

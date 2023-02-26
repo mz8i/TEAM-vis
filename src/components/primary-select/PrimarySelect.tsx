@@ -1,26 +1,26 @@
 import { Functions, FunctionsRounded } from '@mui/icons-material';
 import { Stack } from '@mui/material';
-import produce from 'immer';
+import produce, { castDraft } from 'immer';
+import { toString } from 'lodash';
 import { useCallback } from 'react';
 
+import { DataSelectionValue, LabelFn } from '../../types/data';
 import { ChipSelect } from '../chip-select/ChipSelect';
 import { ChipToggle } from '../chip-toggle/ChipToggle';
 
-interface DataSelectState<T> {
-  aggregate: boolean;
-  filter: T[] | null;
+export interface PrimarySelectProps<T> {
+  value: DataSelectionValue<T>;
+  onChange: (newVal: DataSelectionValue<T>) => void;
+  domain: T[];
+  getLabel: LabelFn<T>;
 }
 
-export interface PrimarySelectProps<T> {
-  value: DataSelectState<T>;
-  onChange: (newVal: DataSelectState<T>) => void;
-  domain: T[];
-}
-export const PrimarySelect = ({
+export const PrimarySelect = <T,>({
   value,
   onChange,
   domain,
-}: PrimarySelectProps<string>) => {
+  getLabel = toString,
+}: PrimarySelectProps<T>) => {
   const { aggregate, filter: selected } = value;
 
   const handleAggregate = useCallback(
@@ -35,10 +35,10 @@ export const PrimarySelect = ({
   );
 
   const handleSelected = useCallback(
-    (selected: string[]) => {
+    (selected: T[]) => {
       onChange?.(
         produce(value, (draft) => {
-          draft.filter = selected;
+          draft.filter = castDraft(selected);
         })
       );
     },
@@ -52,6 +52,7 @@ export const PrimarySelect = ({
         selected={(aggregate ? domain : selected) ?? []}
         onSelected={handleSelected}
         disabled={aggregate}
+        getLabel={getLabel}
       />
       <ChipToggle
         label="Total"

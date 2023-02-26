@@ -8,9 +8,11 @@ import {
   FormLabel,
   Typography,
 } from '@mui/material';
+import { toString } from 'lodash';
 import { FC, useCallback, useMemo } from 'react';
 import { Flipped, Flipper } from 'react-flip-toolkit';
 
+import { LabelFn } from '../../types/data';
 import { toggleInArray } from '../utils/toggle-in-array';
 
 export interface FilterListProps<T = string> {
@@ -20,16 +22,18 @@ export interface FilterListProps<T = string> {
   selected: T[];
   onSelected: (selected: T[]) => void;
   disabled?: boolean;
+  getLabel?: LabelFn<T>;
 }
 
-export const FilterList: FC<FilterListProps> = ({
+export const FilterList = <T,>({
   title,
   values,
   allowed,
   selected,
   onSelected,
   disabled = false,
-}) => {
+  getLabel = toString,
+}: FilterListProps<T>) => {
   const allowedLookup = useLookup(allowed);
   const selectedLookup = useLookup(selected);
 
@@ -39,46 +43,49 @@ export const FilterList: FC<FilterListProps> = ({
   );
 
   const handleChange = useCallback(
-    (v: string, checked: boolean) => {
+    (v: T, checked: boolean) => {
       onSelected?.(toggleInArray(selected, v));
     },
     [onSelected, selected]
   );
 
   const labelVariant = 'body2';
-  const renderOption = (v: string) => (
-    <Flipped key={v} flipId={v} stagger>
-      <FormControlLabel
-        disabled={disabled || !allowedLookup.has(v)}
-        control={
-          <Checkbox
-            // data
-            checked={selectedLookup.has(v)}
-            onChange={(e, checked) => handleChange(v, checked)}
-            //
+  const renderOption = (v: T) => {
+    const label = getLabel(v);
+    return (
+      <Flipped key={label} flipId={label} stagger>
+        <FormControlLabel
+          disabled={disabled || !allowedLookup.has(v)}
+          control={
+            <Checkbox
+              // data
+              checked={selectedLookup.has(v)}
+              onChange={(e, checked) => handleChange(v, checked)}
+              //
 
-            // style
-            icon={<CheckBoxOutlineBlankSharp />}
-            checkedIcon={<CheckBoxSharp />}
-            size="small"
-            sx={{
-              marginY: 0,
-              height: (theme) => theme.typography[labelVariant].lineHeight,
-            }}
-          />
-        }
-        label={
-          <Typography variant={labelVariant} color="text.secondary">
-            {v}
-          </Typography>
-        }
-        //
+              // style
+              icon={<CheckBoxOutlineBlankSharp />}
+              checkedIcon={<CheckBoxSharp />}
+              size="small"
+              sx={{
+                marginY: 0,
+                height: (theme) => theme.typography[labelVariant].lineHeight,
+              }}
+            />
+          }
+          label={
+            <Typography variant={labelVariant} color="text.secondary">
+              {label}
+            </Typography>
+          }
+          //
 
-        // style
-        sx={{ alignItems: 'flex-start', marginY: '0.2em' }}
-      />
-    </Flipped>
-  );
+          // style
+          sx={{ alignItems: 'flex-start', marginY: '0.2em' }}
+        />
+      </Flipped>
+    );
+  };
 
   return (
     <FormControl
@@ -94,6 +101,7 @@ export const FilterList: FC<FilterListProps> = ({
         bgcolor: '#eaeaea',
         boxSizing: 'border-box',
         width: '100%',
+        maxWidth: '400px',
         height: '200px',
         borderRadius: 2,
         position: 'relative',
