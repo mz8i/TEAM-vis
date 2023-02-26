@@ -1,7 +1,7 @@
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
-import { scenarioSlugState, allScenariosState } from './scenario-state';
+import { allScenariosState, scenarioSlugState } from './scenario-state';
 
 export const ScenarioSelect = () => {
   const allScenarios = useRecoilValue(allScenariosState);
