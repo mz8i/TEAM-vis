@@ -1,13 +1,13 @@
 import { atom, selectorFamily } from 'recoil';
 
-import { DataTab } from '../../data/models/data-tab';
+import { DataTabConfig } from '../../data/models/data-tab';
 
-export const allTabsState = atom<DataTab[]>({
+export const allTabsState = atom<DataTabConfig[]>({
   key: 'allTabs',
   default: new Promise(() => {}),
 });
 
-export const tabBySlugState = selectorFamily<DataTab, string>({
+export const tabBySlugState = selectorFamily<DataTabConfig, string>({
   key: 'tabBySlug',
   get:
     (slug) =>

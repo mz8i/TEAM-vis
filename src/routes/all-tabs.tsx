@@ -1,6 +1,6 @@
 import { TabContext, TabList } from '@mui/lab';
 import { Tab, Toolbar } from '@mui/material';
-import { CheckerReturnType, object } from '@recoiljs/refine';
+import { object } from '@recoiljs/refine';
 import { Outlet, useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 
@@ -8,13 +8,14 @@ import { load } from '../data/load';
 import { allDataTabsChecker } from '../data/models/data-tab';
 import { allTabsState } from '../sections/data-tab/data-tab-state';
 import { StateSetter } from '../utils/recoil/StateSetter';
+import { MutableCheckerReturn } from '../utils/recoil/refine';
 import { TypedLoaderFunction, useCheckedLoaderData } from '../utils/router';
 
 const dataViewDataChecker = object({
   dataTabs: allDataTabsChecker,
 });
 
-type DataViewData = CheckerReturnType<typeof dataViewDataChecker>;
+type DataViewData = MutableCheckerReturn<typeof dataViewDataChecker>;
 
 export const dataViewLoader: TypedLoaderFunction<DataViewData> = async ({
   request,

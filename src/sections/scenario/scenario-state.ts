@@ -2,9 +2,9 @@ import { string } from '@recoiljs/refine';
 import { atom, selector } from 'recoil';
 import { urlSyncEffect } from 'recoil-sync';
 
-import { Scenario } from '../../data/models/scenario';
+import { ScenarioConfig } from '../../data/models/scenario';
 
-export const allScenariosState = atom<ReadonlyArray<Scenario>>({
+export const allScenariosState = atom<ScenarioConfig[]>({
   key: 'allScenarios',
   default: new Promise(() => {}),
 });
@@ -27,7 +27,7 @@ export const scenarioSlugState = atom<string>({
   ],
 });
 
-export const scenarioState = selector<Scenario | undefined>({
+export const scenarioState = selector<ScenarioConfig | undefined>({
   key: 'scenario',
   get: ({ get }) => {
     const slug = get(scenarioSlugState);

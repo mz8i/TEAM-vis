@@ -10,13 +10,20 @@ import {
   string,
 } from '@recoiljs/refine';
 
+import { MutableCheckerReturn } from '../../utils/recoil/refine';
+
 export const dataOperationChecker = object({
   aggregate: bool(),
   filter: nullable(array(mixed())),
 });
 
+export const variableChecker = object({
+  name: string(),
+  parameters: array(string()),
+});
+
 export const dataTabContentChecker = object({
-  variables: array(string()),
+  variable: variableChecker,
   primarySelect: nullable(string()),
   secondarySelect: array(string()),
   operations: optional(dict(dataOperationChecker)),
@@ -28,6 +35,6 @@ export const dataTabChecker = object({
   content: dataTabContentChecker,
 });
 
-export type DataTab = CheckerReturnType<typeof dataTabChecker>;
+export type DataTabConfig = MutableCheckerReturn<typeof dataTabChecker>;
 
 export const allDataTabsChecker = array(dataTabChecker);

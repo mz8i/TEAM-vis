@@ -3,7 +3,10 @@
     "slug": "vehicle-stock",
     "label": "Vehicle Stock",
     "content": {
-      "variables": ["NumVeh_Total", "NumVeh_New", "NumVeh_Scrapped"],
+      "variable": {
+        "name": "NumVeh",
+        "parameters": ["VehCat"]
+      },
       "primarySelect": "VehType",
       "secondarySelect": [
         "MassCat",
@@ -19,7 +22,10 @@
     "slug": "vehicle-km",
     "label": "Vehicle KM",
     "content": {
-      "variables": ["VehKM"],
+      "variable": {
+        "name": "VehKM",
+        "parameters": []
+      },
       "primarySelect": "VehType",
       "secondarySelect": [
         "MassCat",
@@ -35,7 +41,10 @@
     "slug": "ghg-emissions",
     "label": "GHG Emissions",
     "content": {
-      "variables": ["ET", "ED"],
+      "variable": {
+        "name": "GHG",
+        "parameters": ["EType"]
+      },
       "primarySelect": "VehType",
       "secondarySelect": [
         "MassCat",
@@ -51,18 +60,11 @@
     "slug": "air-pollutants",
     "label": "Air Pollutants",
     "content": {
-      "variables": [
-        "CO",
-        "NMVOC",
-        "PM25",
-        "NOX",
-        "SO2",
-        "C6H6",
-        "C2H4",
-        "HCHO",
-        "PM10",
-        "PM>10"
-      ],
+      "variable": {
+        "name": "GHG",
+        "parameters": ["APEmission"]
+      },
+
       "primarySelect": "VehType",
       "secondarySelect": [
         "MassCat",
@@ -78,7 +80,10 @@
     "slug": "travel-demand",
     "label": "Travel Demand",
     "content": {
-      "variables": ["td"],
+      "variable": {
+        "name": "TD",
+        "parameters": []
+      },
       "primarySelect": null,
       "secondarySelect": [],
       "operations": {
