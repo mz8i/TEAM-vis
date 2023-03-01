@@ -1,0 +1,97 @@
+[
+  {
+    "slug": "vehicle-stock",
+    "label": "Vehicle Stock",
+    "content": {
+      "variable": {
+        "name": "NumVeh",
+        "parameters": ["VehCat"]
+      },
+      "primarySelect": "Tech.VehType",
+      "secondarySelect": [
+        "Tech.MassCat",
+        "Tech.Fuel",
+        "Tech.Engine",
+        "Tech.TransType",
+        "Tech.Hybrid",
+        "Tech.SecondHandImport"
+      ]
+    }
+  },
+  {
+    "slug": "vehicle-km",
+    "label": "Vehicle KM",
+    "content": {
+      "variable": {
+        "name": "VehKM",
+        "parameters": []
+      },
+      "primarySelect": "Tech.VehType",
+      "secondarySelect": [
+        "Tech.MassCat",
+        "Tech.Fuel",
+        "Tech.Engine",
+        "Tech.TransType",
+        "Tech.Hybrid",
+        "Tech.SecondHandImport"
+      ]
+    }
+  },
+  {
+    "slug": "ghg-emissions",
+    "label": "GHG Emissions",
+    "content": {
+      "variable": {
+        "name": "GHG",
+        "parameters": ["EType"]
+      },
+      "primarySelect": "Tech.VehType",
+      "secondarySelect": [
+        "Tech.MassCat",
+        "Tech.Fuel",
+        "Tech.Engine",
+        "Tech.TransType",
+        "Tech.Hybrid",
+        "Tech.SecondHandImport"
+      ]
+    }
+  },
+  {
+    "slug": "air-pollutants",
+    "label": "Air Pollutants",
+    "content": {
+      "variable": {
+        "name": "AP",
+        "parameters": ["APEmission"]
+      },
+
+      "primarySelect": "Tech.VehType",
+      "secondarySelect": [
+        "Tech.MassCat",
+        "Tech.Fuel",
+        "Tech.Engine",
+        "Tech.TransType",
+        "Tech.Hybrid",
+        "Tech.SecondHandImport"
+      ]
+    }
+  },
+  {
+    "slug": "travel-demand",
+    "label": "Travel Demand",
+    "content": {
+      "variable": {
+        "name": "TD",
+        "parameters": []
+      },
+      "primarySelect": null,
+      "secondarySelect": [],
+      "operations": {
+        "modeName": {
+          "aggregate": false,
+          "filter": null
+        }
+      }
+    }
+  }
+]

@@ -1,0 +1,17 @@
+{
+  "NumVeh": {
+    "pathSchema": "NumVeh__{VehCat.ID}"
+  },
+  "VehKM": {
+    "pathSchema": "VehKM"
+  },
+  "GHG": {
+    "pathSchema": "GHG__{EType.ID}"
+  },
+  "AP": {
+    "pathSchema": "AP__{APEmission.AB}"
+  },
+  "TD": {
+    "pathSchema": "TD"
+  }
+}
