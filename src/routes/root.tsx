@@ -4,7 +4,7 @@ import { Outlet } from 'react-router';
 import { Link } from 'react-router-dom';
 
 import { AppRoot } from '../AppRoot';
-import { load } from '../data/load';
+import { loadJson } from '../data/load';
 import { allScenariosChecker } from '../data/models/scenario';
 import { ScenarioPanel } from '../sections/scenario/ScenarioPanel';
 import { allScenariosState } from '../sections/scenario/scenario-state';
@@ -21,7 +21,7 @@ export const rootLoader: TypedLoaderFunction<RootData> = async ({
   request,
 }) => {
   return {
-    scenarios: await load('/data/scenarios.json', { request }),
+    scenarios: await loadJson('/data/scenarios.json', { request }),
   };
 };
 

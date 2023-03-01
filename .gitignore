@@ -1,3 +1,6 @@
+# Large data files
+public/data/tables
+
 # Logs
 logs
 *.log

@@ -7,14 +7,14 @@
         "name": "NumVeh",
         "parameters": ["VehCat"]
       },
-      "primarySelect": "VehType",
+      "primarySelect": "Tech.VehType",
       "secondarySelect": [
-        "MassCat",
-        "Fuel",
-        "Engine",
-        "TransType",
-        "Hybrid",
-        "SecondHandImport"
+        "Tech.MassCat",
+        "Tech.Fuel",
+        "Tech.Engine",
+        "Tech.TransType",
+        "Tech.Hybrid",
+        "Tech.SecondHandImport"
       ]
     }
   },
@@ -26,14 +26,14 @@
         "name": "VehKM",
         "parameters": []
       },
-      "primarySelect": "VehType",
+      "primarySelect": "Tech.VehType",
       "secondarySelect": [
-        "MassCat",
-        "Fuel",
-        "Engine",
-        "TransType",
-        "Hybrid",
-        "SecondHandImport"
+        "Tech.MassCat",
+        "Tech.Fuel",
+        "Tech.Engine",
+        "Tech.TransType",
+        "Tech.Hybrid",
+        "Tech.SecondHandImport"
       ]
     }
   },
@@ -45,14 +45,14 @@
         "name": "GHG",
         "parameters": ["EType"]
       },
-      "primarySelect": "VehType",
+      "primarySelect": "Tech.VehType",
       "secondarySelect": [
-        "MassCat",
-        "Fuel",
-        "Engine",
-        "TransType",
-        "Hybrid",
-        "SecondHandImport"
+        "Tech.MassCat",
+        "Tech.Fuel",
+        "Tech.Engine",
+        "Tech.TransType",
+        "Tech.Hybrid",
+        "Tech.SecondHandImport"
       ]
     }
   },
@@ -61,18 +61,18 @@
     "label": "Air Pollutants",
     "content": {
       "variable": {
-        "name": "GHG",
+        "name": "AP",
         "parameters": ["APEmission"]
       },
 
-      "primarySelect": "VehType",
+      "primarySelect": "Tech.VehType",
       "secondarySelect": [
-        "MassCat",
-        "Fuel",
-        "Engine",
-        "TransType",
-        "Hybrid",
-        "SecondHandImport"
+        "Tech.MassCat",
+        "Tech.Fuel",
+        "Tech.Engine",
+        "Tech.TransType",
+        "Tech.Hybrid",
+        "Tech.SecondHandImport"
       ]
     }
   },

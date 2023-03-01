@@ -1,5 +1,6 @@
 import { string } from '@recoiljs/refine';
-import { atom, selector } from 'recoil';
+import { useLayoutEffect } from 'react';
+import { atom, selector, useRecoilState, useRecoilValue } from 'recoil';
 import { urlSyncEffect } from 'recoil-sync';
 
 import { ScenarioConfig } from '../../data/models/scenario';
@@ -27,10 +28,22 @@ export const scenarioSlugState = atom<string>({
   ],
 });
 
-export const scenarioState = selector<ScenarioConfig | undefined>({
+export const scenarioState = selector<ScenarioConfig>({
   key: 'scenario',
   get: ({ get }) => {
     const slug = get(scenarioSlugState);
-    return get(allScenariosState).find((x) => x.slug === slug);
+    return get(allScenariosState).find((x) => x.slug === slug)!;
   },
 });
+
+export function useCheckScenarioSlug() {
+  const [slug, setSlug] = useRecoilState(scenarioSlugState);
+
+  const scenarios = useRecoilValue(allScenariosState);
+
+  useLayoutEffect(() => {
+    if (!scenarios.map((x) => x.slug).includes(slug)) {
+      setSlug(scenarios[0].slug);
+    }
+  }, [scenarios, slug, setSlug]);
+}

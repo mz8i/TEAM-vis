@@ -22,6 +22,8 @@ export const variableChecker = object({
   parameters: array(string()),
 });
 
+export type VariableConfig = MutableCheckerReturn<typeof variableChecker>;
+
 export const dataTabContentChecker = object({
   variable: variableChecker,
   primarySelect: nullable(string()),
