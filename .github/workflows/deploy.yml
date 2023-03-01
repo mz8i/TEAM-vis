@@ -24,6 +24,11 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Download Data
+        env:
+          DATA_FILE_URL: ${{ secrets.DATA_FILE_URL }}
+        run:  wget -qO- $DATA_FILE_URL | tar xvz -C dist/data
+
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@4.1.4
         with:
