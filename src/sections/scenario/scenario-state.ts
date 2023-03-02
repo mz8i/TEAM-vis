@@ -21,6 +21,7 @@ export const scenarioSlugState = atom<string>({
   effects: [
     urlSyncEffect({
       itemKey: 'scenario',
+      storeKey: 'simple-url',
       refine: string(),
       history: 'replace',
       syncDefault: true,

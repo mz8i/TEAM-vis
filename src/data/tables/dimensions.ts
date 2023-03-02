@@ -9,7 +9,10 @@ export const dimensionValueChecker = object({
   NA: string(),
 });
 
-export type DimensionValue = MutableCheckerReturn<typeof dimensionValueChecker>;
+export type InputDimensionValue = MutableCheckerReturn<
+  typeof dimensionValueChecker
+>;
+export type DimensionValue = Required<InputDimensionValue>;
 
 const dimensionValueListChecker = array(dimensionValueChecker);
 
@@ -30,10 +33,10 @@ export async function loadDimensionValues(dimension: string) {
   return store;
 }
 
-function processDimensionValues(values: DimensionValue[]) {
+function processDimensionValues(values: InputDimensionValue[]) {
   return values.map((x) => ({
     ...x,
-    AB: x.AB ?? x.NA,
+    AB: x.AB ?? x.ID, // assume that if there's no AB, it's because the ID is a string
   }));
 }
 

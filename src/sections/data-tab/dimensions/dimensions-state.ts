@@ -11,11 +11,3 @@ export const allValuesByDimensionState = selectorFamily<DomainStore, string>({
     return loadDimensionValues(dimension);
   },
 });
-
-export const defaultValueByDimensionState = selectorFamily({
-  key: 'defaultValueByDimension',
-  get:
-    (dimension: string) =>
-    ({ get }) =>
-      get(allValuesByDimensionState(dimension)).values[0],
-});
