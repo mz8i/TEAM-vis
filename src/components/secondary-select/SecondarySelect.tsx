@@ -36,13 +36,16 @@ export const SecondarySelect = <T,>({
     [onValue, value]
   );
 
-  const handleSelected = useCallback((selected: T[]) => {
-    onValue?.(
-      produce(value, (draft) => {
-        draft.filter = castDraft(selected);
-      })
-    );
-  }, []);
+  const handleSelected = useCallback(
+    (selected: T[]) => {
+      onValue?.(
+        produce(value, (draft) => {
+          draft.filter = castDraft(selected);
+        })
+      );
+    },
+    [onValue, value]
+  );
 
   return (
     <Stack direction="column" spacing={1} width="210px">

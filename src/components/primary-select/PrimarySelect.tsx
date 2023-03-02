@@ -13,6 +13,7 @@ export interface PrimarySelectProps<T> {
   onChange: (newVal: DataSelectionValue<T>) => void;
   domain: T[];
   getLabel: LabelFn<T>;
+  allowAggregate?: boolean;
 }
 
 export const PrimarySelect = <T,>({
@@ -20,6 +21,7 @@ export const PrimarySelect = <T,>({
   onChange,
   domain,
   getLabel = toString,
+  allowAggregate = true,
 }: PrimarySelectProps<T>) => {
   const { aggregate, filter: selected } = value;
 
@@ -54,13 +56,15 @@ export const PrimarySelect = <T,>({
         disabled={aggregate}
         getLabel={getLabel}
       />
-      <ChipToggle
-        label="Total"
-        icon={<FunctionsRounded fontSize="small" />}
-        checked={aggregate}
-        onToggle={handleAggregate}
-        color="secondary"
-      />
+      {allowAggregate && (
+        <ChipToggle
+          label="Total"
+          icon={<FunctionsRounded fontSize="small" />}
+          checked={aggregate}
+          onToggle={handleAggregate}
+          color="secondary"
+        />
+      )}
     </Stack>
   );
 };

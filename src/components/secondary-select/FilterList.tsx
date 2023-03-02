@@ -1,4 +1,8 @@
-import { CheckBoxOutlineBlankSharp, CheckBoxSharp } from '@mui/icons-material';
+import {
+  CheckBoxOutlineBlankSharp,
+  CheckBoxSharp,
+  CropFreeSharp,
+} from '@mui/icons-material';
 import {
   Box,
   Checkbox,
@@ -9,7 +13,7 @@ import {
   Typography,
 } from '@mui/material';
 import { toString } from 'lodash';
-import { FC, useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { Flipped, Flipper } from 'react-flip-toolkit';
 
 import { LabelFn } from '../../types/data';
@@ -59,7 +63,9 @@ export const FilterList = <T,>({
           control={
             <Checkbox
               // data
-              checked={selectedLookup.has(v)}
+              checked={disabled || selectedLookup.has(v)}
+              indeterminate={disabled}
+              indeterminateIcon={<CropFreeSharp />}
               onChange={(e, checked) => handleChange(v, checked)}
               //
 
@@ -118,7 +124,7 @@ export const FilterList = <T,>({
           <FormLabel component="legend">{title}</FormLabel>
         </Box>
       )}
-      <Box flexGrow={1} overflow="scroll">
+      <Box flexGrow={1} sx={{ overflowY: 'scroll' }}>
         <Flipper flipKey={sortedValues.join('-')}>
           <FormGroup>{sortedValues.map(renderOption)}</FormGroup>
         </Flipper>
