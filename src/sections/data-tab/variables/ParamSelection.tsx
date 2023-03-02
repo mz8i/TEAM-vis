@@ -3,7 +3,7 @@ import useId from '@mui/material/utils/useId';
 import { FC } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
-import { allValuesByDimensionState } from '../dimensions/dimensions-state';
+import { domainStoreByDimensionState } from '../dimensions/dimensions-state';
 import { paramValueByDimensionState } from './variable-state';
 
 export interface ParamSelectionProps {
@@ -11,7 +11,7 @@ export interface ParamSelectionProps {
 }
 
 export const ParamSelection: FC<ParamSelectionProps> = ({ dimension }) => {
-  const domain = useRecoilValue(allValuesByDimensionState(dimension));
+  const domain = useRecoilValue(domainStoreByDimensionState(dimension));
   const values = domain.values;
 
   const [selectedValue, setSelectedValue] = useRecoilState(

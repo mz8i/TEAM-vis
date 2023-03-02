@@ -13,7 +13,7 @@ import { urlSyncEffect } from 'recoil-sync';
 import { VariableConfig } from '../../../data/models/data-tab';
 import { DimensionValue } from '../../../data/tables/dimensions';
 import { activeTabState } from '../data-tab-state';
-import { allValuesByDimensionState } from '../dimensions/dimensions-state';
+import { domainStoreByDimensionState } from '../dimensions/dimensions-state';
 
 export const paramsQueryState = atom<Record<string, string>>({
   key: 'paramsQuery',
@@ -23,6 +23,7 @@ export const paramsQueryState = atom<Record<string, string>>({
       itemKey: 'params',
       storeKey: 'json-url',
       refine: dict(string()),
+      history: 'replace',
     }),
   ],
 });
@@ -38,14 +39,14 @@ export const paramValueByDimensionState = atomFamily({
         const queryParams = get(paramsQueryState);
 
         if (dimension in queryParams) {
-          value = get(allValuesByDimensionState(dimension)).get(
+          value = get(domainStoreByDimensionState(dimension)).get(
             queryParams[dimension],
             'AB'
           );
         }
 
         if (value == null) {
-          value = get(allValuesByDimensionState(dimension)).values[0];
+          value = get(domainStoreByDimensionState(dimension)).values[0];
         }
 
         return value;

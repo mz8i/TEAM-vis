@@ -35,25 +35,3 @@ export const activeTabState = selector({
   key: 'activeTab',
   get: ({ get }) => get(tabBySlugState(get(activeTabSlugState))),
 });
-
-export interface FactTableParams {
-  variableConfig: VariableConfig;
-  scenario: ScenarioConfig;
-}
-
-export const factTableState = selectorFamily<any, Readonly<FactTableParams>>({
-  key: 'factTable',
-  get:
-    ({ variableConfig, scenario }) =>
-    ({ get }) => {
-      const dataSource = get(dataSourceByNameState(variableConfig.name));
-      const params = get(paramsByVariableConfigState(variableConfig));
-
-      return loadFactTable(dataSource, scenario, params);
-    },
-});
-
-export const currentDataState = selector({
-  key: 'currentData',
-  get: ({ get }) => {},
-});

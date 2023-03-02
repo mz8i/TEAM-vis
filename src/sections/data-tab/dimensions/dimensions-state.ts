@@ -5,8 +5,8 @@ import {
   loadDimensionValues,
 } from '../../../data/tables/dimensions';
 
-export const allValuesByDimensionState = selectorFamily<DomainStore, string>({
-  key: 'allValuesByDimension',
+export const domainStoreByDimensionState = selectorFamily<DomainStore, string>({
+  key: 'domainStoreByDimension',
   get: (dimension: string) => () => {
     return loadDimensionValues(dimension);
   },

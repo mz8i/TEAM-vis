@@ -24,7 +24,6 @@ export const scenarioSlugState = atom<string>({
       storeKey: 'simple-url',
       refine: string(),
       history: 'replace',
-      syncDefault: true,
     }),
   ],
 });
