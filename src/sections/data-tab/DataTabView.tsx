@@ -6,8 +6,8 @@ import { DataChartSection } from './data-display/DataChartSection';
 import { PrimarySelectSection } from './data-operations/PrimarySelectSection';
 import { SecondarySelectSection } from './data-operations/SecondarySelectSection';
 import {
-  currentPrimaryFilterState,
-  currentSecondaryFiltersState,
+  currentPrimaryDimPathState,
+  currentSecondaryDimPathsState,
 } from './data-operations/data-operations-state';
 import { tabBySlugState } from './data-tab-state';
 import { VariableParametersSection } from './variables/VariableParametersSection';
@@ -19,13 +19,14 @@ export const DataTabView: FC<{ slug: string }> = ({ slug }) => {
   const variableConfig = dataTab.content.variable;
   const variableParams = variableConfig.parameters;
 
-  const primary = useRecoilValue(currentPrimaryFilterState);
-  const secondary = useRecoilValue(currentSecondaryFiltersState);
+  const primary = useRecoilValue(currentPrimaryDimPathState);
+  const secondary = useRecoilValue(currentSecondaryDimPathsState);
+
   return (
     <Box>
       {primary && (
         <Suspense fallback={null}>
-          <PrimarySelectSection dataFilter={primary} />
+          <PrimarySelectSection dimPath={primary} />
         </Suspense>
       )}
 
@@ -41,7 +42,7 @@ export const DataTabView: FC<{ slug: string }> = ({ slug }) => {
       </Suspense>
       {secondary.length > 0 && (
         <Suspense>
-          <SecondarySelectSection dataFilters={secondary} />
+          <SecondarySelectSection dimPaths={secondary} />
         </Suspense>
       )}
     </Box>

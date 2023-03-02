@@ -18,7 +18,9 @@ export const DataChartSection = () => {
     id: i++,
   }));
 
-  const columns: GridColDef[] = Object.keys(table[0]).map((k) => ({
+  const columns = factTable.getColumnNames();
+
+  const colDefs: GridColDef[] = columns.map((k) => ({
     field: k,
     headerName: k,
     width: 150,
@@ -26,7 +28,7 @@ export const DataChartSection = () => {
 
   return (
     <Box height="500px" width="1000px">
-      <DataGrid key={variableConfig.name} columns={columns} rows={table} />
+      <DataGrid key={variableConfig.name} columns={colDefs} rows={table} />
     </Box>
   );
 };

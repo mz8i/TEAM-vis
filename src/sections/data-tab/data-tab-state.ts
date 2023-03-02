@@ -1,10 +1,6 @@
 import { atom, selector, selectorFamily } from 'recoil';
 
-import { DataTabConfig, VariableConfig } from '../../data/models/data-tab';
-import { ScenarioConfig } from '../../data/models/scenario';
-import { loadFactTable } from '../../data/tables/facts';
-import { dataSourceByNameState } from './data-source-state';
-import { paramsByVariableConfigState } from './variables/variable-state';
+import { DataTabConfig } from '../../data/models/data-tab';
 
 export const allTabsState = atom<DataTabConfig[]>({
   key: 'allTabs',

@@ -10,12 +10,12 @@ import {
 } from 'recoil';
 import { urlSyncEffect } from 'recoil-sync';
 
-import { DimensionValue } from '../../../data/tables/dimensions';
+import { LeafDimensionValue } from '../../../data/tables/dimensions';
 import { DataSelectionValue } from '../../../types/data';
 import { activeTabState } from '../data-tab-state';
-import { domainStoreByDimensionState } from '../dimensions/dimensions-state';
+import { leafStoreByDimensionState } from '../dimensions/dimensions-state';
 
-export class DataFilter {
+export class DimensionPath {
   public readonly dimension: string;
   public readonly joinList: string[];
   constructor(public readonly rawExpression: string) {
@@ -26,17 +26,17 @@ export class DataFilter {
   }
 }
 
-export const dataFilterByDimExprState = selectorFamily({
-  key: 'dataFilterByDimExpr',
+export const dimPathByDimExprState = selectorFamily({
+  key: 'dimPathByDimExpr',
   get: (dimExpr: string) => () => {
-    return new DataFilter(dimExpr);
+    return new DimensionPath(dimExpr);
   },
 });
 
-export const currentPrimaryFilterState = selector<
-  DataFilter | null | undefined
+export const currentPrimaryDimPathState = selector<
+  DimensionPath | null | undefined
 >({
-  key: 'currentPrimaryFilter',
+  key: 'currentPrimaryDimPath',
   get: ({ get }) => {
     const {
       content: { primarySelect },
@@ -44,24 +44,24 @@ export const currentPrimaryFilterState = selector<
     if (primarySelect == null) {
       return null;
     } else {
-      return get(dataFilterByDimExprState(primarySelect));
+      return get(dimPathByDimExprState(primarySelect));
     }
   },
 });
 
-export const currentSecondaryFiltersState = selector<DataFilter[]>({
-  key: 'currentSecondaryFilters',
+export const currentSecondaryDimPathsState = selector<DimensionPath[]>({
+  key: 'currentSecondaryDimPaths',
   get: ({ get }) => {
     const {
       content: { secondarySelect },
     } = get(activeTabState);
 
-    return secondarySelect.map((expr) => get(dataFilterByDimExprState(expr)));
+    return secondarySelect.map((expr) => get(dimPathByDimExprState(expr)));
   },
 });
 
 export const dataSelectionByDimExprState = atomFamily<
-  DataSelectionValue<DimensionValue>,
+  DataSelectionValue<LeafDimensionValue>,
   string
 >({
   key: 'dataSelectionByDimExpr',
@@ -70,15 +70,15 @@ export const dataSelectionByDimExprState = atomFamily<
     get:
       (dimExpr) =>
       ({ get }) => {
-        const dimDataFilter = get(dataFilterByDimExprState(dimExpr));
+        const dimPath = get(dimPathByDimExprState(dimExpr));
         const opsQuery = get(opsQueryState);
         if (dimExpr in opsQuery) {
           const dimensionStore = get(
-            domainStoreByDimensionState(dimDataFilter.dimension)
+            leafStoreByDimensionState(dimPath.dimension)
           );
           const queryObj = opsQuery[dimExpr];
 
-          const filterValues: DimensionValue[] | null =
+          const filterValues: LeafDimensionValue[] | null =
             queryObj.filter
               ?.map((x) => dimensionStore.get(x, 'ID')!)
               .filter((x) => x != null) ?? null;
@@ -90,8 +90,8 @@ export const dataSelectionByDimExprState = atomFamily<
 
           return res;
         }
-        const dataFilter = get(currentPrimaryFilterState);
-        if (dimDataFilter.rawExpression === dataFilter?.rawExpression) {
+        const primaryDimPath = get(currentPrimaryDimPathState);
+        if (dimPath.rawExpression === primaryDimPath?.rawExpression) {
           return {
             aggregate: false,
             filter: [],
@@ -109,8 +109,8 @@ export const dataSelectionByDimExprState = atomFamily<
 export const currentOpsParamsState = selector({
   key: 'currentOpsParams',
   get: ({ get }) => {
-    const primary = get(currentPrimaryFilterState);
-    const secondary = get(currentSecondaryFiltersState);
+    const primary = get(currentPrimaryDimPathState);
+    const secondary = get(currentSecondaryDimPathsState);
     const all = [...(primary ? [primary] : []), ...secondary];
 
     return Object.fromEntries(

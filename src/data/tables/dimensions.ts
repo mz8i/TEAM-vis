@@ -1,18 +1,39 @@
-import { array, assertion, object, optional, string } from '@recoiljs/refine';
+import {
+  Checker,
+  array,
+  assertion,
+  constraint,
+  dict,
+  string,
+} from '@recoiljs/refine';
 
 import { MutableCheckerReturn } from '../../utils/recoil/refine';
 import { loadCsv } from '../load';
 
-export const dimensionValueChecker = object({
-  ID: string(),
-  AB: optional(string()),
-  NA: string(),
-});
+export type InputDimensionValue = {
+  ID: string;
+  AB?: string;
+  NA?: string;
+} & Record<string, string>;
 
-export type InputDimensionValue = MutableCheckerReturn<
-  typeof dimensionValueChecker
->;
-export type DimensionValue = Required<InputDimensionValue>;
+export const dimensionValueChecker: Checker<InputDimensionValue> = constraint(
+  dict(string()),
+  (x) => 'ID' in x
+) as unknown as Checker<InputDimensionValue>;
+
+export type LeafDimensionValue = {
+  type: 'leaf';
+  ID: string;
+  AB: string;
+  NA: string;
+};
+
+export type JoinDimensionValue = {
+  type: 'join';
+  ID: string;
+} & { [key: string]: DimensionValue };
+
+export type DimensionValue = LeafDimensionValue | JoinDimensionValue;
 
 const dimensionValueListChecker = array(dimensionValueChecker);
 
@@ -26,24 +47,14 @@ export async function loadDimensionValues(dimension: string) {
     data
   ) as DimensionValueList;
 
-  const processed = processDimensionValues(valueList);
-
-  const store = new DomainStore(processed, dimension);
-
-  return store;
+  return valueList;
 }
 
-function processDimensionValues(values: InputDimensionValue[]) {
-  return values.map((x) => ({
-    ...x,
-    AB: x.AB ?? x.ID, // assume that if there's no AB, it's because the ID is a string
-  }));
-}
-
-export class DomainStore {
+export class DomainStore<T extends DimensionValue = DimensionValue> {
   constructor(
-    public readonly values: DimensionValue[],
-    public readonly name: string
+    public readonly values: T[],
+    public readonly name: string,
+    public readonly type: T['type']
   ) {}
 
   public get(key: string, by: keyof DimensionValue = 'ID') {

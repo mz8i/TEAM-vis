@@ -11,10 +11,10 @@ interface LoadOptions {
   request?: Request;
 }
 
-export async function loadJson(
+export async function loadJson<T = unknown>(
   path: string,
   { request }: LoadOptions
-): Promise<unknown> {
+): Promise<T> {
   const res = await axiosInstance.get(path, {
     signal: request?.signal,
   });

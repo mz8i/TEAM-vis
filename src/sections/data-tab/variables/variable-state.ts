@@ -11,9 +11,9 @@ import {
 import { urlSyncEffect } from 'recoil-sync';
 
 import { VariableConfig } from '../../../data/models/data-tab';
-import { DimensionValue } from '../../../data/tables/dimensions';
+import { LeafDimensionValue } from '../../../data/tables/dimensions';
 import { activeTabState } from '../data-tab-state';
-import { domainStoreByDimensionState } from '../dimensions/dimensions-state';
+import { leafStoreByDimensionState } from '../dimensions/dimensions-state';
 
 export const paramsQueryState = atom<Record<string, string>>({
   key: 'paramsQuery',
@@ -35,18 +35,18 @@ export const paramValueByDimensionState = atomFamily({
     get:
       (dimension: string) =>
       ({ get }) => {
-        let value: DimensionValue | undefined;
+        let value: LeafDimensionValue | undefined;
         const queryParams = get(paramsQueryState);
 
         if (dimension in queryParams) {
-          value = get(domainStoreByDimensionState(dimension)).get(
+          value = get(leafStoreByDimensionState(dimension)).get(
             queryParams[dimension],
             'AB'
           );
         }
 
         if (value == null) {
-          value = get(domainStoreByDimensionState(dimension)).values[0];
+          value = get(leafStoreByDimensionState(dimension)).values[0];
         }
 
         return value;
@@ -67,7 +67,7 @@ export function useSaveViewParamsToUrl() {
 }
 
 export const paramsByVariableConfigState = selectorFamily<
-  Record<string, DimensionValue>,
+  Record<string, LeafDimensionValue>,
   VariableConfig
 >({
   key: 'paramsByVariableConfig',

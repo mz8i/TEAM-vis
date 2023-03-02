@@ -1,5 +1,5 @@
 import {
-  CheckerReturnType,
+  Checker,
   array,
   bool,
   dict,
@@ -10,12 +10,13 @@ import {
   string,
 } from '@recoiljs/refine';
 
+import { DataSelectionValue } from '../../types/data';
 import { MutableCheckerReturn } from '../../utils/recoil/refine';
 
 export const dataOperationChecker = object({
   aggregate: bool(),
   filter: nullable(array(mixed())),
-});
+}) as Checker<DataSelectionValue<any>>;
 
 export const variableChecker = object({
   name: string(),
