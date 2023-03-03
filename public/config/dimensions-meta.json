@@ -49,8 +49,8 @@
     "Name": "Emission",
     "IsLeaf": true
   },
-  "Etype": {
-    "Slug": "Etype",
+  "EType": {
+    "Slug": "EType",
     "Name": "Emission Type",
     "IsLeaf": true
   },

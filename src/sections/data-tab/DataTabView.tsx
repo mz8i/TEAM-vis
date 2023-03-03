@@ -2,7 +2,7 @@ import { Box } from '@mui/material';
 import { FC, Suspense } from 'react';
 import { useRecoilValue } from 'recoil';
 
-import { DataChartSection } from './data-display/DataChartSection';
+import { DataDisplaySection } from './data-display/DataDisplaySection';
 import { PrimarySelectSection } from './data-operations/PrimarySelectSection';
 import { SecondarySelectSection } from './data-operations/SecondarySelectSection';
 import {
@@ -38,7 +38,7 @@ export const DataTabView: FC<{ slug: string }> = ({ slug }) => {
         <SaveOpsParams />
       </Suspense>
       <Suspense fallback={null}>
-        <DataChartSection />
+        <DataDisplaySection />
       </Suspense>
       {secondary.length > 0 && (
         <Suspense>

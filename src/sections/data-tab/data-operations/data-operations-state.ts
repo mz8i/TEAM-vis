@@ -24,6 +24,10 @@ export class DimensionPath {
     this.dimension = dims[dims.length - 1];
     this.joinList = dims;
   }
+
+  public toString() {
+    return this.rawExpression;
+  }
 }
 
 export const dimPathByDimExprState = selectorFamily({

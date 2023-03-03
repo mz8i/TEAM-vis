@@ -1,3 +1,4 @@
+import { IDataFrame } from 'data-forge';
 import { selector, selectorFamily } from 'recoil';
 
 import { VariableConfig } from '../../data/models/data-tab';
@@ -45,6 +46,7 @@ export const factTableState = selectorFamily({
       return factTable
         .transformSeries({
           Value: (value) => (value === '' ? 0 : +value),
+          Year: (value) => +value,
         })
         .generateSeries(
           Object.fromEntries(
@@ -136,7 +138,7 @@ export const currentDataState = selector({
     const groupKeyFn = makeGroupKeyFn(groupBy);
     const groupObjFn = makeGroupObjFn(groupBy);
 
-    return fullTable
+    const groupedTable = fullTable
       .filter((row) => filterFn(row))
       .groupBy((row) => groupKeyFn(row))
       .select((group) => {
@@ -147,10 +149,15 @@ export const currentDataState = selector({
         };
       })
       .inflate();
+
+    return ungroupTable(groupedTable);
   },
 });
 
-function getWithPath(obj: any, path: DimensionPath) {
+function getWithPath(obj: any, path: string | DimensionPath) {
+  if (typeof path === 'string') {
+    return obj[path];
+  }
   let current = obj;
   for (const token of path.joinList) {
     current = current[token];
@@ -169,23 +176,33 @@ function makeFilterFn(filters: [DimensionPath, any[]][]) {
   };
 }
 
-function makeGroupKeyFn(groupPaths: DimensionPath[]) {
+export function makeGroupKeyFn(
+  groupPaths: (string | DimensionPath)[],
+  separator = '@@',
+  objField = 'AB'
+) {
   return (row: any) =>
     groupPaths
       .map((path) => {
         const target = getWithPath(row, path);
         if (typeof target === 'object') {
-          return target.AB;
+          return target[objField];
         } else {
           return target;
         }
       })
-      .join('@@');
+      .join(separator);
 }
 
-function makeGroupObjFn(groupPaths: DimensionPath[]) {
+export function makeGroupObjFn(groupPaths: (string | DimensionPath)[]) {
   return (row: any) =>
     Object.fromEntries(
-      groupPaths.map((path) => [path.rawExpression, getWithPath(row, path)])
+      groupPaths.map((path) => [`${path}`, getWithPath(row, path)])
     );
+}
+
+export function ungroupTable(groupedTable: IDataFrame) {
+  const groupingDf = groupedTable.getSeries('Grouping').inflate();
+
+  return groupingDf.merge(groupedTable.dropSeries(['Grouping', 'GroupKey']));
 }
