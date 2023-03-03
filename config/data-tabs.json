@@ -87,7 +87,7 @@
       "primarySelect": null,
       "secondarySelect": [],
       "operations": {
-        "modeName": {
+        "MSMode": {
           "aggregate": false,
           "filter": null
         }
