@@ -1,28 +1,14 @@
 import { IDataFrame } from 'data-forge';
 import { useMemo } from 'react';
-import {
-  VictoryArea,
-  VictoryAxis,
-  VictoryChart,
-  VictoryCursorContainerProps,
-  VictoryStack,
-  VictoryTooltip,
-  VictoryVoronoiContainerProps,
-  createContainer,
-} from 'victory';
 
 import { makeGroupKeyFn, makeGroupObjFn } from '../data-state';
-
-const VictoryZoomVoronoiContainer = createContainer<
-  VictoryCursorContainerProps,
-  VictoryVoronoiContainerProps
->('cursor', 'voronoi');
+import { RechartsChart } from './charts/RechartsChart';
 
 export const DataChartSection = ({ factTable }: { factTable: IDataFrame }) => {
   const timeChartData = useMemo(() => {
     const groupColumns = factTable
       .getColumnNames()
-      .filter((col) => !['Year', 'Value', 'GroupKey'].includes(col));
+      .filter((col) => !['Year', 'Value'].includes(col));
 
     const groupKeyFn = makeGroupKeyFn(groupColumns);
     const groupLabelFn = makeGroupKeyFn(groupColumns, ' - ', 'NA');
@@ -35,37 +21,13 @@ export const DataChartSection = ({ factTable }: { factTable: IDataFrame }) => {
         const GroupLabel = groupLabelFn(group.first());
         return {
           GroupKey,
+          GroupLabel,
           Grouping: groupObjFn(group.first()),
-          Rows: group
-            .subset(['Year', 'Value'])
-            .generateSeries({ GroupLabel: () => GroupLabel })
-            .toArray(),
+          Rows: group.subset(['Year', 'Value']).toArray(),
         };
-      });
+      })
+      .toArray();
   }, [factTable]);
 
-  return (
-    <VictoryChart
-      containerComponent={
-        <VictoryZoomVoronoiContainer
-          voronoiDimension="x"
-          labels={({ datum }) =>
-            datum ? `${datum.GroupLabel}: ${datum.Value}` : ''
-          }
-          labelComponent={
-            <VictoryTooltip cornerRadius={0} flyoutStyle={{ fill: 'white' }} />
-          }
-          cursorDimension="x"
-        />
-      }
-    >
-      <VictoryStack colorScale="warm">
-        {timeChartData.map(({ GroupKey, Grouping, Rows }) => {
-          return <VictoryArea key={GroupKey} data={Rows} x="Year" y="Value" />;
-        })}
-        <VictoryAxis tickFormat={(x) => `${x}`} />
-        <VictoryAxis dependentAxis />
-      </VictoryStack>
-    </VictoryChart>
-  );
+  return <RechartsChart groups={timeChartData} />;
 };
