@@ -13,6 +13,7 @@ export interface SecondarySelectProps<T = string> {
   onValue?: (newValue: DataSelectionValue<T>) => void;
   domain: DataDomain<T>;
   getLabel?: LabelFn<T>;
+  getKey?: LabelFn<T>;
 }
 
 export const SecondarySelect = <T,>({
@@ -21,6 +22,7 @@ export const SecondarySelect = <T,>({
   onValue,
   domain,
   getLabel = toString,
+  getKey = toString,
 }: SecondarySelectProps<T>) => {
   const disaggregate = !value.aggregate;
   const selected = value.filter;
@@ -62,6 +64,7 @@ export const SecondarySelect = <T,>({
         onSelected={handleSelected}
         disabled={!disaggregate}
         getLabel={getLabel}
+        getKey={getKey}
       />
     </Stack>
   );

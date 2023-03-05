@@ -62,6 +62,7 @@ function SecondarySubsection({ dimPath }: { dimPath: DimensionPath }) {
       value={selected}
       onValue={setSelected}
       getLabel={(x) => x.NA}
+      getKey={(x) => `${x.ID}-${x.NA}`}
     />
   );
 }

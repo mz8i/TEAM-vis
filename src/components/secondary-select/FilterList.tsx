@@ -28,6 +28,7 @@ export interface FilterListProps<T = string> {
   onSelected: (selected: T[]) => void;
   disabled?: boolean;
   getLabel?: LabelFn<T>;
+  getKey?: LabelFn<T>;
 }
 
 export const FilterList = <T,>({
@@ -39,6 +40,7 @@ export const FilterList = <T,>({
   onSelected,
   disabled = false,
   getLabel = toString,
+  getKey = toString,
 }: FilterListProps<T>) => {
   const allowedLookup = useLookup(allowed);
   const selectedLookup = useLookup(selected);
