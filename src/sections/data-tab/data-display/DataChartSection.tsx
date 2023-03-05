@@ -10,6 +10,7 @@ import {
   makeGroupObjFn,
 } from '../data-state';
 import { RechartsChart } from './charts/RechartsChart';
+import { groupStyleMappingState } from './data-style-state';
 
 export const DataChartSection = () => {
   const { value: dataViewParams, loadingNew } = useConcurrentValue(
@@ -41,10 +42,17 @@ export const DataChartSection = () => {
       .toArray();
   }, [factTable]);
 
+  const groupStyleMapping = useRecoilValue(
+    groupStyleMappingState(dataViewParams)
+  );
+
   return (
     <>
       {loadingNew && <Typography>(loading new data...)</Typography>}
-      <RechartsChart groups={timeChartData} />
+      <RechartsChart
+        groups={timeChartData}
+        groupStyleMapping={groupStyleMapping}
+      />
     </>
   );
 };

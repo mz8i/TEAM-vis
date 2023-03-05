@@ -27,6 +27,7 @@ export type LeafDimensionValue = {
   ID: string;
   AB: string;
   NA: string;
+  Color?: string;
 };
 
 export type JoinDimensionValue = {
@@ -58,6 +59,7 @@ export class DomainStore<T extends DimensionValue = DimensionValue> {
     public readonly values: T[],
     public readonly name: string,
     public readonly type: T['type'],
+    public readonly hasColor: boolean,
     indexFields: (keyof T)[] = ['ID', 'AB']
   ) {
     this.valueLookups = {};

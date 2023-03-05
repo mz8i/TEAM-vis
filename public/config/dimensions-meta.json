@@ -7,7 +7,18 @@
   "VehType": {
     "Slug": "VehType",
     "Name": "Vehicle Type",
-    "IsLeaf": true
+    "IsLeaf": true,
+    "Colors": {
+      "WALK": "#fd7f6f",
+      "BIKE": "#7eb0d5",
+      "MOTO": "#b2e061",
+      "CAR": "#bd7ebe",
+      "BUS": "#ffb55a",
+      "TRUCK": "#ffee65",
+      "TRAIN": "#beb9db",
+      "SHIP": "#fdcce5",
+      "PLANE": "#8bd3c7"
+    }
   },
   "MassCat": {
     "Slug": "MassCat",
@@ -62,7 +73,22 @@
   "MSMode": {
     "Slug": "MSMode",
     "Name": "Transport Mode",
-    "IsLeaf": true
+    "IsLeaf": true,
+    "Colors": {
+      "1": "#8dd3c7",
+      "2": "#ffffb3",
+      "3": "#bebada",
+      "4": "#fb8072",
+      "5": "#80b1d3",
+      "6": "#fdb462",
+      "7": "#b3de69",
+      "8": "#fccde5",
+      "9": "#d9d9d9",
+      "10": "#bc80bd",
+      "11": "#ccebc5",
+      "12": "#ffed6f",
+      "": "#cccccc"
+    }
   },
   "TripLen": {
     "Slug": "TripLen",

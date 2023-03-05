@@ -14,6 +14,7 @@ interface DimensionMeta {
   Slug: string;
   Name: string;
   IsLeaf: boolean;
+  Colors?: Record<string, string>;
 }
 export const allDimensionsMetaState = selector({
   key: 'allDimensionsMeta',
@@ -41,7 +42,9 @@ export const domainStoreByDimensionState = selectorFamily<DomainStore, string>({
 
       let processed: DimensionValue[];
       if (metadata.IsLeaf) {
-        processed = rawDimensions.map(processLeafValue);
+        processed = rawDimensions.map((x) =>
+          processLeafValue(x, metadata.Colors)
+        );
       } else {
         const columns = Object.keys(rawDimensions[0]);
 
@@ -55,7 +58,8 @@ export const domainStoreByDimensionState = selectorFamily<DomainStore, string>({
       const store = new DomainStore(
         processed,
         dimension,
-        metadata.IsLeaf ? 'leaf' : 'join'
+        metadata.IsLeaf ? 'leaf' : 'join',
+        typeof metadata.Colors === 'object'
       );
 
       return store;
@@ -132,11 +136,17 @@ function processJoinValue(
   return result;
 }
 
-function processLeafValue(raw: InputDimensionValue): LeafDimensionValue {
+function processLeafValue(
+  raw: InputDimensionValue,
+  colors?: Record<string, string>
+): LeafDimensionValue {
+  const AB = raw.AB ?? raw.ID;
+
   return {
     type: 'leaf' as const,
     ID: raw.ID,
     NA: raw.NA!,
-    AB: raw.AB ?? raw.ID,
+    AB,
+    Color: colors?.[AB],
   };
 }

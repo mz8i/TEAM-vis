@@ -1,7 +1,7 @@
-import { Box, Stack, Toolbar, Typography } from '@mui/material';
+import { Box, Link, Stack, Toolbar, Typography } from '@mui/material';
 import { CheckerReturnType, object } from '@recoiljs/refine';
 import { Outlet } from 'react-router';
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 
 import { AppRoot } from '../AppRoot';
 import { loadJson } from '../data/load';
@@ -35,8 +35,13 @@ export const RootRoute = () => {
         <Box height="100vh" width="400px" bgcolor="whitesmoke">
           <Stack direction="column" height="100%">
             <Toolbar>
-              <Link to="/">
-                <Typography variant="h3">TEAM</Typography>
+              <Link
+                variant="h3"
+                sx={{ textDecoration: 'none' }}
+                component={RouterLink}
+                to="/"
+              >
+                TEAM
               </Link>
             </Toolbar>
             <Box height={200} border="1px dashed gray">
@@ -46,7 +51,9 @@ export const RootRoute = () => {
               <Typography variant="h4">About</Typography>
               <Typography variant="body1">
                 Some text here. <br />
-                <Link to="/about">More about</Link>
+                <Link variant="body1" component={RouterLink} to="/about">
+                  More
+                </Link>
               </Typography>
             </Box>
             <Box height={100} border="1px dashed gray">

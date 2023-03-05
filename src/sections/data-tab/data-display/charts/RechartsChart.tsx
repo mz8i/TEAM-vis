@@ -10,20 +10,10 @@ import {
   YAxis,
 } from 'recharts';
 
+import { DataGroup } from '../../data-state';
 import { CustomTooltip } from './CustomTooltip';
 import { isFullOpacity, isHovered, isSelected } from './chart-utils';
 import { CustomLegend } from './legend/CustomLegend';
-
-interface YearValue {
-  Year: number;
-  Value: number;
-}
-interface DataGroup {
-  GroupKey: string;
-  GroupLabel: string;
-  Grouping: any;
-  Rows: YearValue[];
-}
 
 function processData(groups: DataGroup[]) {
   let minYear = +Infinity;
@@ -59,10 +49,22 @@ function processData(groups: DataGroup[]) {
   return data;
 }
 
-export const RechartsChart = ({ groups }: { groups: DataGroup[] }) => {
+export interface RechartsChartProps {
+  groups: DataGroup[];
+  groupStyleMapping: (g: DataGroup) => any;
+}
+
+export const RechartsChart = ({
+  groups,
+  groupStyleMapping,
+}: RechartsChartProps) => {
   const keys = useMemo(() => groups.map((x) => x.GroupKey), [groups]);
   const data = useMemo(() => processData(groups), [groups]);
 
+  const yearTicks = useMemo(
+    () => data.map((x) => x.Year).filter((x) => x % 10 === 0),
+    [data]
+  );
   const [hoveredKey, setHoveredKey] = useState<string | null>(null);
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
 
@@ -75,8 +77,16 @@ export const RechartsChart = ({ groups }: { groups: DataGroup[] }) => {
   return (
     <ResponsiveContainer width="100%" height="100%">
       <AreaChart data={data}>
-        <XAxis dataKey="Year" />
-        <YAxis width={120} />
+        <XAxis dataKey="Year" axisLine={false} ticks={yearTicks} />
+        <YAxis
+          width={120}
+          axisLine={false}
+          tickFormatter={(x: number) =>
+            x.toLocaleString(undefined, {
+              maximumFractionDigits: 0,
+            })
+          }
+        />
         <CartesianGrid strokeDasharray="2 2" />
         <Tooltip content={<CustomTooltip />} />
         {groups.map((group) => {
@@ -86,8 +96,10 @@ export const RechartsChart = ({ groups }: { groups: DataGroup[] }) => {
 
           const isOpaque = isFullOpacity(hovered, selected);
 
-          const fullOpacity = 0.7;
+          const fullOpacity = 0.9;
           const inactiveOpacity = 0.3;
+
+          const style = groupStyleMapping(group);
 
           return (
             <Area
@@ -99,15 +111,22 @@ export const RechartsChart = ({ groups }: { groups: DataGroup[] }) => {
               strokeOpacity={isOpaque ? fullOpacity : 0.5}
               strokeWidth={isOpaque ? 2 : 0}
               isAnimationActive={false}
+              {...style}
             />
           );
         })}
         <Legend
           wrapperStyle={{
-            width: '200px',
+            width: '250px',
             padding: '1em',
-            maxHeight: '90%', // magic number - 10% matches 30px x axis height
+            minHeight: '90%', // magic number - 10% matches 30px x axis height
+            maxHeight: '90%',
             overflowY: 'auto',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'stretch',
+            justifyContent: 'stretch',
+            border: '1px solid #ddd',
           }}
           align="right"
           verticalAlign="top"

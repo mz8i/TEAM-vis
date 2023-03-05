@@ -33,7 +33,11 @@ export function CustomLegend({
   };
 
   return (
-    <Box onMouseLeave={() => setHoveredKey(null)}>
+    <Box
+      onMouseLeave={() => setHoveredKey(null)}
+      onClick={() => setSelectedKey(null)}
+      flexGrow={1}
+    >
       <List disablePadding>
         {payload?.map((x: any) => {
           const gkey = x.dataKey;
@@ -44,7 +48,10 @@ export function CustomLegend({
               key={x.dataKey}
               onMouseEnter={() => handleLegendEnter(x)}
               onMouseLeave={() => handleLegendLeave(x)}
-              onClick={() => handleLegendClick(x)}
+              onClick={(e) => {
+                handleLegendClick(x);
+                e.stopPropagation();
+              }}
             >
               <LegendItem
                 payload={{

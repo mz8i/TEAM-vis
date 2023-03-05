@@ -8,7 +8,6 @@ import {
 } from '../../data/tables/dimensions';
 import { loadFactTable } from '../../data/tables/facts';
 import { DataSelectionValue } from '../../types/data';
-import { scenarioState } from '../scenario/scenario-state';
 import { dataSelectionByDimPathState } from './data-operations/data-operations-state';
 import {
   DimensionPath,
@@ -22,13 +21,24 @@ import {
   getLinkedDimensionStores,
 } from './dimensions/dimensions-state';
 
-type DataViewIdParam = FactTableParams;
+export type DataViewIdParam = FactTableParams;
 
 export type FactTableParams = {
   variableName: string;
   params: Record<string, LeafDimensionValue>;
   scenario: ScenarioConfig;
 };
+
+export interface YearValue {
+  Year: number;
+  Value: number;
+}
+export interface DataGroup {
+  GroupKey: string;
+  GroupLabel: string;
+  Grouping: any;
+  Rows: YearValue[];
+}
 
 export const factTableState = selectorFamily({
   key: 'factTable',
