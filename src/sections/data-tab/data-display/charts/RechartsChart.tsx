@@ -10,6 +10,7 @@ import {
   YAxis,
 } from 'recharts';
 
+import { CustomTooltip } from './CustomTooltip';
 import { isFullOpacity, isHovered, isSelected } from './chart-utils';
 import { CustomLegend } from './legend/CustomLegend';
 
@@ -77,7 +78,7 @@ export const RechartsChart = ({ groups }: { groups: DataGroup[] }) => {
         <XAxis dataKey="Year" />
         <YAxis width={120} />
         <CartesianGrid strokeDasharray="2 2" />
-        <Tooltip />
+        <Tooltip content={<CustomTooltip />} />
         {groups.map((group) => {
           const gkey = group.GroupKey;
           const hovered = isHovered(gkey, hoveredKey);
@@ -97,6 +98,7 @@ export const RechartsChart = ({ groups }: { groups: DataGroup[] }) => {
               fillOpacity={isOpaque ? fullOpacity : inactiveOpacity}
               strokeOpacity={isOpaque ? fullOpacity : 0.5}
               strokeWidth={isOpaque ? 2 : 0}
+              isAnimationActive={false}
             />
           );
         })}
