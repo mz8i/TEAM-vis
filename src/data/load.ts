@@ -26,11 +26,15 @@ export async function loadCsv(
   path: string,
   options: Partial<ParseRemoteConfig> = {}
 ): Promise<unknown[]> {
+  const res = await axiosInstance.get(path, {
+    responseType: 'text',
+  });
+
   return new Promise((resolve, reject) => {
-    Papa.parse(BASE_URL + path, {
-      download: true,
+    Papa.parse(res.data, {
       header: true,
       skipEmptyLines: true,
+      worker: true,
 
       complete(results) {
         resolve(results.data);
