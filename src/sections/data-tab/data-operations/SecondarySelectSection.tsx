@@ -31,14 +31,14 @@ export const SecondarySelectSection: FC<{
 function SecondarySubsection({ dimPath }: { dimPath: DimensionPath }) {
   const dimension = dimPath.dimension;
   const domainStore = useRecoilValue(leafStoreByDimensionState(dimension));
-  // const currentDataViewId = useRecoilValue(currentDataParamsState);
   const values = domainStore.values;
-  // const allowedLoadable = useRecoilValueLoadable(
-  //   valuesAfterPrimaryFilterByPathState({
-  //     path: dimPath,
-  //     dataViewId: currentDataViewId,
-  //   })
-  // );
+  const currentDataViewId = useRecoilValue(currentDataParamsState);
+  const allowedLoadable = useRecoilValueLoadable(
+    valuesAfterPrimaryFilterByPathState({
+      path: dimPath,
+      dataViewId: currentDataViewId,
+    })
+  );
 
   const [selected, setSelected] = useRecoilState(
     dataSelectionByDimPathState(dimPath)
@@ -46,8 +46,9 @@ function SecondarySubsection({ dimPath }: { dimPath: DimensionPath }) {
 
   const title = useRecoilValue(metadataByDimensionState(dimension)).Name;
 
-  const allowed = values;
-  // allowedLoadable.state === 'hasValue' ? allowedLoadable.contents : values;
+  const allowed =
+    allowedLoadable.state === 'hasValue' ? allowedLoadable.contents : values;
+
   const shown = allowed;
 
   return (

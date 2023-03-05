@@ -6,6 +6,7 @@ import {
   dict,
   string,
 } from '@recoiljs/refine';
+import _ from 'lodash';
 
 import { MutableCheckerReturn } from '../../utils/recoil/refine';
 import { loadCsv } from '../load';
@@ -51,13 +52,25 @@ export async function loadDimensionValues(dimension: string) {
 }
 
 export class DomainStore<T extends DimensionValue = DimensionValue> {
+  private valueLookups: Record<string, Record<string, T>>;
+
   constructor(
     public readonly values: T[],
     public readonly name: string,
-    public readonly type: T['type']
-  ) {}
+    public readonly type: T['type'],
+    indexFields: (keyof T)[] = ['ID', 'AB']
+  ) {
+    this.valueLookups = {};
+    for (const indField of indexFields) {
+      this.valueLookups[indField as string] = _.keyBy(values, indField);
+    }
+  }
 
   public get(key: string, by: keyof DimensionValue = 'ID') {
-    return this.values.find((x) => x[by] === key);
+    if (by in this.valueLookups) {
+      return this.valueLookups[by][key];
+    } else {
+      return this.values.find((x) => x[by] === key);
+    }
   }
 }
