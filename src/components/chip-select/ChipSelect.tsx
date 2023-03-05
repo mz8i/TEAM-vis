@@ -23,7 +23,11 @@ export const ChipSelect = <T,>({
 }: ChipSelectProps<T>) => {
   const handleClick = useCallback(
     (e: MouseEvent<HTMLDivElement>, v: T) => {
-      onSelected?.(toggleInArray(selected, v));
+      if (e.detail == 2) {
+        onSelected?.([v]);
+      } else if (e.detail === 1) {
+        onSelected?.(toggleInArray(selected, v));
+      }
     },
     [selected]
   );
