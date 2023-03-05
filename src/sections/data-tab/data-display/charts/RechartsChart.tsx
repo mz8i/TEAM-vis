@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useLayoutEffect, useMemo, useState } from 'react';
 import {
   Area,
   AreaChart,
@@ -9,6 +9,9 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+
+import { isFullOpacity, isHovered, isSelected } from './chart-utils';
+import { CustomLegend } from './legend/CustomLegend';
 
 interface YearValue {
   Year: number;
@@ -46,7 +49,7 @@ function processData(groups: DataGroup[]) {
     const obj: any = { Year: yr };
 
     for (const key of gKeys) {
-      obj[key] = gLookups[key][yr];
+      obj[key] = gLookups[key][yr] ?? 0;
     }
 
     data.push(obj);
@@ -56,24 +59,68 @@ function processData(groups: DataGroup[]) {
 }
 
 export const RechartsChart = ({ groups }: { groups: DataGroup[] }) => {
+  const keys = useMemo(() => groups.map((x) => x.GroupKey), [groups]);
   const data = useMemo(() => processData(groups), [groups]);
 
+  const [hoveredKey, setHoveredKey] = useState<string | null>(null);
+  const [selectedKey, setSelectedKey] = useState<string | null>(null);
+
+  useLayoutEffect(() => {
+    if (selectedKey && !keys.includes(selectedKey)) {
+      setSelectedKey(null);
+    }
+  }, [selectedKey, keys, setSelectedKey]);
+
   return (
-    <ResponsiveContainer>
-      <AreaChart data={data} stackOffset="expand">
+    <ResponsiveContainer width="100%" height="100%">
+      <AreaChart data={data}>
         <XAxis dataKey="Year" />
-        <YAxis />
-        <CartesianGrid strokeDasharray="3 3" />
+        <YAxis width={120} />
+        <CartesianGrid strokeDasharray="2 2" />
         <Tooltip />
-        {groups.map((group) => (
-          <Area
-            key={group.GroupKey}
-            dataKey={group.GroupKey}
-            stackId="areas"
-            name={group.GroupLabel}
-          />
-        ))}
-        <Legend />
+        {groups.map((group) => {
+          const gkey = group.GroupKey;
+          const hovered = isHovered(gkey, hoveredKey);
+          const selected = isSelected(gkey, selectedKey);
+
+          const isOpaque = isFullOpacity(hovered, selected);
+
+          const fullOpacity = 0.7;
+          const inactiveOpacity = 0.3;
+
+          return (
+            <Area
+              key={group.GroupKey}
+              dataKey={group.GroupKey}
+              stackId="areas"
+              name={group.GroupLabel}
+              fillOpacity={isOpaque ? fullOpacity : inactiveOpacity}
+              strokeOpacity={isOpaque ? fullOpacity : 0.5}
+              strokeWidth={isOpaque ? 2 : 0}
+            />
+          );
+        })}
+        <Legend
+          wrapperStyle={{
+            width: '200px',
+            padding: '1em',
+            maxHeight: '90%', // magic number - 10% matches 30px x axis height
+            overflowY: 'auto',
+          }}
+          align="right"
+          verticalAlign="top"
+          layout="vertical"
+          iconType="rect"
+          content={
+            <CustomLegend
+              hoveredKey={hoveredKey}
+              setHoveredKey={setHoveredKey}
+              selectedKey={selectedKey}
+              setSelectedKey={setSelectedKey}
+              payload={{} as any}
+            />
+          }
+        />
       </AreaChart>
     </ResponsiveContainer>
   );

@@ -41,7 +41,7 @@ export const DataDisplaySection = () => {
           </TabList>
         </Box>
         <TabPanel value="chart">
-          <Box height="400px">
+          <Box height="400px" width="100%">
             <DataChartSection key={variableConfig.name} factTable={factTable} />
           </Box>
         </TabPanel>
