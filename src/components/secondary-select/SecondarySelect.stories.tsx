@@ -24,6 +24,7 @@ const VALUES = [
 const DOMAIN: DataDomain<string> = {
   values: VALUES,
   allowed: VALUES,
+  shown: VALUES,
 };
 
 export const Aggregated: Story = {
@@ -54,6 +55,7 @@ export const ComplexValues: Story<Complex> = {
     domain: {
       values: [v1, v2],
       allowed: [v1, v2],
+      shown: [v1, v2],
     },
     value: {
       aggregate: false,

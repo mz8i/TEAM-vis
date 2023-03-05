@@ -32,12 +32,16 @@ export const dataTabContentChecker = object({
   operations: optional(dict(dataOperationChecker)),
 });
 
+export type TabContentConfig = MutableCheckerReturn<
+  typeof dataTabContentChecker
+>;
+
 export const dataTabChecker = object({
   slug: string(),
   label: string(),
   content: dataTabContentChecker,
 });
 
-export type DataTabConfig = MutableCheckerReturn<typeof dataTabChecker>;
+export type DataTabConfigInput = MutableCheckerReturn<typeof dataTabChecker>;
 
 export const allDataTabsChecker = array(dataTabChecker);

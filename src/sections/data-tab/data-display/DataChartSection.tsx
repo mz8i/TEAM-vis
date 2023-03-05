@@ -1,10 +1,22 @@
-import { IDataFrame } from 'data-forge';
+import { Typography } from '@mui/material';
 import { useMemo } from 'react';
+import { useRecoilValue } from 'recoil';
 
-import { makeGroupKeyFn, makeGroupObjFn } from '../data-state';
+import { useConcurrentValue } from '../../../utils/recoil/use-concurrent-value';
+import {
+  currentDataParamsState,
+  currentDataState,
+  makeGroupKeyFn,
+  makeGroupObjFn,
+} from '../data-state';
 import { RechartsChart } from './charts/RechartsChart';
 
-export const DataChartSection = ({ factTable }: { factTable: IDataFrame }) => {
+export const DataChartSection = () => {
+  const { value: dataViewParams, loadingNew } = useConcurrentValue(
+    currentDataParamsState
+  );
+  const factTable = useRecoilValue(currentDataState(dataViewParams));
+
   const timeChartData = useMemo(() => {
     const groupColumns = factTable
       .getColumnNames()
@@ -29,5 +41,10 @@ export const DataChartSection = ({ factTable }: { factTable: IDataFrame }) => {
       .toArray();
   }, [factTable]);
 
-  return <RechartsChart groups={timeChartData} />;
+  return (
+    <>
+      {loadingNew && <Typography>(loading new data...)</Typography>}
+      <RechartsChart groups={timeChartData} />
+    </>
+  );
 };

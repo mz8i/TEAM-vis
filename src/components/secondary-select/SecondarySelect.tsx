@@ -57,6 +57,7 @@ export const SecondarySelect = <T,>({
       <FilterList
         values={domain.values}
         allowed={domain.allowed}
+        shown={domain.shown}
         selected={selected ?? domain.values}
         onSelected={handleSelected}
         disabled={!disaggregate}

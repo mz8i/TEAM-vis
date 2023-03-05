@@ -1,8 +1,12 @@
 import { Download } from '@mui/icons-material';
-import { IconButton } from '@mui/material';
+import { IconButton, Typography } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { IDataFrame } from 'data-forge';
 import download from 'downloadjs';
+import { useRecoilValue } from 'recoil';
+
+import { useConcurrentValue } from '../../../utils/recoil/use-concurrent-value';
+import { currentDataParamsState, currentDataState } from '../data-state';
 
 function prepareTableForCsv(table: IDataFrame) {
   const firstRow = table.first();
@@ -18,7 +22,12 @@ function prepareTableForCsv(table: IDataFrame) {
   return table.transformSeries(mapping);
 }
 
-export const DataTableSection = ({ factTable }: { factTable: IDataFrame }) => {
+export const DataTableSection = () => {
+  const { value: currentDataParams, loadingNew } = useConcurrentValue(
+    currentDataParamsState
+  );
+  const factTable = useRecoilValue(currentDataState(currentDataParams));
+
   let i = 0;
   const table = factTable.toArray().map((x) => ({
     ...x,
@@ -36,6 +45,7 @@ export const DataTableSection = ({ factTable }: { factTable: IDataFrame }) => {
 
   return (
     <>
+      {loadingNew && <Typography>(loading new data...)</Typography>}
       <IconButton
         onClick={() => {
           const data = prepareTableForCsv(factTable).toCSV();

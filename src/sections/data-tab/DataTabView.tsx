@@ -5,11 +5,7 @@ import { useRecoilValue } from 'recoil';
 import { DataDisplaySection } from './data-display/DataDisplaySection';
 import { PrimarySelectSection } from './data-operations/PrimarySelectSection';
 import { SecondarySelectSection } from './data-operations/SecondarySelectSection';
-import {
-  currentPrimaryDimPathState,
-  currentSecondaryDimPathsState,
-} from './data-operations/data-operations-state';
-import { tabBySlugState } from './data-tab-state';
+import { activeTabContentState, tabBySlugState } from './data-tab-state';
 import { VariableParametersSection } from './variables/VariableParametersSection';
 import { useSaveViewParamsToUrl } from './variables/variable-state';
 
@@ -17,34 +13,24 @@ export const DataTabView: FC<{ slug: string }> = ({ slug }) => {
   const dataTab = useRecoilValue(tabBySlugState(slug));
 
   const variableConfig = dataTab.content.variable;
-  const variableParams = variableConfig.parameters;
+  const varParams = variableConfig.parameters;
 
-  const primary = useRecoilValue(currentPrimaryDimPathState);
-  const secondary = useRecoilValue(currentSecondaryDimPathsState);
+  const { primarySelect: primary, secondarySelect: secondary } = useRecoilValue(
+    activeTabContentState
+  );
 
   return (
     <Box>
-      {primary && (
-        <Suspense fallback={null}>
-          <PrimarySelectSection dimPath={primary} />
-        </Suspense>
-      )}
-
-      {variableParams.length > 0 && (
-        <VariableParametersSection parameters={variableParams} />
+      {primary.length > 0 && <PrimarySelectSection dimPaths={primary} />}
+      {varParams.length > 0 && (
+        <VariableParametersSection parameters={varParams} />
       )}
       <Suspense>
         <SaveVariableParams />
         <SaveOpsParams />
       </Suspense>
-      <Suspense fallback={null}>
-        <DataDisplaySection />
-      </Suspense>
-      {secondary.length > 0 && (
-        <Suspense>
-          <SecondarySelectSection dimPaths={secondary} />
-        </Suspense>
-      )}
+      <DataDisplaySection />
+      {secondary.length > 0 && <SecondarySelectSection dimPaths={secondary} />}
     </Box>
   );
 };

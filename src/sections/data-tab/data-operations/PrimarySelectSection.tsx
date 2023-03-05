@@ -1,23 +1,33 @@
 import { Box } from '@mui/material';
-import { FC } from 'react';
+import { FC, Suspense } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
 import { PrimarySelect } from '../../../components/primary-select/PrimarySelect';
 import { leafStoreByDimensionState } from '../dimensions/dimensions-state';
-import {
-  DimensionPath,
-  dataSelectionByDimExprState,
-} from './data-operations-state';
+import { dataSelectionByDimPathState } from './data-operations-state';
+import { DimensionPath } from './dimension-paths';
 
 export const PrimarySelectSection: FC<{
-  dimPath: DimensionPath;
-}> = ({ dimPath }) => {
+  dimPaths: DimensionPath[];
+}> = ({ dimPaths }) => {
+  return (
+    <Box height={40}>
+      {dimPaths.map((dimPath) => (
+        <Suspense>
+          <PrimarySubsection dimPath={dimPath} />
+        </Suspense>
+      ))}
+    </Box>
+  );
+};
+
+function PrimarySubsection({ dimPath }: { dimPath: DimensionPath }) {
   const dimension = dimPath.dimension;
   const domainStore = useRecoilValue(leafStoreByDimensionState(dimension));
   const values = domainStore.values;
 
   const [selected, setSelected] = useRecoilState(
-    dataSelectionByDimExprState(dimPath.rawExpression)
+    dataSelectionByDimPathState(dimPath)
   );
 
   return (
@@ -31,4 +41,4 @@ export const PrimarySelectSection: FC<{
       />
     </Box>
   );
-};
+}

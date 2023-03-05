@@ -1,4 +1,4 @@
-import { Stack } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import { FC, Suspense } from 'react';
 
 import { VariableConfig } from '../../../data/models/data-tab';
@@ -8,12 +8,14 @@ export const VariableParametersSection: FC<{
   parameters: VariableConfig['parameters'];
 }> = ({ parameters }) => {
   return (
-    <Suspense fallback={null}>
+    <Box height={50}>
       <Stack direction="row">
         {parameters.map((param) => (
-          <ParamSelection key={param} dimension={param} />
+          <Suspense fallback={null}>
+            <ParamSelection key={param} dimension={param} />
+          </Suspense>
         ))}
       </Stack>
-    </Suspense>
+    </Box>
   );
 };

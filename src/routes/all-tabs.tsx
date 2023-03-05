@@ -39,7 +39,10 @@ export const AllTabsRoute = () => {
       <StateSetter value={dataSources} state={allDataSourcesState} />
       <Toolbar>
         <TabContext value={tab}>
-          <TabList variant="scrollable">
+          <TabList
+            variant="scrollable"
+            TabIndicatorProps={{ style: { transition: 'none' } }}
+          >
             {dataTabs.map(({ slug, label }) => (
               <Tab
                 key={slug}

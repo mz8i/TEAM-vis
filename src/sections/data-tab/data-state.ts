@@ -1,37 +1,42 @@
 import { IDataFrame } from 'data-forge';
-import { selector, selectorFamily } from 'recoil';
+import { atom, selector, selectorFamily } from 'recoil';
 
-import { VariableConfig } from '../../data/models/data-tab';
 import { ScenarioConfig } from '../../data/models/scenario';
+import {
+  DimensionValue,
+  LeafDimensionValue,
+} from '../../data/tables/dimensions';
 import { loadFactTable } from '../../data/tables/facts';
+import { DataSelectionValue } from '../../types/data';
 import { scenarioState } from '../scenario/scenario-state';
+import { dataSelectionByDimPathState } from './data-operations/data-operations-state';
 import {
   DimensionPath,
-  currentPrimaryDimPathState,
-  currentSecondaryDimPathsState,
-  dataSelectionByDimExprState,
-} from './data-operations/data-operations-state';
+  getWithPath,
+  makeDimPath,
+} from './data-operations/dimension-paths';
 import { dataSourceByNameState } from './data-source-state';
-import { activeTabState } from './data-tab-state';
+import { activeTabContentState } from './data-tab-state';
 import {
   allDimensionsMetaState,
   getLinkedDimensionStores,
 } from './dimensions/dimensions-state';
-import { paramsByVariableConfigState } from './variables/variable-state';
 
-export interface FactTableParams {
-  variableConfig: VariableConfig;
+type DataViewIdParam = FactTableParams;
+
+export type FactTableParams = {
+  variableName: string;
+  params: Record<string, LeafDimensionValue>;
   scenario: ScenarioConfig;
-}
+};
 
 export const factTableState = selectorFamily({
   key: 'factTable',
   dangerouslyAllowMutability: true,
   get:
-    ({ variableConfig, scenario }: Readonly<FactTableParams>) =>
+    ({ variableName, params, scenario }: Readonly<FactTableParams>) =>
     async ({ get }) => {
-      const dataSource = get(dataSourceByNameState(variableConfig.name));
-      const params = get(paramsByVariableConfigState(variableConfig));
+      const dataSource = get(dataSourceByNameState(variableName));
 
       const factTable = await loadFactTable(dataSource, scenario, params);
 
@@ -74,100 +79,237 @@ export const currentChartOpsState = selector({
   },
 });
 
-function isNonNullable<TValue>(
-  value: TValue | undefined | null
-): value is TValue {
-  return value !== null && value !== undefined;
+export const currentDataParamsState = atom<FactTableParams>({
+  key: 'currentDataParamsState',
+  default: new Promise(() => {}),
+});
+
+export const rootTableState = selectorFamily({
+  key: 'rootTable',
+  dangerouslyAllowMutability: true,
+  get:
+    (dataViewId: DataViewIdParam) =>
+    ({ get }) => {
+      return get(factTableState(dataViewId));
+    },
+});
+
+interface DataOp {
+  path: DimensionPath;
+  ops: DataSelectionValue<DimensionValue>;
+}
+interface DataFilterOp {
+  path: DimensionPath;
+  values: any[];
 }
 
-export const currentDataState = selector({
-  key: 'currentData',
-  dangerouslyAllowMutability: true,
-  get: ({ get }) => {
-    const scenario = get(scenarioState);
-    const {
-      content: { variable: variableConfig, operations: viewOps = {} },
-    } = get(activeTabState);
+type DataGroupOp = DimensionPath;
 
-    const fullTable = get(
-      factTableState({
-        scenario,
-        variableConfig,
-      })
-    );
+export const primaryOpsState = selectorFamily({
+  key: 'primaryOps',
+  get:
+    (dataViewId: DataViewIdParam) =>
+    ({ get }) => {
+      const currentChartOps = get(currentChartOpsState);
+      const { operations: viewOps = {}, primarySelect: primaryOps } = get(
+        activeTabContentState
+      );
 
-    const currentChartOps = get(currentChartOpsState);
-
-    const primaryOp = get(currentPrimaryDimPathState);
-    const secondaryOps = get(currentSecondaryDimPathsState);
-
-    const allOps = [
-      ...Object.entries(currentChartOps),
-      ...Object.entries(viewOps),
-      ...(primaryOp
-        ? [
-            [
-              primaryOp,
-              get(dataSelectionByDimExprState(primaryOp.rawExpression)),
-            ] as const,
-          ]
-        : []),
-      ...secondaryOps.map(
-        (dimPath) =>
-          [
-            dimPath,
-            get(dataSelectionByDimExprState(dimPath.rawExpression)),
-          ] as const
-      ),
-    ]
-      .filter(isNonNullable)
-      .map(([path, ops]) => ({
-        path: path instanceof DimensionPath ? path : new DimensionPath(path),
+      const ops = [
+        ...Object.entries(currentChartOps),
+        ...Object.entries(viewOps),
+        ...primaryOps.map(
+          (dimPath) =>
+            [dimPath, get(dataSelectionByDimPathState(dimPath))] as const
+        ),
+      ].map(([path, ops]) => ({
+        path: path instanceof DimensionPath ? path : makeDimPath(path),
         ops,
       }));
 
-    const filters: [DimensionPath, any[]][] = allOps
-      .filter((x) => x.ops.filter != null)
-      .map((x) => [x.path, x.ops.filter!]);
-
-    const groupBy: DimensionPath[] = allOps
-      .filter((x) => x.ops.aggregate === false)
-      .map((x) => x.path);
-
-    const filterFn = makeFilterFn(filters);
-    const groupKeyFn = makeGroupKeyFn(groupBy);
-    const groupObjFn = makeGroupObjFn(groupBy);
-
-    const groupedTable = fullTable
-      .filter((row) => filterFn(row))
-      .groupBy((row) => groupKeyFn(row))
-      .select((group) => {
-        return {
-          GroupKey: groupKeyFn(group.first()),
-          Grouping: groupObjFn(group.first()),
-          Value: group.deflate((row) => row.Value).sum(),
-        };
-      })
-      .inflate();
-
-    return ungroupTable(groupedTable);
-  },
+      return ops;
+    },
 });
 
-function getWithPath(obj: any, path: string | DimensionPath) {
-  if (typeof path === 'string') {
-    return obj[path];
-  }
-  let current = obj;
-  for (const token of path.joinList) {
-    current = current[token];
-  }
-  return current;
+export const primaryFilteredTableState = selectorFamily({
+  key: 'primaryFilteredTable',
+  dangerouslyAllowMutability: true,
+  get:
+    (dataViewId: DataViewIdParam) =>
+    ({ get }) => {
+      const rootTable = get(rootTableState(dataViewId));
+
+      const ops = get(primaryOpsState(dataViewId));
+
+      const filters = getFiltersFromOps(ops);
+
+      return filterTable(rootTable, filters);
+    },
+});
+
+export const valuesAfterPrimaryFilterByPathState = selectorFamily({
+  key: 'valuesAfterPrimaryFilterByPath',
+  get:
+    ({
+      path,
+      dataViewId,
+    }: {
+      path: DimensionPath;
+      dataViewId: DataViewIdParam;
+    }) =>
+    ({ get }) => {
+      return get(primaryFilteredTableState(dataViewId))
+        .deflate((row) => getWithPath(row, path))
+        .distinct()
+        .toArray();
+    },
+});
+
+export const secondaryOpsState = selectorFamily({
+  key: 'secondaryOps',
+  get:
+    (dataViewId: DataViewIdParam) =>
+    ({ get }) => {
+      const { secondarySelect } = get(activeTabContentState);
+
+      const ops = secondarySelect.map((dimPath) => ({
+        path: dimPath,
+        ops: get(dataSelectionByDimPathState(dimPath)),
+      }));
+
+      return ops;
+    },
+});
+
+export const secondaryFilteredTableState = selectorFamily({
+  key: 'secondaryFilteredTable',
+  dangerouslyAllowMutability: true,
+  get:
+    (dataViewId: DataViewIdParam) =>
+    ({ get }) => {
+      const ops = get(secondaryOpsState(dataViewId));
+      const table = get(primaryFilteredTableState(dataViewId));
+
+      const filters = getFiltersFromOps(ops);
+
+      return filterTable(table, filters);
+    },
+});
+
+export const allOpsState = selectorFamily({
+  key: 'allOps',
+  get:
+    (dataViewId: DataViewIdParam) =>
+    ({ get }) => {
+      return [
+        ...get(primaryOpsState(dataViewId)),
+        ...get(secondaryOpsState(dataViewId)),
+      ];
+    },
+});
+
+export const currentDataState = selectorFamily({
+  key: 'currentData',
+  dangerouslyAllowMutability: true,
+  get:
+    (dataViewId: DataViewIdParam) =>
+    ({ get }) => {
+      const allOps = get(allOpsState(dataViewId));
+      const table = get(secondaryFilteredTableState(dataViewId));
+
+      const groupBy = getGroupingsFromOps(allOps);
+
+      const groupKeyFn = makeGroupKeyFn(groupBy);
+      const groupObjFn = makeGroupObjFn(groupBy);
+
+      const groupedTable = table
+        .groupBy((row) => groupKeyFn(row))
+        .select((group) => {
+          return {
+            GroupKey: groupKeyFn(group.first()),
+            Grouping: groupObjFn(group.first()),
+            Value: group.deflate((row) => row.Value).sum(),
+          };
+        })
+        .inflate();
+
+      return ungroupTable(groupedTable);
+    },
+});
+
+// export const currentDataState = selector({
+//   key: 'currentData',
+//   dangerouslyAllowMutability: true,
+//   get: ({ get }) => {
+//     const fullTable = get(rootTableState);
+
+//     const {
+//       operations: viewOps = {},
+//       primarySelect: primaryOps,
+//       secondarySelect: secondaryOps,
+//     } = get(activeTabContentState);
+
+//     const allOps = [
+//       ...Object.entries(currentChartOps),
+//       ...Object.entries(viewOps),
+//       ...primaryOps.map(
+//         (dimPath) =>
+//           [dimPath, get(dataSelectionByDimPathState(dimPath))] as const
+//       ),
+//       ...secondaryOps.map(
+//         (dimPath) =>
+//           [dimPath, get(dataSelectionByDimPathState(dimPath))] as const
+//       ),
+//     ].map(([path, ops]) => ({
+//       path: path instanceof DimensionPath ? path : makeDimPath(path),
+//       ops,
+//     }));
+
+//     const filters = allOps
+//       .filter((x) => x.ops.filter != null)
+//       .map((x) => [x.path, x.ops.filter!]);
+
+// const groupBy: DimensionPath[] = allOps
+//   .filter((x) => x.ops.aggregate === false)
+//   .map((x) => x.path);
+
+//     const filterFn = makeFilterFn(filters);
+
+//     const groupedTable = fullTable
+//       .filter((row) => filterFn(row))
+//       .groupBy((row) => groupKeyFn(row))
+//       .select((group) => {
+//         return {
+//           GroupKey: groupKeyFn(group.first()),
+//           Grouping: groupObjFn(group.first()),
+//           Value: group.deflate((row) => row.Value).sum(),
+//         };
+//       })
+//       .inflate();
+
+//     return ungroupTable(groupedTable);
+//   },
+// });
+
+function getFiltersFromOps(allOps: DataOp[]): DataFilterOp[] {
+  return allOps
+    .filter((x) => x.ops.filter != null)
+    .map((x) => ({ path: x.path, values: x.ops.filter! }));
 }
 
-function makeFilterFn(filters: [DimensionPath, any[]][]) {
+function filterTable(df: IDataFrame, filters: DataFilterOp[]) {
+  const filterFn = makeFilterFn(filters);
+
+  return df.filter((row) => filterFn(row));
+}
+
+function getGroupingsFromOps(allOps: DataOp[]): DataGroupOp[] {
+  return allOps.filter((x) => x.ops.aggregate === false).map((x) => x.path);
+}
+
+function makeFilterFn(filters: DataFilterOp[]) {
   return (row: any) => {
-    for (const [path, values] of filters) {
+    for (const { path, values } of filters) {
       if (!values.includes(getWithPath(row, path))) {
         return false;
       }

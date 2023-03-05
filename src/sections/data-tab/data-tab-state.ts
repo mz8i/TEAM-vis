@@ -1,11 +1,36 @@
+import _ from 'lodash';
 import { atom, selector, selectorFamily } from 'recoil';
 
-import { DataTabConfig } from '../../data/models/data-tab';
+import {
+  DataTabConfigInput,
+  TabContentConfig,
+} from '../../data/models/data-tab';
+import { DimensionPath, makeDimPath } from './data-operations/dimension-paths';
 
-export const allTabsState = atom<DataTabConfig[]>({
+export const allTabsState = atom<DataTabConfigInput[]>({
   key: 'allTabs',
   default: new Promise(() => {}),
 });
+
+type DataTabConfig = Omit<DataTabConfigInput, 'content'> & {
+  content: Omit<TabContentConfig, 'primarySelect' | 'secondarySelect'> & {
+    primarySelect: DimensionPath[];
+    secondarySelect: DimensionPath[];
+  };
+};
+
+function processTabState(state: DataTabConfigInput): DataTabConfig {
+  const processed: DataTabConfig = _.cloneDeep(state) as any;
+
+  const primary = state.content.primarySelect;
+  processed.content.primarySelect =
+    primary != null ? [makeDimPath(primary)] : [];
+  processed.content.secondarySelect = state.content.secondarySelect.map((x) =>
+    makeDimPath(x)
+  );
+
+  return processed;
+}
 
 export const tabBySlugState = selectorFamily<DataTabConfig, string>({
   key: 'tabBySlug',
@@ -18,8 +43,16 @@ export const tabBySlugState = selectorFamily<DataTabConfig, string>({
         throw new Error(`Data tab '${slug}' not found`);
       }
 
-      return tab;
+      return processTabState(tab);
     },
+});
+
+export const tabContentBySlugState = selectorFamily({
+  key: 'tabContentBySlug',
+  get:
+    (slug: string) =>
+    ({ get }) =>
+      get(tabBySlugState(slug)).content,
 });
 
 export const activeTabSlugState = atom<string>({
@@ -27,7 +60,7 @@ export const activeTabSlugState = atom<string>({
   default: new Promise(() => {}),
 });
 
-export const activeTabState = selector({
-  key: 'activeTab',
-  get: ({ get }) => get(tabBySlugState(get(activeTabSlugState))),
+export const activeTabContentState = selector({
+  key: 'activeTabContent',
+  get: ({ get }) => get(tabContentBySlugState(get(activeTabSlugState))),
 });

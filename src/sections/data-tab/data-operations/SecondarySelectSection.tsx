@@ -1,13 +1,16 @@
 import { Box, Stack } from '@mui/material';
-import { FC } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { FC, Suspense } from 'react';
+import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from 'recoil';
 
 import { SecondarySelect } from '../../../components/secondary-select/SecondarySelect';
-import { leafStoreByDimensionState } from '../dimensions/dimensions-state';
 import {
-  DimensionPath,
-  dataSelectionByDimExprState,
-} from './data-operations-state';
+  currentDataParamsState,
+  valuesAfterPrimaryFilterByPathState,
+} from '../data-state';
+import { leafStoreByDimensionState } from '../dimensions/dimensions-state';
+import { metadataByDimensionState } from '../dimensions/dimensions-state';
+import { dataSelectionByDimPathState } from './data-operations-state';
+import { DimensionPath } from './dimension-paths';
 
 export const SecondarySelectSection: FC<{
   dimPaths: DimensionPath[];
@@ -16,7 +19,9 @@ export const SecondarySelectSection: FC<{
     <Box>
       <Stack direction="row">
         {dimPaths.map((path) => (
-          <SecondarySubsection key={path.dimension} dimPath={path} />
+          <Suspense>
+            <SecondarySubsection key={path.dimension} dimPath={path} />
+          </Suspense>
         ))}
       </Stack>
     </Box>
@@ -26,24 +31,36 @@ export const SecondarySelectSection: FC<{
 function SecondarySubsection({ dimPath }: { dimPath: DimensionPath }) {
   const dimension = dimPath.dimension;
   const domainStore = useRecoilValue(leafStoreByDimensionState(dimension));
+  const currentDataViewId = useRecoilValue(currentDataParamsState);
   const values = domainStore.values;
-
-  const [selected, setSelected] = useRecoilState(
-    dataSelectionByDimExprState(dimPath.rawExpression)
+  const allowedLoadable = useRecoilValueLoadable(
+    valuesAfterPrimaryFilterByPathState({
+      path: dimPath,
+      dataViewId: currentDataViewId,
+    })
   );
 
+  const [selected, setSelected] = useRecoilState(
+    dataSelectionByDimPathState(dimPath)
+  );
+
+  const title = useRecoilValue(metadataByDimensionState(dimension)).Name;
+
+  const allowed =
+    allowedLoadable.state === 'hasValue' ? allowedLoadable.contents : values;
+  const shown = allowed;
+
   return (
-    <Box>
-      <SecondarySelect
-        title={dimension}
-        domain={{
-          values,
-          allowed: values,
-        }}
-        value={selected}
-        onValue={setSelected}
-        getLabel={(x) => x.NA}
-      />
-    </Box>
+    <SecondarySelect
+      title={title}
+      domain={{
+        values,
+        allowed,
+        shown,
+      }}
+      value={selected}
+      onValue={setSelected}
+      getLabel={(x) => x.NA}
+    />
   );
 }

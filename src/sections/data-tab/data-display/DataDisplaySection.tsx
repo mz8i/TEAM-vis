@@ -1,21 +1,21 @@
 import { TableRows, Timeline } from '@mui/icons-material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Box, Tab } from '@mui/material';
-import { useState } from 'react';
-import { useRecoilValue } from 'recoil';
+import { Suspense, startTransition, useEffect, useState } from 'react';
+import {
+  useRecoilState_TRANSITION_SUPPORT_UNSTABLE,
+  useRecoilValue,
+  useSetRecoilState,
+} from 'recoil';
 
-import { currentDataState } from '../data-state';
-import { activeTabState } from '../data-tab-state';
+import { scenarioState } from '../../scenario/scenario-state';
+import { currentDataParamsState } from '../data-state';
+import { activeTabContentState } from '../data-tab-state';
+import { paramValuesByVariableParamsState } from '../variables/variable-state';
 import { DataChartSection } from './DataChartSection';
 import { DataTableSection } from './DataTableSection';
 
 export const DataDisplaySection = () => {
-  const {
-    content: { variable: variableConfig },
-  } = useRecoilValue(activeTabState);
-
-  const factTable = useRecoilValue(currentDataState);
-
   const [tab, setTab] = useState<'chart' | 'table'>('chart');
 
   return (
@@ -40,17 +40,70 @@ export const DataDisplaySection = () => {
             />
           </TabList>
         </Box>
+
         <TabPanel value="chart">
           <Box height="400px" width="100%">
-            <DataChartSection key={variableConfig.name} factTable={factTable} />
+            <Suspense>
+              <DataChartSection />
+            </Suspense>
           </Box>
         </TabPanel>
         <TabPanel value="table">
           <Box height="400px">
-            <DataTableSection key={variableConfig.name} factTable={factTable} />
+            <Suspense>
+              <DataTableSection />
+            </Suspense>
           </Box>
         </TabPanel>
       </TabContext>
+      <Suspense>
+        <DataParamsSetter />
+      </Suspense>
     </Box>
   );
 };
+
+function DataParamsSetter({}: any) {
+  const {
+    variable: { name, parameters },
+  } = useRecoilValue(activeTabContentState);
+  const scenario = useRecoilValue(scenarioState);
+  const variableParams = useRecoilValue(
+    paramValuesByVariableParamsState(parameters)
+  );
+
+  const dataParams = {
+    variableName: name,
+    params: variableParams,
+    scenario,
+  };
+  return (
+    <Suspense fallback={<FallbackSetter dataParams={dataParams} />}>
+      <DataParamsSetterWithTransition dataParams={dataParams} />
+    </Suspense>
+  );
+}
+
+function DataParamsSetterWithTransition({ dataParams }: any) {
+  const [, setDataParams] = useRecoilState_TRANSITION_SUPPORT_UNSTABLE(
+    currentDataParamsState
+  );
+
+  useEffect(() => {
+    startTransition(() => {
+      setDataParams(dataParams);
+    });
+  }, [dataParams]);
+
+  return null;
+}
+
+function FallbackSetter({ dataParams }: any) {
+  const setDataParams = useSetRecoilState(currentDataParamsState);
+
+  useEffect(() => {
+    setDataParams(dataParams);
+  }, [dataParams]);
+
+  return null;
+}

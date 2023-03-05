@@ -10,9 +10,8 @@ import {
 } from 'recoil';
 import { urlSyncEffect } from 'recoil-sync';
 
-import { VariableConfig } from '../../../data/models/data-tab';
 import { LeafDimensionValue } from '../../../data/tables/dimensions';
-import { activeTabState } from '../data-tab-state';
+import { activeTabContentState } from '../data-tab-state';
 import { leafStoreByDimensionState } from '../dimensions/dimensions-state';
 
 export const paramsQueryState = atom<Record<string, string>>({
@@ -56,9 +55,9 @@ export const paramValueByDimensionState = atomFamily({
 
 export function useSaveViewParamsToUrl() {
   const {
-    content: { variable },
-  } = useRecoilValue(activeTabState);
-  const params = useRecoilValue(paramsByVariableConfigState(variable));
+    variable: { parameters },
+  } = useRecoilValue(activeTabContentState);
+  const params = useRecoilValue(paramValuesByVariableParamsState(parameters));
   const setParamsQuery = useSetRecoilState(paramsQueryState);
 
   useEffect(() => {
@@ -66,19 +65,16 @@ export function useSaveViewParamsToUrl() {
   }, [params, setParamsQuery]);
 }
 
-export const paramsByVariableConfigState = selectorFamily<
+export const paramValuesByVariableParamsState = selectorFamily<
   Record<string, LeafDimensionValue>,
-  VariableConfig
+  string[]
 >({
-  key: 'paramsByVariableConfig',
+  key: 'paramValuesByVariableParams',
   get:
-    (variableConfig) =>
+    (parameters) =>
     ({ get }) => {
       return Object.fromEntries(
-        variableConfig.parameters.map((p) => [
-          p,
-          get(paramValueByDimensionState(p)),
-        ])
+        parameters.map((p) => [p, get(paramValueByDimensionState(p))])
       );
     },
 });

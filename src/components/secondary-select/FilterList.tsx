@@ -23,6 +23,7 @@ export interface FilterListProps<T = string> {
   title?: string;
   values: T[];
   allowed: T[];
+  shown: T[];
   selected: T[];
   onSelected: (selected: T[]) => void;
   disabled?: boolean;
@@ -33,6 +34,7 @@ export const FilterList = <T,>({
   title,
   values,
   allowed,
+  shown,
   selected,
   onSelected,
   disabled = false,
@@ -40,6 +42,7 @@ export const FilterList = <T,>({
 }: FilterListProps<T>) => {
   const allowedLookup = useLookup(allowed);
   const selectedLookup = useLookup(selected);
+  const shownLookup = useLookup(shown);
 
   const sortedValues = useMemo(
     () => sortValues(values, disabled ? null : allowedLookup),
@@ -80,7 +83,10 @@ export const FilterList = <T,>({
             />
           }
           label={
-            <Typography variant={labelVariant} color="text.secondary">
+            <Typography
+              variant={labelVariant}
+              color={shownLookup.has(v) ? 'text.secondary' : 'text.disabled'}
+            >
               {label}
             </Typography>
           }
