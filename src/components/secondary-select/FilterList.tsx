@@ -61,8 +61,10 @@ export const FilterList = <T,>({
   const labelVariant = 'body2';
   const renderOption = (v: T) => {
     const label = getLabel(v);
+    const key = getKey(v);
+
     return (
-      <Flipped key={label} flipId={label} stagger>
+      <Flipped key={key} flipId={key} stagger>
         <FormControlLabel
           disabled={disabled || !allowedLookup.has(v)}
           control={

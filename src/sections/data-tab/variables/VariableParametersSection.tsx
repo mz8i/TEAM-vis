@@ -11,8 +11,8 @@ export const VariableParametersSection: FC<{
     <Box height={50}>
       <Stack direction="row">
         {parameters.map((param) => (
-          <Suspense fallback={null}>
-            <ParamSelection key={param} dimension={param} />
+          <Suspense key={param} fallback={null}>
+            <ParamSelection dimension={param} />
           </Suspense>
         ))}
       </Stack>

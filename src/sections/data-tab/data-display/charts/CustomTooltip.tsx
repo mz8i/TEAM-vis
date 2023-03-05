@@ -36,14 +36,14 @@ export const CustomTooltip = ({
           <Typography variant="h6">Year: {label}</Typography>
         </Box>
 
-        <Table size="small">
-          <TableBody>
-            <Flipper flipKey={sorted.map((x) => x.value).join('+')}>
+        <Flipper flipKey={sorted.map((x) => x.value).join('+')}>
+          <Table size="small">
+            <TableBody>
               {sorted.map(({ value, name, dataKey, color }) => {
                 if (value == null) return null;
 
                 return (
-                  <Flipped flipId={dataKey}>
+                  <Flipped key={dataKey} flipId={dataKey}>
                     <TableRow>
                       <TableCell align="right">
                         {/* TODO: remove hardcoded number formatting */}
@@ -68,9 +68,9 @@ export const CustomTooltip = ({
                   </Flipped>
                 );
               })}
-            </Flipper>
-          </TableBody>
-        </Table>
+            </TableBody>
+          </Table>
+        </Flipper>
       </TableContainer>
     );
   }

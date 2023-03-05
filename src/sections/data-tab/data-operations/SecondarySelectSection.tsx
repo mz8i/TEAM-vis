@@ -19,8 +19,8 @@ export const SecondarySelectSection: FC<{
     <Box>
       <Stack direction="row">
         {dimPaths.map((path) => (
-          <Suspense>
-            <SecondarySubsection key={path.dimension} dimPath={path} />
+          <Suspense key={path.dimension}>
+            <SecondarySubsection dimPath={path} />
           </Suspense>
         ))}
       </Stack>

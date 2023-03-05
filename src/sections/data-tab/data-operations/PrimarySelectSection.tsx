@@ -13,7 +13,7 @@ export const PrimarySelectSection: FC<{
   return (
     <Box height={40}>
       {dimPaths.map((dimPath) => (
-        <Suspense>
+        <Suspense key={dimPath.rawExpression}>
           <PrimarySubsection dimPath={dimPath} />
         </Suspense>
       ))}
