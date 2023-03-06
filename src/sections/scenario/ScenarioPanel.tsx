@@ -7,11 +7,14 @@ import { ScenarioSelect } from './ScenarioSelect';
 export const ScenarioPanel = () => {
   return (
     <Box>
-      <Typography variant="h4">Scenario Selection</Typography>
-
-      <Suspense fallback="Loading scenarios...">
-        <ScenarioSelect />
-        <ScenarioDescription />
+      <Typography variant="h5">Select Scenario</Typography>
+      <Suspense>
+        <Box my={2}>
+          <ScenarioSelect />
+        </Box>
+        <Box my={2}>
+          <ScenarioDescription />
+        </Box>
       </Suspense>
     </Box>
   );

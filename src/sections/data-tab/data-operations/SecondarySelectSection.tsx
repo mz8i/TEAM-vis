@@ -16,15 +16,15 @@ export const SecondarySelectSection: FC<{
   dimPaths: DimensionPath[];
 }> = ({ dimPaths }) => {
   return (
-    <Box>
-      <Stack direction="row">
-        {dimPaths.map((path) => (
-          <Suspense key={path.dimension}>
+    <Stack direction="row" spacing={1} height="100%">
+      {dimPaths.map((path) => (
+        <Suspense key={path.dimension}>
+          <Box width={210} height="100%">
             <SecondarySubsection dimPath={path} />
-          </Suspense>
-        ))}
-      </Stack>
-    </Box>
+          </Box>
+        </Suspense>
+      ))}
+    </Stack>
   );
 };
 

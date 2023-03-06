@@ -1,7 +1,7 @@
-import { Stack } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import produce, { castDraft } from 'immer';
 import { toString } from 'lodash';
-import { FC, useCallback } from 'react';
+import { useCallback } from 'react';
 
 import { DataDomain, DataSelectionValue, LabelFn } from '../../types/data';
 import { ChipToggle } from '../chip-toggle/ChipToggle';
@@ -50,22 +50,26 @@ export const SecondarySelect = <T,>({
   );
 
   return (
-    <Stack direction="column" spacing={1} width="210px">
-      <ChipToggle
-        label={title}
-        checked={disaggregate}
-        onToggle={handleDisaggregate}
-      />
-      <FilterList
-        values={domain.values}
-        allowed={domain.allowed}
-        shown={domain.shown}
-        selected={selected ?? domain.values}
-        onSelected={handleSelected}
-        disabled={!disaggregate}
-        getLabel={getLabel}
-        getKey={getKey}
-      />
-    </Stack>
+    <Box maxWidth={400} height="100%">
+      <Stack direction="column" spacing={1}>
+        <ChipToggle
+          label={title}
+          checked={disaggregate}
+          onToggle={handleDisaggregate}
+          sx={{ borderRadius: '10px' }}
+          color={disaggregate ? 'primary' : 'default'}
+        />
+        <FilterList
+          values={domain.values}
+          allowed={domain.allowed}
+          shown={domain.shown}
+          selected={selected ?? domain.values}
+          onSelected={handleSelected}
+          disabled={!disaggregate}
+          getLabel={getLabel}
+          getKey={getKey}
+        />
+      </Stack>
+    </Box>
   );
 };

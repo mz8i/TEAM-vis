@@ -40,9 +40,11 @@ export const ParamSelection: FC<ParamSelectionProps> = ({ dimension }) => {
         //
 
         // style
-        variant="standard"
+        variant="outlined"
+        size="small"
         sx={{
-          maxWidth: '300px',
+          minWidth: '100px',
+          borderRadius: '10px',
         }}
       >
         {values.map((x) => (

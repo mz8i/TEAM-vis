@@ -51,7 +51,7 @@ export const PrimarySelect = <T,>({
     <Stack direction="row" spacing={1}>
       <ChipSelect
         values={domain}
-        selected={(aggregate ? domain : selected) ?? []}
+        selected={aggregate ? domain : selected ?? domain}
         onSelected={handleSelected}
         disabled={aggregate}
         getLabel={getLabel}

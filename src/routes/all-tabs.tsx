@@ -1,5 +1,5 @@
 import { TabContext, TabList } from '@mui/lab';
-import { Tab, Toolbar } from '@mui/material';
+import { Box, Tab, Toolbar } from '@mui/material';
 import { object } from '@recoiljs/refine';
 import { Outlet, useParams } from 'react-router';
 import { Link } from 'react-router-dom';
@@ -37,25 +37,27 @@ export const AllTabsRoute = () => {
     <>
       <StateSetter value={dataTabs} state={allTabsState} />
       <StateSetter value={dataSources} state={allDataSourcesState} />
-      <Toolbar>
-        <TabContext value={tab}>
-          <TabList
-            variant="scrollable"
-            TabIndicatorProps={{ style: { transition: 'none' } }}
-          >
-            {dataTabs.map(({ slug, label }) => (
-              <Tab
-                key={slug}
-                label={label}
-                value={slug}
-                component={Link}
-                to={slug}
-              />
-            ))}
-          </TabList>
-        </TabContext>
-      </Toolbar>
-      <Outlet />
+      <Box height="100vh" maxHeight="100vh">
+        <Toolbar sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <TabContext value={tab}>
+            <TabList
+              variant="scrollable"
+              TabIndicatorProps={{ style: { transition: 'none' } }}
+            >
+              {dataTabs.map(({ slug, label }) => (
+                <Tab
+                  key={slug}
+                  label={label}
+                  value={slug}
+                  component={Link}
+                  to={slug}
+                />
+              ))}
+            </TabList>
+          </TabContext>
+        </Toolbar>
+        <Outlet />
+      </Box>
     </>
   );
 };

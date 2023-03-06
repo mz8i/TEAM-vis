@@ -20,17 +20,35 @@ export const DataTabView: FC<{ slug: string }> = ({ slug }) => {
   );
 
   return (
-    <Box>
-      {primary.length > 0 && <PrimarySelectSection dimPaths={primary} />}
-      {varParams.length > 0 && (
-        <VariableParametersSection parameters={varParams} />
-      )}
+    <Box display="flex" flexDirection="column" alignItems="stretch">
+      <Box height={40} display="flex" alignItems="center" mx={2} my={1}>
+        {primary.length > 0 && <PrimarySelectSection dimPaths={primary} />}
+      </Box>
+      <Box
+        height={50}
+        display="flex"
+        alignItems="center"
+        mx={2}
+        my={1}
+        mt={2}
+        ml="120px"
+      >
+        {varParams.length > 0 && (
+          <VariableParametersSection parameters={varParams} />
+        )}
+      </Box>
       <Suspense>
         <SaveVariableParams />
         <SaveOpsParams />
       </Suspense>
-      <DataDisplaySection />
-      {secondary.length > 0 && <SecondarySelectSection dimPaths={secondary} />}
+      <Box height="calc(100vh-350px)">
+        <DataDisplaySection />
+      </Box>
+      <Box height={200} alignItems="center" mx={2} my={1}>
+        {secondary.length > 0 && (
+          <SecondarySelectSection dimPaths={secondary} />
+        )}
+      </Box>
     </Box>
   );
 };

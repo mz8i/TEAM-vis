@@ -10,13 +10,15 @@ export const ScenarioSelect = () => {
 
   return (
     <FormControl fullWidth>
-      <InputLabel id="demo-simple-select-label">Scenario</InputLabel>
+      <InputLabel id="scenario-select-label">Scenario</InputLabel>
       <Select
-        labelId="demo-simple-select-label"
-        id="demo-simple-select"
+        labelId="scenario-select-label"
+        id="scenario-select"
         value={scenarioSlug}
         label="Scenario"
         onChange={(e) => setScenarioSlug(e.target.value)}
+        variant="outlined"
+        size="small"
       >
         {allScenarios.map((sc) => (
           <MenuItem key={sc.slug} value={sc.slug}>

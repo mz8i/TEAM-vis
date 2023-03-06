@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material';
+import { Backdrop, Box, CircularProgress } from '@mui/material';
 import { useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
 
@@ -47,12 +47,23 @@ export const DataChartSection = () => {
   );
 
   return (
-    <>
-      {loadingNew && <Typography>(loading new data...)</Typography>}
+    <Box height="100%" position="relative" zIndex={0}>
+      {loadingNew && (
+        <Backdrop
+          sx={{
+            position: 'absolute',
+            zIndex: 1000,
+            backgroundColor: 'rgba(220, 220, 220, 0.5)',
+          }}
+          open={true}
+        >
+          <CircularProgress sx={{ color: 'white' }} />
+        </Backdrop>
+      )}
       <RechartsChart
         groups={timeChartData}
         groupStyleMapping={groupStyleMapping}
       />
-    </>
+    </Box>
   );
 };

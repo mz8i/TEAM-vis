@@ -11,13 +11,13 @@ export const PrimarySelectSection: FC<{
   dimPaths: DimensionPath[];
 }> = ({ dimPaths }) => {
   return (
-    <Box height={40}>
+    <>
       {dimPaths.map((dimPath) => (
         <Suspense key={dimPath.rawExpression}>
           <PrimarySubsection dimPath={dimPath} />
         </Suspense>
       ))}
-    </Box>
+    </>
   );
 };
 
@@ -31,14 +31,12 @@ function PrimarySubsection({ dimPath }: { dimPath: DimensionPath }) {
   );
 
   return (
-    <Box>
-      <PrimarySelect
-        domain={values}
-        value={selected}
-        onChange={setSelected}
-        getLabel={(x) => x.NA}
-        allowAggregate={false}
-      />
-    </Box>
+    <PrimarySelect
+      domain={values}
+      value={selected}
+      onChange={setSelected}
+      getLabel={(x) => x.NA}
+      allowAggregate={false}
+    />
   );
 }

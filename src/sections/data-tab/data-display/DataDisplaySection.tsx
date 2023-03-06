@@ -13,53 +13,78 @@ import { currentDataParamsState } from '../data-state';
 import { activeTabContentState } from '../data-tab-state';
 import { paramValuesByVariableParamsState } from '../variables/variable-state';
 import { DataChartSection } from './DataChartSection';
+import { DataDownloadButton } from './DataDownloadButton';
 import { DataTableSection } from './DataTableSection';
 
 export const DataDisplaySection = () => {
   const [tab, setTab] = useState<'chart' | 'table'>('chart');
 
   return (
-    <Box height="500px" width="1000px">
-      <TabContext value={tab}>
+    <TabContext value={tab}>
+      <Box
+        height="400px"
+        display="flex"
+        flexDirection="row"
+        alignItems="stretch"
+        justifyContent="stretch"
+      >
         <Box
-          sx={{
-            borderBottom: 1,
-            borderColor: 'divider',
-          }}
+          flexGrow={1}
+          display="flex"
+          flexDirection="column"
+          // alignItems="stretch"
         >
-          <TabList onChange={(e, value) => setTab(value)}>
+          <TabPanel value="chart" sx={{ padding: 0 }}>
+            <Box height="400px" width="100%">
+              <Suspense>
+                <DataChartSection />
+              </Suspense>
+            </Box>
+          </TabPanel>
+          <TabPanel value="table" sx={{ padding: 0 }}>
+            <Box height="400px" width="100%">
+              <Suspense>
+                <DataTableSection />
+              </Suspense>
+            </Box>
+          </TabPanel>
+        </Box>
+
+        <Box width={40}>
+          <TabList
+            onChange={(e, value) => setTab(value)}
+            orientation="vertical"
+            sx={{ width: '40px' }}
+            TabIndicatorProps={{ hidden: true }}
+          >
             <Tab
               value="chart"
               icon={<Timeline fontSize="small" />}
               title="Chart"
+              sx={{
+                minWidth: 'unset',
+                padding: 0,
+                margin: 0,
+              }}
             />
             <Tab
               value="table"
               icon={<TableRows fontSize="small" />}
               title="Table"
+              sx={{
+                minWidth: 'unset',
+                padding: 0,
+                margin: 0,
+              }}
             />
           </TabList>
+          <DataDownloadButton />
         </Box>
-
-        <TabPanel value="chart">
-          <Box height="400px" width="100%">
-            <Suspense>
-              <DataChartSection />
-            </Suspense>
-          </Box>
-        </TabPanel>
-        <TabPanel value="table">
-          <Box height="400px">
-            <Suspense>
-              <DataTableSection />
-            </Suspense>
-          </Box>
-        </TabPanel>
-      </TabContext>
+      </Box>
       <Suspense>
         <DataParamsSetter />
       </Suspense>
-    </Box>
+    </TabContext>
   );
 };
 

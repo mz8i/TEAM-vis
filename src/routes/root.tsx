@@ -1,4 +1,4 @@
-import { Box, Link, Stack, Toolbar, Typography } from '@mui/material';
+import { Box, Divider, Link, Stack, Toolbar, Typography } from '@mui/material';
 import { CheckerReturnType, object } from '@recoiljs/refine';
 import { Outlet } from 'react-router';
 import { Link as RouterLink } from 'react-router-dom';
@@ -8,6 +8,7 @@ import { loadJson } from '../data/load';
 import { allScenariosChecker } from '../data/models/scenario';
 import { ScenarioPanel } from '../sections/scenario/ScenarioPanel';
 import { allScenariosState } from '../sections/scenario/scenario-state';
+import AboutSidebar from '../text/AboutSidebar.mdx';
 import { StateSetter } from '../utils/recoil/StateSetter';
 import { TypedLoaderFunction, useCheckedLoaderData } from '../utils/router';
 
@@ -31,40 +32,58 @@ export const RootRoute = () => {
   return (
     <AppRoot>
       <StateSetter value={scenarios} state={allScenariosState} />
-      <Box display="flex">
+      <Box display="flex" flexDirection="row" justifyContent="stretch">
         <Box height="100vh" width="400px" bgcolor="whitesmoke">
-          <Stack direction="column" height="100%">
+          <Stack direction="column" height="100%" divider={<Divider />}>
             <Toolbar>
-              <Link
-                variant="h3"
-                sx={{ textDecoration: 'none' }}
-                component={RouterLink}
-                to="/"
-              >
-                TEAM
-              </Link>
-            </Toolbar>
-            <Box height={200} border="1px dashed gray">
-              <ScenarioPanel />
-            </Box>
-            <Box flexGrow={1} border="1px dashed gray">
-              <Typography variant="h4">About</Typography>
-              <Typography variant="body1">
-                Some text here. <br />
-                <Link variant="body1" component={RouterLink} to="/about">
-                  More
+              <Typography variant="h3" fontWeight={600}>
+                <Link
+                  sx={{ textDecoration: 'none' }}
+                  component={RouterLink}
+                  to="/"
+                >
+                  TEAM
                 </Link>
               </Typography>
+            </Toolbar>
+            <Box height={300}>
+              <SidebarSection>
+                <ScenarioPanel />
+              </SidebarSection>
             </Box>
-            <Box height={100} border="1px dashed gray">
+            <Box flexGrow={1}>
+              <SidebarSection>
+                <Typography variant="h5">About</Typography>
+                <AboutSidebar
+                  components={{
+                    a: ({ href, title, children }) =>
+                      href ? (
+                        <Link
+                          textAlign="right"
+                          width="100%"
+                          display="block"
+                          component={RouterLink}
+                          to={href}
+                          children={children}
+                        />
+                      ) : null,
+                  }}
+                />
+              </SidebarSection>
+            </Box>
+            <Box height={200}>
               <Typography>Logos</Typography>
             </Box>
           </Stack>
         </Box>
-        <Box>
+        <Box width="calc(100vw-400px)">
           <Outlet />
         </Box>
       </Box>
     </AppRoot>
   );
 };
+
+function SidebarSection({ children }: any) {
+  return <Box p={2}>{children}</Box>;
+}

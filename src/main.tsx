@@ -11,7 +11,7 @@ import {
   redirect,
 } from 'react-router-dom';
 
-import About from './routes/about.mdx';
+import { AboutRoute } from './routes/about';
 import { AllTabsRoute, dataViewLoader } from './routes/all-tabs';
 import { DataTabRoute } from './routes/data-tab';
 import { RootRoute, rootLoader } from './routes/root';
@@ -25,7 +25,7 @@ const router = createHashRouter(
           return redirect('/vehicle-stock');
         }}
       ></Route>
-      <Route path="about" element={<About />} />
+      <Route path="about" element={<AboutRoute />} />
       <Route loader={dataViewLoader} element={<AllTabsRoute />}>
         <Route path=":tab" element={<DataTabRoute />} />
       </Route>

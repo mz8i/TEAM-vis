@@ -64,3 +64,32 @@ export const ComplexValues: Story<Complex> = {
     getLabel: getComplexLabel,
   },
 };
+
+const LONG = [...Array(100)].map((x, i) => i + '');
+
+export const LongValuesList: Story = {
+  args: {
+    title: 'Variable',
+    domain: {
+      values: LONG,
+      allowed: LONG,
+      shown: LONG,
+    },
+    value: {
+      aggregate: false,
+      filter: LONG,
+    },
+  },
+  render: (props) => (
+    <div
+      style={{
+        height: '400px',
+        width: '200px',
+        padding: 5,
+        backgroundColor: '#ccc',
+      }}
+    >
+      <SecondarySelect {...props} />
+    </div>
+  ),
+};

@@ -59,12 +59,13 @@ export const FilterList = <T,>({
   );
 
   const labelVariant = 'body2';
+
   const renderOption = (v: T) => {
     const label = getLabel(v);
     const key = getKey(v);
 
     return (
-      <Flipped key={key} flipId={key} stagger>
+      <Flipped key={key} flipId={key}>
         <FormControlLabel
           disabled={disabled || !allowedLookup.has(v)}
           control={
@@ -89,7 +90,11 @@ export const FilterList = <T,>({
           label={
             <Typography
               variant={labelVariant}
-              color={shownLookup.has(v) ? 'text.secondary' : 'text.disabled'}
+              color={
+                !disabled && shownLookup.has(v)
+                  ? 'text.secondary'
+                  : 'text.disabled'
+              }
             >
               {label}
             </Typography>
@@ -118,7 +123,7 @@ export const FilterList = <T,>({
         boxSizing: 'border-box',
         width: '100%',
         maxWidth: '400px',
-        height: '200px',
+        height: '200px', //TODO: fix flexbox issues and remove hardcoded height
         borderRadius: 2,
         position: 'relative',
         display: 'flex',
@@ -139,17 +144,6 @@ export const FilterList = <T,>({
           <FormGroup>{sortedValues.map(renderOption)}</FormGroup>
         </Flipper>
       </Box>
-      <Box
-        visibility={disabled ? 'visible' : 'hidden'}
-        position="absolute"
-        top={0}
-        right={0}
-        bottom={0}
-        left={0}
-        zIndex={10}
-        bgcolor="rgba(10,10,10,0.1)"
-        role="presentation"
-      />
     </FormControl>
   );
 };

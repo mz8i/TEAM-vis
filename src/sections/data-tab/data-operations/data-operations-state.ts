@@ -52,7 +52,7 @@ export const dataSelectionByDimPathState = atomFamily<
         if (primaryDimPaths.includes(dimPath)) {
           return {
             aggregate: false,
-            filter: [],
+            filter: null,
           };
         } else {
           return {
