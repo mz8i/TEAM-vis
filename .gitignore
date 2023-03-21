@@ -1,6 +1,9 @@
 # Large data files
 public/data/tables
 
+# Local env files
+.env
+
 # Logs
 logs
 *.log
