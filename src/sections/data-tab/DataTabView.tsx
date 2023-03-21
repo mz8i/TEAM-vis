@@ -41,7 +41,7 @@ export const DataTabView: FC<{ slug: string }> = ({ slug }) => {
         <SaveVariableParams />
         <SaveOpsParams />
       </Suspense>
-      <Box height="calc(100vh-350px)">
+      <Box height="calc(100vh-350px)" width="100%">
         <DataDisplaySection />
       </Box>
       <Box height={200} alignItems="center" mx={2} my={1}>

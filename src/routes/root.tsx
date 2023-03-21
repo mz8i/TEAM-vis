@@ -76,7 +76,7 @@ export const RootRoute = () => {
             </Box>
           </Stack>
         </Box>
-        <Box width="calc(100vw-400px)">
+        <Box sx={{ width: 'calc(100vw-400px)', height: '100vh' }}>
           <Outlet />
         </Box>
       </Box>

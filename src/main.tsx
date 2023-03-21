@@ -1,8 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-
-import './index.css';
-
 import {
   Route,
   RouterProvider,
@@ -15,6 +12,8 @@ import { AboutRoute } from './routes/about';
 import { AllTabsRoute, dataViewLoader } from './routes/all-tabs';
 import { DataTabRoute } from './routes/data-tab';
 import { RootRoute, rootLoader } from './routes/root';
+
+import './index.css';
 
 const router = createHashRouter(
   createRoutesFromElements(
