@@ -16,7 +16,7 @@ export async function loadFactTable(
     parameterValues
   );
 
-  const filePath = `data/tables/facts/${scenario.id}__${pathSchemaFormatted}.csv`;
+  const filePath = `data/tables/facts/${scenario.ID}__${pathSchemaFormatted}.csv`;
 
   const data = await loadCsv(filePath);
   return new DataFrame(data);

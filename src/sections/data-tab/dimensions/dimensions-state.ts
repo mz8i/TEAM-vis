@@ -147,6 +147,7 @@ function processLeafValue(
     ID: raw.ID,
     NA: raw.NA!,
     AB,
-    Color: colors?.[AB],
+    Description: raw.Description,
+    Color: colors?.[AB] ?? raw.Color,
   };
 }

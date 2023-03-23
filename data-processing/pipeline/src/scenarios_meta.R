@@ -11,14 +11,13 @@ read_scenarios_meta <- function(root_in_dir) {
   )
 }
 
-
-prepare_scenarios_json <- function(in_dir, out_dir) {
+prepare_scenarios_dimension <- function(in_dir, out_dir) {
   read_scenarios_meta(in_dir) %>% 
     rename(
-      id=ScenarioID,
-      slug=ScenarioAB,
-      name=ScenarioNA,
-      description=Description
+      ID=ScenarioID,
+      AB=ScenarioAB,
+      `NA`=ScenarioNA
+      # Description already has the right name
     ) %>% 
-    write_json(out_dir %//% 'scenarios.json')
+    write_csv(out_dir %//% 'tables/dimensions/Scenario.csv')
 }

@@ -12,26 +12,9 @@ import AboutSidebar from '../text/AboutSidebar.mdx';
 import { StateSetter } from '../utils/recoil/StateSetter';
 import { TypedLoaderFunction, useCheckedLoaderData } from '../utils/router';
 
-const rootDataChecker = object({
-  scenarios: allScenariosChecker,
-});
-
-type RootData = CheckerReturnType<typeof rootDataChecker>;
-
-export const rootLoader: TypedLoaderFunction<RootData> = async ({
-  request,
-}) => {
-  return {
-    scenarios: await loadJson('/data/scenarios.json', { request }),
-  };
-};
-
 export const RootRoute = () => {
-  const { scenarios } = useCheckedLoaderData<RootData>(rootDataChecker);
-
   return (
     <AppRoot>
-      <StateSetter value={scenarios} state={allScenariosState} />
       <Box display="flex" flexDirection="row" justifyContent="stretch">
         <Box height="100vh" width="400px" bgcolor="whitesmoke">
           <Stack direction="column" height="100%" divider={<Divider />}>

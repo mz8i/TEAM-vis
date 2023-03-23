@@ -15,6 +15,8 @@ export type InputDimensionValue = {
   ID: string;
   AB?: string;
   NA?: string;
+  Description?: string;
+  Color?: string;
 } & Record<string, string>;
 
 export const dimensionValueChecker: Checker<InputDimensionValue> = constraint(
@@ -27,6 +29,7 @@ export type LeafDimensionValue = {
   ID: string;
   AB: string;
   NA: string;
+  Description?: string;
   Color?: string;
 };
 

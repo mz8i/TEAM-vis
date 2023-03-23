@@ -4,15 +4,16 @@ import { atom, selector, useRecoilState, useRecoilValue } from 'recoil';
 import { urlSyncEffect } from 'recoil-sync';
 
 import { ScenarioConfig } from '../../data/models/scenario';
+import { leafStoreByDimensionState } from '../data-tab/dimensions/dimensions-state';
 
-export const allScenariosState = atom<ScenarioConfig[]>({
+export const allScenariosState = selector<ScenarioConfig[]>({
   key: 'allScenarios',
-  default: new Promise(() => {}),
+  get: ({ get }) => get(leafStoreByDimensionState('Scenario')).values,
 });
 
 export const firstScenarioSlugState = selector<string>({
   key: 'firstScenarioSlug',
-  get: ({ get }) => get(allScenariosState)?.[0].slug,
+  get: ({ get }) => get(allScenariosState)?.[0].AB,
 });
 
 export const scenarioSlugState = atom<string>({
@@ -32,7 +33,7 @@ export const scenarioState = selector<ScenarioConfig>({
   key: 'scenario',
   get: ({ get }) => {
     const slug = get(scenarioSlugState);
-    return get(allScenariosState).find((x) => x.slug === slug)!;
+    return get(allScenariosState).find((x) => x.AB === slug)!;
   },
 });
 
@@ -42,8 +43,8 @@ export function useCheckScenarioSlug() {
   const scenarios = useRecoilValue(allScenariosState);
 
   useLayoutEffect(() => {
-    if (!scenarios.map((x) => x.slug).includes(slug)) {
-      setSlug(scenarios[0].slug);
+    if (!scenarios.map((x) => x.AB).includes(slug)) {
+      setSlug(scenarios[0].AB);
     }
   }, [scenarios, slug, setSlug]);
 }

@@ -1,4 +1,9 @@
 {
+  "Scenario": {
+    "Slug": "Scenario",
+    "Name": "Scenario",
+    "IsLeaf": true
+  },
   "Tech": {
     "Slug": "Tech",
     "Name": "Technology",

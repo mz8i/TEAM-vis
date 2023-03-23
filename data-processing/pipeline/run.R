@@ -22,4 +22,4 @@ source('src/prepare_facts.R')
 prepare_facts(IN_DATA_DIR, OUT_DATA_DIR)
 
 
-prepare_scenarios_json(IN_DATA_DIR, OUT_DATA_DIR)
+prepare_scenarios_dimension(IN_DATA_DIR, OUT_DATA_DIR)

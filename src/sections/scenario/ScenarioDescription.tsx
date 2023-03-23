@@ -7,6 +7,6 @@ export const ScenarioDescription = () => {
   const scenario = useRecoilValue(scenarioState);
 
   return scenario ? (
-    <Typography variant="body1">{scenario.description}</Typography>
+    <Typography variant="body1">{scenario.Description}</Typography>
   ) : null;
 };

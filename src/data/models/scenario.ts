@@ -7,6 +7,7 @@ import {
 } from '@recoiljs/refine';
 
 import { MutableCheckerReturn } from '../../utils/recoil/refine';
+import { LeafDimensionValue } from '../tables/dimensions';
 
 export const scenarioChecker = object({
   id: number(),
@@ -15,7 +16,7 @@ export const scenarioChecker = object({
   description: string(),
 });
 
-export type ScenarioConfig = MutableCheckerReturn<typeof scenarioChecker>;
+export type ScenarioConfig = LeafDimensionValue;
 
 export const allScenariosChecker = array(scenarioChecker);
 
