@@ -1,11 +1,11 @@
 import _ from 'lodash';
 import { atom, selector, selectorFamily } from 'recoil';
 
+import { DimensionPath, makeDimPath } from '../../data/dimension-paths';
 import {
   DataTabConfigInput,
   TabContentConfig,
-} from '../../data/models/data-tab';
-import { DimensionPath, makeDimPath } from './data-operations/dimension-paths';
+} from '../../data/fetch/models/data-tab';
 
 export const allTabsState = atom<DataTabConfigInput[]>({
   key: 'allTabs',

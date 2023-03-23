@@ -1,12 +1,12 @@
 import { selectorFamily } from 'recoil';
 
 import { DataSeries } from '../../../components/charts/types';
+import { leafStoreByDimensionState } from '../dimensions/dimensions-state';
 import {
   DataViewIdParam,
   primaryFilteredTableState,
   primaryOpsState,
-} from '../data-state';
-import { leafStoreByDimensionState } from '../dimensions/dimensions-state';
+} from '../fact-state';
 
 export const groupStyleMappingState = selectorFamily({
   key: 'groupStyleMapping',

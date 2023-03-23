@@ -6,7 +6,7 @@ import { Suspense } from 'react';
 import { useRecoilValue } from 'recoil';
 
 import { useConcurrentValue } from '../../../utils/recoil/use-concurrent-value';
-import { currentDataParamsState, currentDataState } from '../data-state';
+import { currentDataParamsState, currentDataState } from '../fact-state';
 
 function prepareTableForCsv(table: IDataFrame) {
   const firstRow = table.first();

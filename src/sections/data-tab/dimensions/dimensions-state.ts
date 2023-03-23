@@ -1,21 +1,14 @@
-import { GetRecoilValue, selector, selectorFamily } from 'recoil';
+import { selector, selectorFamily } from 'recoil';
 
-import { loadJson } from '../../../data/load';
 import {
-  DimensionValue,
+  DimensionMeta,
   DomainStore,
-  InputDimensionValue,
-  JoinDimensionValue,
   LeafDimensionValue,
-  loadDimensionValues,
-} from '../../../data/tables/dimensions';
+} from '../../../data/dimensions';
+import { loadJson } from '../../../data/fetch/load-file';
+import { loadDimensionValues } from '../../../data/fetch/tables/dimensions';
+import { loadDimensionStore } from '../../../data/load/link-dimension-stores';
 
-interface DimensionMeta {
-  Slug: string;
-  Name: string;
-  IsLeaf: boolean;
-  Colors?: Record<string, string>;
-}
 export const allDimensionsMetaState = selector({
   key: 'allDimensionsMeta',
   get: () =>
@@ -35,34 +28,18 @@ export const domainStoreByDimensionState = selectorFamily<DomainStore, string>({
   get:
     (dimension: string) =>
     async ({ get }) => {
-      const rawDimensions = await loadDimensionValues(dimension);
-
       const allMetadata = get(allDimensionsMetaState);
-      const metadata = allMetadata[dimension];
+      const getStore: (dim: string) => DomainStore = (dim: string) =>
+        get(domainStoreByDimensionState(dim));
 
-      let processed: DimensionValue[];
-      if (metadata.IsLeaf) {
-        processed = rawDimensions.map((x) =>
-          processLeafValue(x, metadata.Colors)
-        );
-      } else {
-        const columns = Object.keys(rawDimensions[0]);
+      const rawValues = await loadDimensionValues(dimension);
 
-        const otherStores = getLinkedDimensionStores(columns, allMetadata, get);
-
-        processed = rawDimensions.map((raw) =>
-          processJoinValue(raw, otherStores)
-        );
-      }
-
-      const store = new DomainStore(
-        processed,
+      return await loadDimensionStore(
         dimension,
-        metadata.IsLeaf ? 'leaf' : 'join',
-        typeof metadata.Colors === 'object'
+        rawValues,
+        allMetadata,
+        getStore
       );
-
-      return store;
     },
 });
 
@@ -85,69 +62,3 @@ export const leafStoreByDimensionState = selectorFamily<
       return store as DomainStore<LeafDimensionValue>;
     },
 });
-
-export function getLinkedDimensionStores(
-  columns: string[],
-  metadata: Record<string, DimensionMeta>,
-  get: GetRecoilValue
-) {
-  const allDimensions = new Set(Object.keys(metadata));
-
-  const dimensionIdCols = columns.filter((col) =>
-    allDimensions.has(col.match(/^(.+)ID$/)?.[1] ?? '')
-  );
-
-  const otherStores = Object.fromEntries(
-    dimensionIdCols.map((dimIdCol) => {
-      const dim = dimFromIdColumn(dimIdCol);
-      return [
-        dimIdCol,
-        {
-          dimension: dim,
-          store: get(domainStoreByDimensionState(dim)),
-        },
-      ];
-    })
-  );
-  return otherStores;
-}
-
-function dimFromIdColumn(idColumn: string) {
-  return idColumn.slice(0, idColumn.length - 2);
-}
-
-function processJoinValue(
-  raw: InputDimensionValue,
-  dimensionsByColumn: Record<string, { dimension: string; store: DomainStore }>
-): JoinDimensionValue {
-  const result: any = {};
-
-  for (const [column, value] of Object.entries(raw)) {
-    if (column in dimensionsByColumn) {
-      const { dimension, store } = dimensionsByColumn[column];
-      result[dimension] = store.get(value, 'ID');
-    } else {
-      result[column] = value;
-    }
-  }
-
-  result.type = 'join';
-
-  return result;
-}
-
-function processLeafValue(
-  raw: InputDimensionValue,
-  colors?: Record<string, string>
-): LeafDimensionValue {
-  const AB = raw.AB ?? raw.ID;
-
-  return {
-    type: 'leaf' as const,
-    ID: raw.ID,
-    NA: raw.NA!,
-    AB,
-    Description: raw.Description,
-    Color: colors?.[AB] ?? raw.Color,
-  };
-}

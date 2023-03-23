@@ -1,6 +1,6 @@
 import { dict, object, string } from '@recoiljs/refine';
 
-import { MutableCheckerReturn } from '../../utils/recoil/refine';
+import { MutableCheckerReturn } from '../../../utils/recoil/refine';
 
 export const dataSourceChecker = object({
   pathSchema: string(),

@@ -3,9 +3,9 @@ import { FC, Suspense } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
 import { PrimarySelect } from '../../../components/primary-select/PrimarySelect';
+import { DimensionPath } from '../../../data/dimension-paths';
 import { leafStoreByDimensionState } from '../dimensions/dimensions-state';
 import { dataSelectionByDimPathState } from './data-operations-state';
-import { DimensionPath } from './dimension-paths';
 
 export const PrimarySelectSection: FC<{
   dimPaths: DimensionPath[];

@@ -1,28 +1,11 @@
-import {
-  Checker,
-  array,
-  assertion,
-  constraint,
-  dict,
-  string,
-} from '@recoiljs/refine';
 import _ from 'lodash';
 
-import { MutableCheckerReturn } from '../../utils/recoil/refine';
-import { loadCsv } from '../load';
-
-export type InputDimensionValue = {
-  ID: string;
-  AB?: string;
-  NA?: string;
-  Description?: string;
-  Color?: string;
-} & Record<string, string>;
-
-export const dimensionValueChecker: Checker<InputDimensionValue> = constraint(
-  dict(string()),
-  (x) => 'ID' in x
-) as unknown as Checker<InputDimensionValue>;
+export interface DimensionMeta {
+  Slug: string;
+  Name: string;
+  IsLeaf: boolean;
+  Colors?: Record<string, string>;
+}
 
 export type LeafDimensionValue = {
   type: 'leaf';
@@ -39,21 +22,6 @@ export type JoinDimensionValue = {
 } & { [key: string]: DimensionValue };
 
 export type DimensionValue = LeafDimensionValue | JoinDimensionValue;
-
-const dimensionValueListChecker = array(dimensionValueChecker);
-
-type DimensionValueList = MutableCheckerReturn<
-  typeof dimensionValueListChecker
->;
-
-export async function loadDimensionValues(dimension: string) {
-  const data = await loadCsv(`data/tables/dimensions/${dimension}.csv`);
-  const valueList = assertion(dimensionValueListChecker)(
-    data
-  ) as DimensionValueList;
-
-  return valueList;
-}
 
 export class DomainStore<T extends DimensionValue = DimensionValue> {
   private valueLookups: Record<string, Record<string, T>>;

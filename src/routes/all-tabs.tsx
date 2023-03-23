@@ -4,9 +4,9 @@ import { object } from '@recoiljs/refine';
 import { Outlet, useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 
-import { loadJson } from '../data/load';
-import { allDataSourcesChecker } from '../data/models/data-source';
-import { allDataTabsChecker } from '../data/models/data-tab';
+import { loadJson } from '../data/fetch/load-file';
+import { allDataSourcesChecker } from '../data/fetch/models/data-source';
+import { allDataTabsChecker } from '../data/fetch/models/data-tab';
 import { allDataSourcesState } from '../sections/data-tab/data-source-state';
 import { allTabsState } from '../sections/data-tab/data-tab-state';
 import { StateSetter } from '../utils/recoil/StateSetter';

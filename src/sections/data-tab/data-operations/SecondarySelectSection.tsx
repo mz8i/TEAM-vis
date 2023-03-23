@@ -3,14 +3,14 @@ import { FC, Suspense } from 'react';
 import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from 'recoil';
 
 import { SecondarySelect } from '../../../components/secondary-select/SecondarySelect';
+import { DimensionPath } from '../../../data/dimension-paths';
+import { leafStoreByDimensionState } from '../dimensions/dimensions-state';
+import { metadataByDimensionState } from '../dimensions/dimensions-state';
 import {
   currentDataParamsState,
   valuesAfterPrimaryFilterByPathState,
-} from '../data-state';
-import { leafStoreByDimensionState } from '../dimensions/dimensions-state';
-import { metadataByDimensionState } from '../dimensions/dimensions-state';
+} from '../fact-state';
 import { dataSelectionByDimPathState } from './data-operations-state';
-import { DimensionPath } from './dimension-paths';
 
 export const SecondarySelectSection: FC<{
   dimPaths: DimensionPath[];

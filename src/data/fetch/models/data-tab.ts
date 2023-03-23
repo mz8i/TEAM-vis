@@ -10,8 +10,8 @@ import {
   string,
 } from '@recoiljs/refine';
 
-import { DataSelectionValue } from '../../types/data';
-import { MutableCheckerReturn } from '../../utils/recoil/refine';
+import { DataSelectionValue } from '../../../types/data';
+import { MutableCheckerReturn } from '../../../utils/recoil/refine';
 
 export const dataOperationChecker = object({
   aggregate: bool(),
@@ -36,10 +36,16 @@ export type TabContentConfig = MutableCheckerReturn<
   typeof dataTabContentChecker
 >;
 
+export const dataTabDefaultChartChecker = object({
+  type: string(),
+  options: dict(mixed()),
+});
+
 export const dataTabChecker = object({
   slug: string(),
   label: string(),
   content: dataTabContentChecker,
+  defaultChart: dataTabDefaultChartChecker,
 });
 
 export type DataTabConfigInput = MutableCheckerReturn<typeof dataTabChecker>;

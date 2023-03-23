@@ -3,7 +3,7 @@ import { atom, selectorFamily } from 'recoil';
 import {
   AllDataSourcesConfig,
   DataSourceConfig,
-} from '../../data/models/data-source';
+} from '../../data/fetch/models/data-source';
 
 export const allDataSourcesState = atom<AllDataSourcesConfig>({
   key: 'allDataSources',

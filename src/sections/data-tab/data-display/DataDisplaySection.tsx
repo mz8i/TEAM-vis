@@ -9,8 +9,8 @@ import {
 } from 'recoil';
 
 import { scenarioState } from '../../scenario/scenario-state';
-import { FactTableParams, currentDataParamsState } from '../data-state';
 import { activeTabContentState } from '../data-tab-state';
+import { FactTableParams, currentDataParamsState } from '../fact-state';
 import { paramValuesByVariableParamsState } from '../variables/variable-state';
 import { DataChartSection } from './DataChartSection';
 import { DataDownloadButton } from './DataDownloadButton';

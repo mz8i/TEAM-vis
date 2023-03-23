@@ -10,10 +10,10 @@ import {
 } from 'recoil';
 import { urlSyncEffect } from 'recoil-sync';
 
-import { LeafDimensionValue } from '../../../data/tables/dimensions';
+import { DimensionPath } from '../../../data/dimension-paths';
+import { LeafDimensionValue } from '../../../data/dimensions';
 import { DataSelectionValue } from '../../../types/data';
 import { activeTabContentState } from '../data-tab-state';
-import { DimensionPath } from './dimension-paths';
 
 export const dataSelectionByDimPathState = atomFamily<
   DataSelectionValue<LeafDimensionValue>,

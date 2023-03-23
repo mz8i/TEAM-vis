@@ -10,7 +10,7 @@ import {
 } from 'recoil';
 import { urlSyncEffect } from 'recoil-sync';
 
-import { LeafDimensionValue } from '../../../data/tables/dimensions';
+import { LeafDimensionValue } from '../../../data/dimensions';
 import { activeTabContentState } from '../data-tab-state';
 import { leafStoreByDimensionState } from '../dimensions/dimensions-state';
 

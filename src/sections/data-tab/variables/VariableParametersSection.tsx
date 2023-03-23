@@ -1,7 +1,7 @@
 import { Box, Stack } from '@mui/material';
 import { FC, Suspense } from 'react';
 
-import { VariableConfig } from '../../../data/models/data-tab';
+import { VariableConfig } from '../../../data/fetch/models/data-tab';
 import { ParamSelection } from './ParamSelection';
 
 export const VariableParametersSection: FC<{

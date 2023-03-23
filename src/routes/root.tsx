@@ -4,7 +4,7 @@ import { Outlet } from 'react-router';
 import { Link as RouterLink } from 'react-router-dom';
 
 import { AppRoot } from '../AppRoot';
-import { loadJson } from '../data/load';
+import { loadJson } from '../data/fetch/load-file';
 import { ScenarioPanel } from '../sections/scenario/ScenarioPanel';
 import { allScenariosState } from '../sections/scenario/scenario-state';
 import AboutSidebar from '../text/AboutSidebar.mdx';
