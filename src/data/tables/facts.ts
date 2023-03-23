@@ -1,16 +1,16 @@
-import { DataFrame } from 'data-forge';
+import { DataFrame, IDataFrame } from 'data-forge';
 
 import { interpolateDotFormatString } from '../../utils/string-expression';
 import { loadCsv } from '../load';
 import { DataSourceConfig } from '../models/data-source';
-import { ScenarioConfig } from '../models/scenario';
+import { ScenarioValue } from '../models/scenario';
 import { DimensionValue } from './dimensions';
 
 export async function loadFactTable(
   dataSourceConfig: DataSourceConfig,
-  scenario: ScenarioConfig,
+  scenario: ScenarioValue,
   parameterValues: Record<string, DimensionValue>
-): Promise<DataFrame> {
+): Promise<IDataFrame> {
   const pathSchemaFormatted = interpolateDotFormatString(
     dataSourceConfig.pathSchema,
     parameterValues
@@ -19,5 +19,7 @@ export async function loadFactTable(
   const filePath = `data/tables/facts/${scenario.ID}__${pathSchemaFormatted}.csv`;
 
   const data = await loadCsv(filePath);
-  return new DataFrame(data);
+  return new DataFrame(data).generateSeries({
+    Scenario: () => scenario,
+  });
 }

@@ -1,7 +1,7 @@
 import { IDataFrame } from 'data-forge';
 import { atom, selector, selectorFamily } from 'recoil';
 
-import { ScenarioConfig } from '../../data/models/scenario';
+import { ScenarioValue } from '../../data/models/scenario';
 import {
   DimensionValue,
   LeafDimensionValue,
@@ -26,18 +26,28 @@ export type DataViewIdParam = FactTableParams;
 export type FactTableParams = {
   variableName: string;
   params: Record<string, LeafDimensionValue>;
-  scenario: ScenarioConfig;
+  scenarios: ScenarioValue[];
 };
 
 export const factTableState = selectorFamily({
   key: 'factTable',
   dangerouslyAllowMutability: true,
   get:
-    ({ variableName, params, scenario }: Readonly<FactTableParams>) =>
+    ({ variableName, params, scenarios }: Readonly<FactTableParams>) =>
     async ({ get }) => {
       const dataSource = get(dataSourceByNameState(variableName));
 
-      const factTable = await loadFactTable(dataSource, scenario, params);
+      let factTable: IDataFrame<number, any> | null = null;
+
+      for (const scenario of scenarios) {
+        const scenarioTable = await loadFactTable(dataSource, scenario, params);
+        if (factTable == null) {
+          factTable = scenarioTable;
+        } else {
+          factTable = factTable.concat(scenarioTable);
+        }
+      }
+      factTable = factTable!;
 
       const columns = factTable.getColumnNames();
       const dimensionsMetadata = get(allDimensionsMetaState);

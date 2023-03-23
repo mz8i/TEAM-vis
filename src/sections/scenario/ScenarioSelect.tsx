@@ -20,7 +20,7 @@ export const ScenarioSelect = () => {
         variant="outlined"
         size="small"
       >
-        {allScenarios.map((sc) => (
+        {allScenarios.values.map((sc) => (
           <MenuItem key={sc.AB} value={sc.AB}>
             {sc.AB}
           </MenuItem>

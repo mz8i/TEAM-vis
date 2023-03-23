@@ -5,7 +5,6 @@ import { Link as RouterLink } from 'react-router-dom';
 
 import { AppRoot } from '../AppRoot';
 import { loadJson } from '../data/load';
-import { allScenariosChecker } from '../data/models/scenario';
 import { ScenarioPanel } from '../sections/scenario/ScenarioPanel';
 import { allScenariosState } from '../sections/scenario/scenario-state';
 import AboutSidebar from '../text/AboutSidebar.mdx';

@@ -71,6 +71,11 @@ export class DomainStore<T extends DimensionValue = DimensionValue> {
     }
   }
 
+  /**
+   * Find dimension value with specified attribute
+   * @param key the attribute value to find
+   * @param by the attribute name to search by (default: ID)
+   */
   public get(key: string, by: keyof DimensionValue = 'ID') {
     if (by in this.valueLookups) {
       return this.valueLookups[by][key];

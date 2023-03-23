@@ -102,7 +102,7 @@ function DataParamsSetter({}: any) {
   const dataParams: FactTableParams = {
     variableName: name,
     params: variableParams,
-    scenario,
+    scenarios: [scenario],
   };
   return (
     <Suspense fallback={<FallbackSetter dataParams={dataParams} />}>
