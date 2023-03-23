@@ -14,7 +14,7 @@ export const groupStyleMappingState = selectorFamily({
     (dataViewId: DataViewIdParam) =>
     ({ get }) => {
       const primaryOp = get(primaryOpsState(dataViewId)).find(
-        (x) => x.path.dimension !== 'Year'
+        (x) => x.path.dimension !== 'Year' && !x.ops.aggregate
       );
 
       if (primaryOp == null) return () => ({});
