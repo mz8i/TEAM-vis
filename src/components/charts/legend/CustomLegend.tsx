@@ -40,7 +40,6 @@ export function CustomLegend({
     >
       <List disablePadding>
         {payload?.map((x: Payload) => {
-          console.log(x);
           const gkey = (x as any).dataKey;
           return (
             <ListItem
