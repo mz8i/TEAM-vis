@@ -29,17 +29,6 @@ export type FactTableParams = {
   scenario: ScenarioConfig;
 };
 
-export interface YearValue {
-  Year: number;
-  Value: number;
-}
-export interface DataGroup {
-  GroupKey: string;
-  GroupLabel: string;
-  Grouping: any;
-  Rows: YearValue[];
-}
-
 export const factTableState = selectorFamily({
   key: 'factTable',
   dangerouslyAllowMutability: true,

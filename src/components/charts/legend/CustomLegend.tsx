@@ -39,13 +39,14 @@ export function CustomLegend({
       flexGrow={1}
     >
       <List disablePadding>
-        {payload?.map((x: any) => {
-          const gkey = x.dataKey;
+        {payload?.map((x: Payload) => {
+          console.log(x);
+          const gkey = (x as any).dataKey;
           return (
             <ListItem
               disableGutters
               disablePadding
-              key={x.dataKey}
+              key={(x as any).dataKey}
               onMouseEnter={() => handleLegendEnter(x)}
               onMouseLeave={() => handleLegendLeave(x)}
               onClick={(e) => {

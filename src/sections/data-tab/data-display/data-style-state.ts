@@ -1,7 +1,7 @@
 import { selectorFamily } from 'recoil';
 
+import { DataSeries } from '../../../components/charts/types';
 import {
-  DataGroup,
   DataViewIdParam,
   primaryFilteredTableState,
   primaryOpsState,
@@ -22,7 +22,7 @@ export const groupStyleMappingState = selectorFamily({
       const store = get(leafStoreByDimensionState(primaryOp.path.dimension));
 
       if (!primaryOp.ops.aggregate && store.hasColor) {
-        return (g: DataGroup) => {
+        return (g: DataSeries<any>) => {
           const value = g.Grouping[primaryOp.path.rawExpression];
           const color = value?.Color ?? '#cccccc';
           return {

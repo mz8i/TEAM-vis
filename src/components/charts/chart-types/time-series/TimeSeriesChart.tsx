@@ -3,26 +3,37 @@ import {
   Area,
   AreaChart,
   CartesianGrid,
+  ComposedChart,
   Legend,
+  Line,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from 'recharts';
 
-import { DataGroup } from '../../data-state';
+import { isFullOpacity, isHovered, isSelected } from '../../chart-utils';
+import { CustomLegend } from '../../legend/CustomLegend';
+import { DataSeries } from '../../types';
 import { CustomTooltip } from './CustomTooltip';
-import { isFullOpacity, isHovered, isSelected } from './chart-utils';
-import { CustomLegend } from './legend/CustomLegend';
 
-function processData(groups: DataGroup[]) {
+export interface YearValue {
+  Year: number;
+  Value: number;
+}
+
+export type TSDataSeries = DataSeries<YearValue>;
+
+function processData(groups: TSDataSeries[]) {
   let minYear = +Infinity;
   let maxYear = -Infinity;
 
   const gKeys: string[] = [];
   const gLookups: Record<string, Record<number, number>> = {};
 
-  for (const g of groups) {
+  const allGroups = [...groups];
+
+  for (const g of allGroups) {
     const lookup: Record<number, number> = (gLookups[g.GroupKey] = {});
     gKeys.push(g.GroupKey);
 
@@ -49,15 +60,15 @@ function processData(groups: DataGroup[]) {
   return data;
 }
 
-export interface RechartsChartProps {
-  groups: DataGroup[];
-  groupStyleMapping: (g: DataGroup) => any;
+export interface TimeSeriesChartProps {
+  groups: TSDataSeries[];
+  groupStyleMapping: (g: TSDataSeries) => any;
 }
 
-export const RechartsChart = ({
+export const TimeSeriesChart = ({
   groups,
   groupStyleMapping,
-}: RechartsChartProps) => {
+}: TimeSeriesChartProps) => {
   const keys = useMemo(() => groups.map((x) => x.GroupKey), [groups]);
   const data = useMemo(() => processData(groups), [groups]);
 
@@ -76,7 +87,7 @@ export const RechartsChart = ({
 
   return (
     <ResponsiveContainer width="100%" height="100%">
-      <AreaChart data={data}>
+      <ComposedChart data={data}>
         <XAxis dataKey="Year" axisLine={false} ticks={yearTicks} />
         <YAxis
           width={120}
@@ -89,6 +100,7 @@ export const RechartsChart = ({
         />
         <CartesianGrid strokeDasharray="2 2" />
         <Tooltip content={<CustomTooltip />} />
+
         {groups.map((group) => {
           const gkey = group.GroupKey;
           const hovered = isHovered(gkey, hoveredKey);
@@ -111,10 +123,12 @@ export const RechartsChart = ({
               strokeOpacity={isOpaque ? fullOpacity : 0.5}
               strokeWidth={isOpaque ? 2 : 0}
               isAnimationActive={false}
+              legendType="rect"
               {...style}
             />
           );
         })}
+
         <Legend
           wrapperStyle={{
             width: '250px',
@@ -131,7 +145,6 @@ export const RechartsChart = ({
           align="right"
           verticalAlign="top"
           layout="vertical"
-          iconType="rect"
           content={
             <CustomLegend
               hoveredKey={hoveredKey}
@@ -142,7 +155,7 @@ export const RechartsChart = ({
             />
           }
         />
-      </AreaChart>
+      </ComposedChart>
     </ResponsiveContainer>
   );
 };

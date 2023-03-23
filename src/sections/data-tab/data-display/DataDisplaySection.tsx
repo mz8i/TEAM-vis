@@ -9,7 +9,7 @@ import {
 } from 'recoil';
 
 import { scenarioState } from '../../scenario/scenario-state';
-import { currentDataParamsState } from '../data-state';
+import { FactTableParams, currentDataParamsState } from '../data-state';
 import { activeTabContentState } from '../data-tab-state';
 import { paramValuesByVariableParamsState } from '../variables/variable-state';
 import { DataChartSection } from './DataChartSection';
@@ -99,7 +99,7 @@ function DataParamsSetter({}: any) {
     paramValuesByVariableParamsState(parameters)
   );
 
-  const dataParams = {
+  const dataParams: FactTableParams = {
     variableName: name,
     params: variableParams,
     scenario,

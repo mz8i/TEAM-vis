@@ -8,7 +8,9 @@ export function LegendItem({
     color,
     hovered,
     selected,
-    payload: { name },
+    type,
+    payload: { strokeDasharray },
+    value: name,
   },
 }: {
   payload: any;
@@ -34,7 +36,7 @@ export function LegendItem({
             cy={shapeSize / 2}
             fill={color}
             opacity={opacity}
-          ></Dot>
+          />
         </svg>
       </Box>
       <Box sx={{ lineHeight }}>
