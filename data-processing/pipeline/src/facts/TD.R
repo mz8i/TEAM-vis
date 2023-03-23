@@ -19,9 +19,9 @@ prepare_td <- function(scenario_id, scenario_dir, fact_out_dir, config) {
       MSModeID = modeID,
       Value = td
     ) %>% 
-    filter(
-      Year >= config$td_min_year,
-      Year <= config$td_max_year
+    filter_years(
+      config$minYear,
+      config$maxYear
     ) %>% 
     write_csv(
       fact_out_dir %//% str_glue("{scenario_id}__TD.csv"),

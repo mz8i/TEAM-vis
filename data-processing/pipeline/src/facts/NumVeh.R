@@ -13,8 +13,9 @@ read_num_veh <- function(scenario_dir) {
   )
 }
 
-prepare_num_veh <- function(scenario_id, scenario_dir, fact_out_dir) {
+prepare_num_veh <- function(scenario_id, scenario_dir, fact_out_dir, config) {
   read_num_veh(scenario_dir) %>%
+    filter_years(config$minYear, config$maxYear) %>% 
     group_by(VehCatID) %>% 
     group_walk(function(df, head) {
       category <- sanitizeSlug(head$VehCatID)

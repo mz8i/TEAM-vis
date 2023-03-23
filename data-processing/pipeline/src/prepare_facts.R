@@ -4,11 +4,18 @@ source('./src/facts/VehKM.R')
 source('./src/facts/emissions.R')
 source('./src/facts/TD.R')
 
+filter_years <- function(df, minYear, maxYear) {
+  filter(
+    df,
+    Year >= minYear,
+    Year <= maxYear
+  )
+}
 
 prepare_scenario_facts <- function(scenario_id, scenario_in_dir, fact_out_dir, emission_meta, config) {
-  prepare_num_veh(scenario_id, scenario_in_dir, fact_out_dir)
-  prepare_veh_km(scenario_id, scenario_in_dir, fact_out_dir)
-  prepare_emissions(scenario_id, scenario_in_dir, fact_out_dir, emission_meta)
+  prepare_num_veh(scenario_id, scenario_in_dir, fact_out_dir, config)
+  prepare_veh_km(scenario_id, scenario_in_dir, fact_out_dir, config)
+  prepare_emissions(scenario_id, scenario_in_dir, fact_out_dir, config, emission_meta)
   prepare_td(scenario_id, scenario_in_dir, fact_out_dir, config)
   
   return(TRUE)

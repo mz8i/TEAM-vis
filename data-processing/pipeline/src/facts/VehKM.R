@@ -11,9 +11,10 @@ read_veh_km <- function(scenario_dir) {
   )
 }
 
-prepare_veh_km <- function(scenario_id, scenario_dir, fact_out_dir) {
+prepare_veh_km <- function(scenario_id, scenario_dir, fact_out_dir, config) {
   read_veh_km(scenario_dir) %>% 
-    rename(Value = VehKM) %>% 
+    rename(Value = VehKM) %>%
+    filter_years(config$minYear, config$maxYear) %>% 
     write_csv(
       fact_out_dir %//% str_glue("{scenario_id}__VehKM.csv"),
       na = ''

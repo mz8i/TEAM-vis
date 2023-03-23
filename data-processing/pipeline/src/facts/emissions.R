@@ -97,14 +97,15 @@ preprocess_emissions <- function(df) {
     mutate(Value = Value / 1000000)
 }
 
-prepare_emissions <- function(scenario_id, scenario_dir, fact_out_dir, emission_meta) {
+prepare_emissions <- function(scenario_id, scenario_dir, fact_out_dir, config, emission_meta) {
   et <- read_et(scenario_dir) %>% 
     preproc_et()
   
   ed <- read_ed(scenario_dir) %>% 
     preproc_ed()
   
-  emissions <- bind_rows(ed, et) %>% 
+  emissions <- bind_rows(ed, et) %>%
+    filter_years(config$minYear, config$maxYear) %>% 
     preprocess_emissions()
 
   prepare_ghg(emissions, emission_meta, scenario_id, scenario_dir, fact_out_dir)
