@@ -3,7 +3,7 @@
  * Defines aggregation (summing up over variable) or disaggregation (splitting by variable),
  * also defines filtering of variable values.
  */
-export interface DataSelectionValue<T> {
+export type DataSelectionValue<T> = {
   /**
    * Should the data be aggregated across all possible values of this domain,
    * e.g. charts are not disaggregated by Fuel Type - data points for all fuel types are summed up.
@@ -14,9 +14,9 @@ export interface DataSelectionValue<T> {
    * Array of values to keep. If empty, filter everything out. If null, don't filter anything out.
    */
   filter: T[] | null;
-}
+};
 
-export interface DataDomain<T> {
+export type DataDomain<T> = {
   /**
    * All possible values in the domain
    */
@@ -37,6 +37,6 @@ export interface DataDomain<T> {
    * toggle the selection on/off.
    */
   shown: T[];
-}
+};
 
 export type LabelFn<T> = (x: T) => string;

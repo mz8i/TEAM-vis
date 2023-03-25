@@ -11,13 +11,13 @@ import {
 import { AboutRoute } from './routes/about';
 import { AllTabsRoute, dataViewLoader } from './routes/all-tabs';
 import { DataTabRoute } from './routes/data-tab';
-import { RootRoute } from './routes/root';
+import { RootRoute, rootLoader } from './routes/root';
 
 import './index.css';
 
 const router = createHashRouter(
   createRoutesFromElements(
-    <Route element={<RootRoute />}>
+    <Route loader={rootLoader} element={<RootRoute />}>
       <Route
         path="/"
         loader={() => {

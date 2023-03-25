@@ -1,15 +1,16 @@
 import { Box, Stack } from '@mui/material';
-import { FC, Suspense } from 'react';
-import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from 'recoil';
+import { FC, Suspense, useMemo } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 import { SecondarySelect } from '../../../components/secondary-select/SecondarySelect';
-import { DimensionPath } from '../../../data/dimension-paths';
-import { leafStoreByDimensionState } from '../dimensions/dimensions-state';
-import { metadataByDimensionState } from '../dimensions/dimensions-state';
+import { DimensionPath, getWithPath } from '../../../data/dimension-paths';
+import { useConcurrentValue } from '../../../utils/recoil/use-concurrent-value';
+import { currentDataViewParamsState } from '../data-view-state';
 import {
-  currentDataParamsState,
-  valuesAfterPrimaryFilterByPathState,
-} from '../fact-state';
+  leafStoreByDimensionState,
+  metadataByDimensionState,
+} from '../dimensions/dimensions-state';
+import { DataViewParams, primaryFilteredTableState } from '../fact-state';
 import { dataSelectionByDimPathState } from './data-operations-state';
 
 export const SecondarySelectSection: FC<{
@@ -28,17 +29,38 @@ export const SecondarySelectSection: FC<{
   );
 };
 
+function useValuesAfterPrimaryFilter(
+  path: DimensionPath,
+  dataViewParams: DataViewParams
+) {
+  const { value: primaryFilteredTable, loadingNew } = useConcurrentValue(
+    primaryFilteredTableState(dataViewParams)
+  );
+
+  const allowedValues = useMemo(
+    () =>
+      primaryFilteredTable
+        .deflate((row) => getWithPath(row, path))
+        .distinct()
+        .toArray(),
+    [primaryFilteredTable]
+  );
+
+  return { allowedValues, loadingNew };
+}
+
 function SecondarySubsection({ dimPath }: { dimPath: DimensionPath }) {
   const dimension = dimPath.dimension;
   const domainStore = useRecoilValue(leafStoreByDimensionState(dimension));
   const values = domainStore.values;
-  const currentDataViewId = useRecoilValue(currentDataParamsState);
-  const allowedLoadable = useRecoilValueLoadable(
-    valuesAfterPrimaryFilterByPathState({
-      path: dimPath,
-      dataViewId: currentDataViewId,
-    })
-  );
+
+  // TODO: fix loading of allowed values
+
+  // const dataViewParams = useRecoilValue(currentDataViewParamsState);
+  // const { allowedValues, loadingNew } = useValuesAfterPrimaryFilter(
+  //   dimPath,
+  //   dataViewParams
+  // );
 
   const [selected, setSelected] = useRecoilState(
     dataSelectionByDimPathState(dimPath)
@@ -46,8 +68,7 @@ function SecondarySubsection({ dimPath }: { dimPath: DimensionPath }) {
 
   const title = useRecoilValue(metadataByDimensionState(dimension)).Name;
 
-  const allowed =
-    allowedLoadable.state === 'hasValue' ? allowedLoadable.contents : values;
+  const allowed = values; // loadingNew ? values : allowedValues;
 
   const shown = allowed;
 

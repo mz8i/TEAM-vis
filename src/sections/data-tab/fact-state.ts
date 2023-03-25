@@ -1,10 +1,5 @@
-import { atom, selector, selectorFamily } from 'recoil';
+import { selectorFamily } from 'recoil';
 
-import {
-  DimensionPath,
-  getWithPath,
-  makeDimPath,
-} from '../../data/dimension-paths';
 import { LeafDimensionValue } from '../../data/dimensions';
 import { loadMultiScenarioFactTable } from '../../data/fetch/tables/facts';
 import { linkFactDimensions } from '../../data/load/link-fact-dimensions';
@@ -12,21 +7,29 @@ import { ScenarioValue } from '../../data/scenario';
 import {
   filterTable,
   getFiltersFromOps,
-  getGroupingsFromOps,
   groupTable,
   makeGroupKeyFn,
   makeGroupObjFn,
   ungroupTable,
 } from '../../data/transform/fact-processing';
-import { dataSelectionByDimPathState } from './data-operations/data-operations-state';
+import { ChartType } from './data-display/chart-types';
 import { dataSourceByNameState } from './data-source-state';
-import { activeTabContentState } from './data-tab-state';
 import {
   allDimensionsMetaState,
   domainStoreByDimensionState,
 } from './dimensions/dimensions-state';
+import {
+  ViewParams,
+  allGroupingsState,
+  primaryOpsState,
+  secondaryOpsState,
+} from './fact-ops-state';
 
-export type DataViewIdParam = FactTableParams;
+export type DataViewParams = {
+  factTableParams: FactTableParams;
+  viewParams: ViewParams;
+  chartType: ChartType;
+};
 
 export type FactTableParams = {
   variableName: string;
@@ -54,68 +57,15 @@ export const factTableState = selectorFamily({
     },
 });
 
-export const currentChartOpsState = selector({
-  key: 'currentChartOps',
-  get: ({ get }) => {
-    return {
-      Year: {
-        aggregate: false,
-        filter: null,
-      },
-    };
-  },
-});
-
-export const currentDataParamsState = atom<FactTableParams>({
-  key: 'currentDataParamsState',
-  default: new Promise(() => {}),
-});
-
-export const rootTableState = selectorFamily({
-  key: 'rootTable',
-  dangerouslyAllowMutability: true,
-  get:
-    (dataViewId: DataViewIdParam) =>
-    ({ get }) => {
-      return get(factTableState(dataViewId));
-    },
-});
-
-export const primaryOpsState = selectorFamily({
-  key: 'primaryOps',
-  get:
-    (dataViewId: DataViewIdParam) =>
-    ({ get }) => {
-      const currentChartOps = get(currentChartOpsState);
-      const { operations: viewOps = {}, primarySelect: primaryOps } = get(
-        activeTabContentState
-      );
-
-      const ops = [
-        ...Object.entries(currentChartOps),
-        ...Object.entries(viewOps),
-        ...primaryOps.map(
-          (dimPath) =>
-            [dimPath, get(dataSelectionByDimPathState(dimPath))] as const
-        ),
-      ].map(([path, ops]) => ({
-        path: path instanceof DimensionPath ? path : makeDimPath(path),
-        ops,
-      }));
-
-      return ops;
-    },
-});
-
 export const primaryFilteredTableState = selectorFamily({
   key: 'primaryFilteredTable',
   dangerouslyAllowMutability: true,
   get:
-    (dataViewId: DataViewIdParam) =>
+    ({ factTableParams, viewParams }: DataViewParams) =>
     ({ get }) => {
-      const rootTable = get(rootTableState(dataViewId));
+      const rootTable = get(factTableState(factTableParams));
 
-      const ops = get(primaryOpsState(dataViewId));
+      const ops = get(primaryOpsState(viewParams));
 
       const filters = getFiltersFromOps(ops);
 
@@ -123,48 +73,14 @@ export const primaryFilteredTableState = selectorFamily({
     },
 });
 
-export const valuesAfterPrimaryFilterByPathState = selectorFamily({
-  key: 'valuesAfterPrimaryFilterByPath',
-  get:
-    ({
-      path,
-      dataViewId,
-    }: {
-      path: DimensionPath;
-      dataViewId: DataViewIdParam;
-    }) =>
-    ({ get }) => {
-      return get(primaryFilteredTableState(dataViewId))
-        .deflate((row) => getWithPath(row, path))
-        .distinct()
-        .toArray();
-    },
-});
-
-export const secondaryOpsState = selectorFamily({
-  key: 'secondaryOps',
-  get:
-    (dataViewId: DataViewIdParam) =>
-    ({ get }) => {
-      const { secondarySelect } = get(activeTabContentState);
-
-      const ops = secondarySelect.map((dimPath) => ({
-        path: dimPath,
-        ops: get(dataSelectionByDimPathState(dimPath)),
-      }));
-
-      return ops;
-    },
-});
-
 export const secondaryFilteredTableState = selectorFamily({
   key: 'secondaryFilteredTable',
   dangerouslyAllowMutability: true,
   get:
-    (dataViewId: DataViewIdParam) =>
+    (dataViewParams: DataViewParams) =>
     ({ get }) => {
-      const ops = get(secondaryOpsState(dataViewId));
-      const table = get(primaryFilteredTableState(dataViewId));
+      const ops = get(secondaryOpsState(dataViewParams.viewParams));
+      const table = get(primaryFilteredTableState(dataViewParams));
 
       const filters = getFiltersFromOps(ops);
 
@@ -172,28 +88,15 @@ export const secondaryFilteredTableState = selectorFamily({
     },
 });
 
-export const allOpsState = selectorFamily({
-  key: 'allOps',
-  get:
-    (dataViewId: DataViewIdParam) =>
-    ({ get }) => {
-      return [
-        ...get(primaryOpsState(dataViewId)),
-        ...get(secondaryOpsState(dataViewId)),
-      ];
-    },
-});
-
 export const currentDataState = selectorFamily({
   key: 'currentData',
   dangerouslyAllowMutability: true,
   get:
-    (dataViewId: DataViewIdParam) =>
+    (dataViewParams: DataViewParams) =>
     ({ get }) => {
-      const allOps = get(allOpsState(dataViewId));
-      const table = get(secondaryFilteredTableState(dataViewId));
+      const table = get(secondaryFilteredTableState(dataViewParams));
 
-      const groupBy = getGroupingsFromOps(allOps);
+      const groupBy = get(allGroupingsState(dataViewParams.viewParams));
 
       const groupKeyFn = makeGroupKeyFn(groupBy);
       const groupObjFn = makeGroupObjFn(groupBy);
@@ -205,26 +108,5 @@ export const currentDataState = selectorFamily({
         .dropSeries('Rows');
 
       return ungroupTable(aggregatedTable);
-    },
-});
-
-export const totalDataState = selectorFamily({
-  key: 'totalData',
-  dangerouslyAllowMutability: true,
-  get:
-    (dataViewId: DataViewIdParam) =>
-    ({ get }) => {
-      const table = get(rootTableState(dataViewId));
-
-      const groupedTable = table
-        .groupBy((row) => row.Year)
-        .select((group) => ({
-          GroupKey: group.first().Year,
-          Grouping: { Year: group.first().Year },
-          Value: group.deflate((row) => row.Value).sum(),
-        }))
-        .inflate();
-
-      return ungroupTable(groupedTable);
     },
 });

@@ -32,7 +32,7 @@ export const dataTabContentChecker = object({
   operations: optional(dict(dataOperationChecker)),
 });
 
-export type TabContentConfig = MutableCheckerReturn<
+export type DataTabContentConfigInput = MutableCheckerReturn<
   typeof dataTabContentChecker
 >;
 

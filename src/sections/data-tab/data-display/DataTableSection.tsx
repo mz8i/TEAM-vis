@@ -1,13 +1,13 @@
-import { Typography } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { useRecoilValue } from 'recoil';
 
 import { useConcurrentValue } from '../../../utils/recoil/use-concurrent-value';
-import { currentDataParamsState, currentDataState } from '../fact-state';
+import { currentDataViewParamsState } from '../data-view-state';
+import { currentDataState } from '../fact-state';
 
 export const DataTableSection = () => {
   const { value: currentDataParams, loadingNew } = useConcurrentValue(
-    currentDataParamsState
+    currentDataViewParamsState
   );
   const factTable = useRecoilValue(currentDataState(currentDataParams));
 

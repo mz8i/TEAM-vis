@@ -1,27 +1,15 @@
 import { Backdrop, Box, CircularProgress } from '@mui/material';
-import { useMemo } from 'react';
-import { useRecoilValue } from 'recoil';
 
-import { TimeSeriesChart } from '../../../components/charts/chart-types/time-series/TimeSeriesChart';
-import { prepareTimeSeriesDataSeries } from '../../../components/charts/chart-types/time-series/prepare-data';
 import { useConcurrentValue } from '../../../utils/recoil/use-concurrent-value';
-import {
-  FactTableParams,
-  currentDataParamsState,
-  currentDataState,
-} from '../fact-state';
-import { groupStyleMappingState } from './data-style-state';
+import { currentDataViewParamsState } from '../data-view-state';
+import { useChartComponent } from './use-chart';
 
 export const DataChartSection = () => {
   const { value: dataViewParams, loadingNew } = useConcurrentValue(
-    currentDataParamsState
+    currentDataViewParamsState
   );
 
-  const groupedSeriesData = useTimeSeriesData(dataViewParams);
-
-  const groupStyleMapping = useRecoilValue(
-    groupStyleMappingState(dataViewParams)
-  );
+  const ChartComponent = useChartComponent(dataViewParams.chartType);
 
   return (
     <Box height="100%" position="relative" zIndex={0}>
@@ -37,16 +25,7 @@ export const DataChartSection = () => {
           <CircularProgress sx={{ color: 'white' }} />
         </Backdrop>
       )}
-      <TimeSeriesChart
-        groups={groupedSeriesData}
-        groupStyleMapping={groupStyleMapping}
-      />
+      <ChartComponent dataViewParams={dataViewParams} />
     </Box>
   );
 };
-
-function useTimeSeriesData(dataViewParams: FactTableParams) {
-  const factTable = useRecoilValue(currentDataState(dataViewParams));
-
-  return useMemo(() => prepareTimeSeriesDataSeries(factTable), [factTable]);
-}

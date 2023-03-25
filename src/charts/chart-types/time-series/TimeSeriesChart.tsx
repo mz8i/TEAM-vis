@@ -12,10 +12,10 @@ import {
   YAxis,
 } from 'recharts';
 
+import { CustomTooltip } from '../../CustomTooltip';
 import { isFullOpacity, isHovered, isSelected } from '../../chart-utils';
 import { CustomLegend } from '../../legend/CustomLegend';
 import { DataSeries } from '../../types';
-import { CustomTooltip } from './CustomTooltip';
 
 export interface YearValue {
   Year: number;

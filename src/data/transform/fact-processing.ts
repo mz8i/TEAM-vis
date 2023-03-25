@@ -1,6 +1,6 @@
 import { IDataFrame } from 'data-forge';
 
-import { DataSeries } from '../../components/charts/types';
+import { DataSeries } from '../../charts/types';
 import { DataSelectionValue } from '../../types/data';
 import { DimensionPath, getWithPath } from '../dimension-paths';
 import { DimensionValue } from '../dimensions';
@@ -72,6 +72,8 @@ export function makeGroupObjFn(groupPaths: (string | DimensionPath)[]) {
     );
 }
 
+export type GroupRowsFunction = (rows: IDataFrame) => any;
+
 export interface DataGroup<GroupingT extends Record<string, any>> {
   GroupKey: string;
   Grouping: GroupingT;
@@ -80,15 +82,16 @@ export interface DataGroup<GroupingT extends Record<string, any>> {
 export function groupTable<T>(
   table: IDataFrame<number, T>,
   groupKeyFn: GroupKeyFunction,
-  groupObjFn: GroupObjectFunction
-) {
+  groupObjFn: GroupObjectFunction,
+  groupRowsFn: GroupRowsFunction = (rr) => rr
+): IDataFrame<number, any> {
   return table
     .groupBy((row) => groupKeyFn(row))
     .select((group) => {
       return {
         GroupKey: groupKeyFn(group.first()),
         Grouping: groupObjFn(group.first()),
-        Rows: group,
+        Rows: groupRowsFn(group),
       };
     })
     .inflate();

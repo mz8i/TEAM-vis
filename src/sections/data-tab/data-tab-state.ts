@@ -4,7 +4,7 @@ import { atom, selector, selectorFamily } from 'recoil';
 import { DimensionPath, makeDimPath } from '../../data/dimension-paths';
 import {
   DataTabConfigInput,
-  TabContentConfig,
+  DataTabContentConfigInput,
 } from '../../data/fetch/models/data-tab';
 
 export const allTabsState = atom<DataTabConfigInput[]>({
@@ -12,11 +12,16 @@ export const allTabsState = atom<DataTabConfigInput[]>({
   default: new Promise(() => {}),
 });
 
-type DataTabConfig = Omit<DataTabConfigInput, 'content'> & {
-  content: Omit<TabContentConfig, 'primarySelect' | 'secondarySelect'> & {
-    primarySelect: DimensionPath[];
-    secondarySelect: DimensionPath[];
-  };
+export type DataTabContentConfig = Omit<
+  DataTabContentConfigInput,
+  'primarySelect' | 'secondarySelect'
+> & {
+  primarySelect: DimensionPath[];
+  secondarySelect: DimensionPath[];
+};
+
+export type DataTabConfig = Omit<DataTabConfigInput, 'content'> & {
+  content: DataTabContentConfig;
 };
 
 function processTabState(state: DataTabConfigInput): DataTabConfig {

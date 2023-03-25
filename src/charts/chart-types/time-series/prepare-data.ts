@@ -3,7 +3,7 @@ import { IDataFrame } from 'data-forge';
 import {
   makeGroupKeyFn,
   makeGroupObjFn,
-} from '../../../../data/transform/fact-processing';
+} from '../../../data/transform/fact-processing';
 import { TSDataSeries } from './TimeSeriesChart';
 
 export function prepareTimeSeriesDataSeries(

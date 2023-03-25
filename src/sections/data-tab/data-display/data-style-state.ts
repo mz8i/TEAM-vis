@@ -1,20 +1,22 @@
 import { selectorFamily } from 'recoil';
 
-import { DataSeries } from '../../../components/charts/types';
+import { DataSeries } from '../../../charts/types';
 import { leafStoreByDimensionState } from '../dimensions/dimensions-state';
-import {
-  DataViewIdParam,
-  primaryFilteredTableState,
-  primaryOpsState,
-} from '../fact-state';
+import { ViewParams, primaryOpsState } from '../fact-ops-state';
 
-export const groupStyleMappingState = selectorFamily({
+export type GroupStyleMapping = (g: DataSeries<any>) => {};
+
+export const groupStyleMappingState = selectorFamily<
+  GroupStyleMapping,
+  ViewParams
+>({
   key: 'groupStyleMapping',
   get:
-    (dataViewId: DataViewIdParam) =>
+    (viewParams) =>
     ({ get }) => {
-      const primaryOp = get(primaryOpsState(dataViewId)).find(
-        (x) => x.path.dimension !== 'Year' && !x.ops.aggregate
+      const primaryOp = get(primaryOpsState(viewParams)).find(
+        (x) =>
+          !['Year', 'Scenario'].includes(x.path.dimension) && !x.ops.aggregate
       );
 
       if (primaryOp == null) return () => ({});
