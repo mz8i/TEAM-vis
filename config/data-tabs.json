@@ -15,11 +15,11 @@
         "Tech.TransType",
         "Tech.Hybrid",
         "Tech.SecondHandImport"
-      ]
-    },
-    "defaultChart": {
-      "type": "time-series",
-      "options": {}
+      ],
+      "defaultChart": {
+        "type": "time-series",
+        "options": {}
+      }
     }
   },
   {
@@ -38,11 +38,11 @@
         "Tech.TransType",
         "Tech.Hybrid",
         "Tech.SecondHandImport"
-      ]
-    },
-    "defaultChart": {
-      "type": "time-series",
-      "options": {}
+      ],
+      "defaultChart": {
+        "type": "time-series",
+        "options": {}
+      }
     }
   },
   {
@@ -61,12 +61,12 @@
         "Tech.TransType",
         "Tech.Hybrid",
         "Tech.SecondHandImport"
-      ]
-    },
-    "defaultChart": {
-      "type": "time-series",
-      "options": {
-        "totalLine": true
+      ],
+      "defaultChart": {
+        "type": "time-series",
+        "options": {
+          "totalLine": true
+        }
       }
     }
   },
@@ -87,12 +87,12 @@
         "Tech.TransType",
         "Tech.Hybrid",
         "Tech.SecondHandImport"
-      ]
-    },
-    "defaultChart": {
-      "type": "time-series",
-      "options": {
-        "totalLine": true
+      ],
+      "defaultChart": {
+        "type": "time-series",
+        "options": {
+          "totalLine": true
+        }
       }
     }
   },
@@ -111,11 +111,11 @@
           "aggregate": false,
           "filter": null
         }
+      },
+      "defaultChart": {
+        "type": "time-series",
+        "options": {}
       }
-    },
-    "defaultChart": {
-      "type": "time-series",
-      "options": {}
     }
   }
 ]
