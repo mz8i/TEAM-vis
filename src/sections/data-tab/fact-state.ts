@@ -1,6 +1,7 @@
 import { selectorFamily } from 'recoil';
 
 import { LeafDimensionValue } from '../../data/dimensions';
+import { ChartConfig } from '../../data/fetch/models/data-tab';
 import { loadMultiScenarioFactTable } from '../../data/fetch/tables/facts';
 import { linkFactDimensions } from '../../data/load/link-fact-dimensions';
 import { ScenarioValue } from '../../data/scenario';
@@ -28,7 +29,7 @@ import {
 export type DataViewParams = {
   factTableParams: FactTableParams;
   viewParams: ViewParams;
-  chartType: ChartType;
+  chartConfig: ChartConfig;
 };
 
 export type FactTableParams = {

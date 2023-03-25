@@ -3,8 +3,10 @@ import { selectorFamily, useRecoilValue } from 'recoil';
 
 import { TimeSeriesChart } from '../../../../charts/chart-types/time-series/TimeSeriesChart';
 import { prepareTimeSeriesDataSeries } from '../../../../charts/chart-types/time-series/prepare-data';
+import { ChartConfig } from '../../../../data/fetch/models/data-tab';
 import { ungroupTable } from '../../../../data/transform/fact-processing';
 import { ConcurrentSetter } from '../../../../utils/recoil/ConcurrentSetter';
+import { nullState } from '../../../../utils/recoil/null-state';
 import { DataTabContentConfig } from '../../data-tab-state';
 import { currentDataViewParamsState } from '../../data-view-state';
 import {
@@ -15,13 +17,51 @@ import {
 } from '../../fact-state';
 import { groupStyleMappingState } from '../data-style-state';
 
+export const TimeSeriesDataViewParams = ({
+  factTableParams,
+  tabContent,
+  chartConfig,
+}: {
+  factTableParams: FactTableParams;
+  tabContent: DataTabContentConfig;
+  chartConfig: ChartConfig;
+}) => {
+  const {
+    primarySelect,
+    secondarySelect,
+    operations: tabOps = {},
+  } = tabContent;
+  const dataViewParams: DataViewParams = {
+    factTableParams,
+    viewParams: {
+      primarySelect,
+      secondarySelect,
+      tabOps,
+      chartOps: {
+        Year: {
+          aggregate: false,
+          filter: null,
+        },
+      },
+    },
+    chartConfig,
+  };
+
+  return (
+    <ConcurrentSetter
+      state={currentDataViewParamsState}
+      value={dataViewParams}
+    />
+  );
+};
+
 const totalDataState = selectorFamily({
   key: 'totalData',
   dangerouslyAllowMutability: true,
   get:
-    (dataViewId: DataViewParams) =>
+    (dataViewParams: DataViewParams) =>
     ({ get }) => {
-      const table = get(factTableState(dataViewId.factTableParams));
+      const table = get(factTableState(dataViewParams.factTableParams));
 
       const groupedTable = table
         .groupBy((row) => row.Year)
@@ -36,36 +76,22 @@ const totalDataState = selectorFamily({
     },
 });
 
-export const TimeSeriesDataViewParams = ({
-  factTableParams,
-  tabContent: { primarySelect, secondarySelect, operations: tabOps = {} },
-}: {
-  factTableParams: FactTableParams;
-  tabContent: DataTabContentConfig;
-}) => {
-  const dataViewParams: DataViewParams = {
-    factTableParams,
-    viewParams: {
-      primarySelect,
-      secondarySelect,
-      tabOps,
-      chartOps: {
-        Year: {
-          aggregate: false,
-          filter: null,
-        },
-      },
-    },
-    chartType: 'time-series',
-  };
-
-  return (
-    <ConcurrentSetter
-      state={currentDataViewParamsState}
-      value={dataViewParams}
-    />
+function useTotalData(dataViewParams: DataViewParams, calculate: boolean) {
+  const totalTable = useRecoilValue(
+    calculate ? totalDataState(dataViewParams) : nullState
   );
-};
+
+  return useMemo(
+    () =>
+      totalTable && {
+        GroupKey: 'Total',
+        GroupLabel: 'Total',
+        Grouping: {},
+        Rows: totalTable.subset(['Year', 'Value']).toArray(),
+      },
+    [totalTable]
+  );
+}
 
 export function TimeSeriesDisplay({
   dataViewParams,
@@ -77,12 +103,21 @@ export function TimeSeriesDisplay({
     groupStyleMappingState(dataViewParams.viewParams)
   );
 
+  const totalData = useTotalData(
+    dataViewParams,
+    dataViewParams.chartConfig?.options?.totalLine
+  );
+
   const data = useMemo(
     () => prepareTimeSeriesDataSeries(factTable),
     [factTable]
   );
 
   return (
-    <TimeSeriesChart groups={data} groupStyleMapping={groupStyleMapping} />
+    <TimeSeriesChart
+      groups={data}
+      groupStyleMapping={groupStyleMapping}
+      totalGroup={totalData ?? undefined}
+    />
   );
 }

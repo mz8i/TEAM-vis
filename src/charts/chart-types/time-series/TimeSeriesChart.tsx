@@ -24,7 +24,10 @@ export interface YearValue {
 
 export type TSDataSeries = DataSeries<YearValue>;
 
-function processData(groups: TSDataSeries[]) {
+function processData(
+  groups: TSDataSeries[],
+  totalGroup: TSDataSeries | undefined
+) {
   let minYear = +Infinity;
   let maxYear = -Infinity;
 
@@ -32,6 +35,10 @@ function processData(groups: TSDataSeries[]) {
   const gLookups: Record<string, Record<number, number>> = {};
 
   const allGroups = [...groups];
+
+  if (totalGroup) {
+    allGroups.push(totalGroup);
+  }
 
   for (const g of allGroups) {
     const lookup: Record<number, number> = (gLookups[g.GroupKey] = {});
@@ -63,14 +70,19 @@ function processData(groups: TSDataSeries[]) {
 export interface TimeSeriesChartProps {
   groups: TSDataSeries[];
   groupStyleMapping: (g: TSDataSeries) => any;
+  totalGroup?: TSDataSeries;
 }
 
 export const TimeSeriesChart = ({
   groups,
   groupStyleMapping,
+  totalGroup,
 }: TimeSeriesChartProps) => {
   const keys = useMemo(() => groups.map((x) => x.GroupKey), [groups]);
-  const data = useMemo(() => processData(groups), [groups]);
+  const data = useMemo(
+    () => processData(groups, totalGroup),
+    [groups, totalGroup]
+  );
 
   const yearTicks = useMemo(
     () => data.map((x) => x.Year).filter((x) => x % 10 === 0),
@@ -128,6 +140,16 @@ export const TimeSeriesChart = ({
             />
           );
         })}
+        {totalGroup && (
+          <Line
+            dataKey="Total"
+            name={totalGroup.GroupLabel}
+            strokeDasharray="5 5"
+            stroke="black"
+            dot={false}
+            isAnimationActive={false}
+          />
+        )}
 
         <Legend
           wrapperStyle={{

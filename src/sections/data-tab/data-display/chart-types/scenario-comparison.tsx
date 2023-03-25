@@ -4,6 +4,7 @@ import { useRecoilValue } from 'recoil';
 import { ScenarioComparisonChart } from '../../../../charts/chart-types/scenario-comparison/ScenarioComparisonChart';
 import { prepareScenarioComparisonDataSeries } from '../../../../charts/chart-types/scenario-comparison/prepare-data';
 import { makeScenarioComparisonChartConfig } from '../../../../charts/chart-types/scenario-comparison/scenario-comparison-config';
+import { ChartConfig } from '../../../../data/fetch/models/data-tab';
 import { useConfig } from '../../../../root-state';
 import { ConcurrentSetter } from '../../../../utils/recoil/ConcurrentSetter';
 import { allScenariosState } from '../../../scenario/scenario-state';
@@ -19,9 +20,11 @@ import { groupStyleMappingState } from '../data-style-state';
 export const ScenarioComparisonDataViewParams = ({
   factTableParams,
   tabContent: { primarySelect, secondarySelect, operations: tabOps = {} },
+  chartConfig,
 }: {
   factTableParams: FactTableParams;
   tabContent: DataTabContentConfig;
+  chartConfig: ChartConfig;
 }) => {
   const config = useConfig();
 
@@ -35,7 +38,7 @@ export const ScenarioComparisonDataViewParams = ({
       tabOps,
       chartOps,
     },
-    chartType: 'scenario-comparison',
+    chartConfig,
   };
 
   return (

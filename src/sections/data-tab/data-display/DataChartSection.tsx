@@ -9,7 +9,7 @@ export const DataChartSection = () => {
     currentDataViewParamsState
   );
 
-  const ChartComponent = useChartComponent(dataViewParams.chartType);
+  const ChartComponent = useChartComponent(dataViewParams.chartConfig.type);
 
   return (
     <Box height="100%" position="relative" zIndex={0}>

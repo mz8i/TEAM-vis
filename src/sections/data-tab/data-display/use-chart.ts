@@ -1,6 +1,7 @@
 import { ComponentType } from 'react';
 import { useRecoilValue } from 'recoil';
 
+import { ChartConfig } from '../../../data/fetch/models/data-tab';
 import { scenarioCompareState } from '../../scenario/scenario-state';
 import { DataTabContentConfig } from '../data-tab-state';
 import { DataViewParams, FactTableParams } from '../fact-state';
@@ -21,6 +22,7 @@ export type ChartComponentType = ComponentType<{
 export type DataViewParamsSetterComponentType = ComponentType<{
   factTableParams: FactTableParams;
   tabContent: DataTabContentConfig;
+  chartConfig: ChartConfig;
 }>;
 
 export type ChartMeta = {
@@ -39,12 +41,21 @@ const chartTypes: Record<ChartType, ChartMeta> = {
   },
 };
 
-export function useChartType(): ChartType {
+export function useChartConfig(tabContent: DataTabContentConfig): ChartConfig {
   const scenarioCompare = useRecoilValue(scenarioCompareState);
 
-  if (scenarioCompare) return 'scenario-comparison';
+  if (scenarioCompare)
+    return {
+      type: 'scenario-comparison',
+      options: {},
+    };
 
-  return 'time-series';
+  return (
+    tabContent.defaultChart ?? {
+      type: 'time-series',
+      options: {},
+    }
+  );
 }
 
 export function useChartViewParamSetter(

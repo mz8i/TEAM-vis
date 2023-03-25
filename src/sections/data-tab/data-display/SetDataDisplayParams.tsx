@@ -5,7 +5,7 @@ import { scenariosFilterState } from '../../scenario/scenario-state';
 import { DataTabContentConfig, activeTabContentState } from '../data-tab-state';
 import { FactTableParams } from '../fact-state';
 import { paramValuesByVariableParamsState } from '../variables/variable-state';
-import { useChartType, useChartViewParamSetter } from './use-chart';
+import { useChartConfig, useChartViewParamSetter } from './use-chart';
 
 export function SetDataDisplayParams() {
   return (
@@ -35,13 +35,14 @@ function FactTableParamsSetter() {
 
   const factTableParams: FactTableParams = useFactTableParams(tabContent);
 
-  const chartType = useChartType();
-  const ViewParamsSetter = useChartViewParamSetter(chartType);
+  const chartConfig = useChartConfig(tabContent);
+  const ViewParamsSetter = useChartViewParamSetter(chartConfig.type);
 
   return (
     <ViewParamsSetter
       factTableParams={factTableParams}
       tabContent={tabContent}
+      chartConfig={chartConfig}
     />
   );
 }
