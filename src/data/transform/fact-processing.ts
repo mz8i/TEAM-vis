@@ -27,8 +27,8 @@ export function filterTable(df: IDataFrame, filters: DataFilterOp[]) {
   return df.filter((row) => filterFn(row));
 }
 
-export function getGroupingsFromOps(allOps: DataOp[]): DataGroupOp[] {
-  return allOps.filter((x) => x.ops.aggregate === false).map((x) => x.path);
+export function getGroupingOps(allOps: DataOp[]): DataOp[] {
+  return allOps.filter((x) => x.ops.aggregate === false);
 }
 
 export function makeFilterFn(filters: DataFilterOp[]) {

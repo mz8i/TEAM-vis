@@ -1,7 +1,7 @@
 import { selectorFamily } from 'recoil';
 
 import { IDimPath, makeDimPath } from '../../data/dimension-paths';
-import { getGroupingsFromOps } from '../../data/transform/fact-processing';
+import { getGroupingOps } from '../../data/transform/fact-processing';
 import { DataSelectionValue } from '../../types/data';
 import { dataSelectionByDimPathState } from './data-operations/data-operations-state';
 
@@ -57,6 +57,6 @@ export const allGroupingsState = selectorFamily({
         ...get(secondaryOpsState(viewParams)),
       ];
 
-      return getGroupingsFromOps(allOps);
+      return getGroupingOps(allOps);
     },
 });

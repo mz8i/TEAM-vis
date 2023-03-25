@@ -1,18 +1,13 @@
-import { selector, selectorFamily } from 'recoil';
+import { atom, selectorFamily } from 'recoil';
 
-import {
-  DimensionMeta,
-  DomainStore,
-  LeafDimensionValue,
-} from '../../../data/dimensions';
-import { loadJson } from '../../../data/fetch/load-file';
+import { DomainStore, LeafDimensionValue } from '../../../data/dimensions';
+import { DimensionMeta } from '../../../data/fetch/models/dimensions-meta';
 import { loadDimensionValues } from '../../../data/fetch/tables/dimensions';
 import { loadDimensionStore } from '../../../data/load/link-dimension-stores';
 
-export const allDimensionsMetaState = selector({
+export const allDimensionsMetaState = atom<Record<string, DimensionMeta>>({
   key: 'allDimensionsMeta',
-  get: () =>
-    loadJson<Record<string, DimensionMeta>>('/config/dimensions-meta.json', {}),
+  default: new Promise(() => {}),
 });
 
 export const metadataByDimensionState = selectorFamily({

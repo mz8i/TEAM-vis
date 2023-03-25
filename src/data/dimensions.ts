@@ -1,12 +1,5 @@
 import _ from 'lodash';
 
-export interface DimensionMeta {
-  Slug: string;
-  Name: string;
-  IsLeaf: boolean;
-  Colors?: Record<string, string>;
-}
-
 export type LeafDimensionValue = {
   type: 'leaf';
   ID: string;

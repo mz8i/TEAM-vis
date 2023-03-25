@@ -97,7 +97,9 @@ export const currentDataState = selectorFamily({
     ({ get }) => {
       const table = get(secondaryFilteredTableState(dataViewParams));
 
-      const groupBy = get(allGroupingsState(dataViewParams.viewParams));
+      const groupBy = get(allGroupingsState(dataViewParams.viewParams)).map(
+        (x) => x.path
+      );
 
       const groupKeyFn = makeGroupKeyFn(groupBy);
       const groupObjFn = makeGroupObjFn(groupBy);
