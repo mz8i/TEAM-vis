@@ -37,15 +37,14 @@ export async function loadMultiScenarioFactTable(
   scenarios: ScenarioValue[],
   params: Record<string, DimensionValue>
 ) {
-  let factTable: IDataFrame<number, any> | null = null;
+  const scenarioTables: IDataFrame[] = [];
 
   for (const scenario of scenarios) {
-    const scenarioTable = await loadFactTable(dataSource, scenario, params);
-    if (factTable == null) {
-      factTable = scenarioTable;
-    } else {
-      factTable = factTable.concat(scenarioTable);
-    }
+    const table = await loadFactTable(dataSource, scenario, params);
+
+    scenarioTables.push(table);
   }
-  return factTable!;
+
+  // CRUCIAL: reset index after concat!
+  return DataFrame.concat(scenarioTables).resetIndex();
 }
