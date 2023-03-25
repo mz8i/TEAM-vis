@@ -8,7 +8,10 @@ import {
   useSetRecoilState,
 } from 'recoil';
 
-import { scenarioState } from '../../scenario/scenario-state';
+import {
+  scenarioState,
+  scenariosFilterState,
+} from '../../scenario/scenario-state';
 import { activeTabContentState } from '../data-tab-state';
 import { FactTableParams, currentDataParamsState } from '../fact-state';
 import { paramValuesByVariableParamsState } from '../variables/variable-state';
@@ -94,7 +97,7 @@ function DataParamsSetter({}: any) {
   const {
     variable: { name, parameters },
   } = useRecoilValue(activeTabContentState);
-  const scenario = useRecoilValue(scenarioState);
+  const scenarioFilter = useRecoilValue(scenariosFilterState);
   const variableParams = useRecoilValue(
     paramValuesByVariableParamsState(parameters)
   );
@@ -102,7 +105,7 @@ function DataParamsSetter({}: any) {
   const dataParams: FactTableParams = {
     variableName: name,
     params: variableParams,
-    scenarios: [scenario],
+    scenarios: scenarioFilter,
   };
   return (
     <Suspense fallback={<FallbackSetter dataParams={dataParams} />}>

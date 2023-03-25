@@ -1,9 +1,9 @@
-import { string } from '@recoiljs/refine';
+import { string, bool } from '@recoiljs/refine';
 import { useLayoutEffect } from 'react';
 import { atom, selector, useRecoilState, useRecoilValue } from 'recoil';
 import { urlSyncEffect } from 'recoil-sync';
 
-import { ScenarioValue } from '../../data/models/scenario';
+import { ScenarioValue } from '../../data/scenario';
 import { leafStoreByDimensionState } from '../data-tab/dimensions/dimensions-state';
 
 export const allScenariosState = selector({
@@ -29,11 +29,35 @@ export const scenarioSlugState = atom<string>({
   ],
 });
 
+export const scenarioCompareState = atom<boolean>({
+  key: 'scenarioCompare',
+  default: false,
+  effects: [
+    urlSyncEffect({
+      itemKey: 'compare',
+      storeKey: 'simple-url',
+      refine: bool(),
+      history: 'push',
+    }),
+  ],
+});
+
 export const scenarioState = selector<ScenarioValue>({
   key: 'scenario',
   get: ({ get }) => {
     const slug = get(scenarioSlugState);
     return get(allScenariosState).get(slug, 'AB')!;
+  },
+});
+
+export const scenariosFilterState = selector<ScenarioValue[]>({
+  key: 'scenariosFilter',
+  get: ({ get }) => {
+    if (get(scenarioCompareState)) {
+      return get(allScenariosState).values;
+    } else {
+      return [get(scenarioState)];
+    }
   },
 });
 
