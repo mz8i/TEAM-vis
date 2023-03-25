@@ -1,10 +1,9 @@
 import _ from 'lodash';
 
-const WARNING = "Don't call this directly, use makeDimPath()" as const;
-export class DimensionPath {
+class DimPath {
   public readonly dimension: string;
   public readonly joinList: string[];
-  constructor(public readonly rawExpression: string, warning: typeof WARNING) {
+  constructor(public readonly rawExpression: string) {
     const dims = rawExpression.split('.');
 
     this.dimension = dims[dims.length - 1];
@@ -19,11 +18,19 @@ export class DimensionPath {
   }
 }
 
-export const makeDimPath = _.memoize(function dimPathImpl(dimExpr: string) {
-  return new DimensionPath(dimExpr, WARNING);
+export type IDimPath = InstanceType<typeof DimPath>;
+
+export const makeDimPath = _.memoize(function dimPathImpl(
+  dimExpr: string | DimPath
+) {
+  return isPath(dimExpr) ? dimExpr : new DimPath(dimExpr);
 });
 
-export function getWithPath(obj: any, path: string | DimensionPath) {
+export function isPath(path: string | DimPath): path is DimPath {
+  return path instanceof DimPath;
+}
+
+export function atPath(obj: any, path: string | DimPath) {
   if (typeof path === 'string') {
     return obj[path];
   }

@@ -1,20 +1,19 @@
 import { IDataFrame } from 'data-forge';
 
-import { DataSeries } from '../../charts/types';
 import { DataSelectionValue } from '../../types/data';
-import { DimensionPath, getWithPath } from '../dimension-paths';
+import { IDimPath, atPath } from '../dimension-paths';
 import { DimensionValue } from '../dimensions';
 
 export interface DataOp {
-  path: DimensionPath;
+  path: IDimPath;
   ops: DataSelectionValue<DimensionValue>;
 }
 export interface DataFilterOp {
-  path: DimensionPath;
+  path: IDimPath;
   values: any[];
 }
 
-export type DataGroupOp = DimensionPath;
+export type DataGroupOp = IDimPath;
 
 export function getFiltersFromOps(allOps: DataOp[]): DataFilterOp[] {
   return allOps
@@ -35,7 +34,7 @@ export function getGroupingsFromOps(allOps: DataOp[]): DataGroupOp[] {
 export function makeFilterFn(filters: DataFilterOp[]) {
   return (row: any) => {
     for (const { path, values } of filters) {
-      if (!values.includes(getWithPath(row, path))) {
+      if (!values.includes(atPath(row, path))) {
         return false;
       }
     }
@@ -46,14 +45,14 @@ export function makeFilterFn(filters: DataFilterOp[]) {
 export type GroupKeyFunction = (row: any) => string;
 
 export function makeGroupKeyFn(
-  groupPaths: (string | DimensionPath)[],
+  groupPaths: (string | IDimPath)[],
   separator = '@@',
   objField = 'AB'
 ) {
   return (row: any) =>
     groupPaths
       .map((path) => {
-        const target = getWithPath(row, path);
+        const target = atPath(row, path);
         if (typeof target === 'object') {
           return target[objField];
         } else {
@@ -65,10 +64,10 @@ export function makeGroupKeyFn(
 
 export type GroupObjectFunction = (row: any) => Record<string, any>;
 
-export function makeGroupObjFn(groupPaths: (string | DimensionPath)[]) {
+export function makeGroupObjFn(groupPaths: (string | IDimPath)[]) {
   return (row: any) =>
     Object.fromEntries(
-      groupPaths.map((path) => [`${path}`, getWithPath(row, path)])
+      groupPaths.map((path) => [`${path}`, atPath(row, path)])
     );
 }
 

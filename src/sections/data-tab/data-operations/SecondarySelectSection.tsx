@@ -3,9 +3,8 @@ import { FC, Suspense, useMemo } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
 import { SecondarySelect } from '../../../components/secondary-select/SecondarySelect';
-import { DimensionPath, getWithPath } from '../../../data/dimension-paths';
+import { IDimPath, atPath } from '../../../data/dimension-paths';
 import { useConcurrentValue } from '../../../utils/recoil/use-concurrent-value';
-import { currentDataViewParamsState } from '../data-view-state';
 import {
   leafStoreByDimensionState,
   metadataByDimensionState,
@@ -14,7 +13,7 @@ import { DataViewParams, primaryFilteredTableState } from '../fact-state';
 import { dataSelectionByDimPathState } from './data-operations-state';
 
 export const SecondarySelectSection: FC<{
-  dimPaths: DimensionPath[];
+  dimPaths: IDimPath[];
 }> = ({ dimPaths }) => {
   return (
     <Stack direction="row" spacing={1} height="100%">
@@ -30,7 +29,7 @@ export const SecondarySelectSection: FC<{
 };
 
 function useValuesAfterPrimaryFilter(
-  path: DimensionPath,
+  path: IDimPath,
   dataViewParams: DataViewParams
 ) {
   const { value: primaryFilteredTable, loadingNew } = useConcurrentValue(
@@ -40,7 +39,7 @@ function useValuesAfterPrimaryFilter(
   const allowedValues = useMemo(
     () =>
       primaryFilteredTable
-        .deflate((row) => getWithPath(row, path))
+        .deflate((row) => atPath(row, path))
         .distinct()
         .toArray(),
     [primaryFilteredTable]
@@ -49,7 +48,7 @@ function useValuesAfterPrimaryFilter(
   return { allowedValues, loadingNew };
 }
 
-function SecondarySubsection({ dimPath }: { dimPath: DimensionPath }) {
+function SecondarySubsection({ dimPath }: { dimPath: IDimPath }) {
   const dimension = dimPath.dimension;
   const domainStore = useRecoilValue(leafStoreByDimensionState(dimension));
   const values = domainStore.values;

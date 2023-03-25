@@ -1,6 +1,6 @@
 import { selectorFamily } from 'recoil';
 
-import { DimensionPath, makeDimPath } from '../../data/dimension-paths';
+import { IDimPath, makeDimPath } from '../../data/dimension-paths';
 import { getGroupingsFromOps } from '../../data/transform/fact-processing';
 import { DataSelectionValue } from '../../types/data';
 import { dataSelectionByDimPathState } from './data-operations/data-operations-state';
@@ -8,8 +8,8 @@ import { dataSelectionByDimPathState } from './data-operations/data-operations-s
 export type ViewParams = {
   chartOps: Record<string, DataSelectionValue<any>>;
   tabOps: Record<string, DataSelectionValue<any>>;
-  primarySelect: DimensionPath[];
-  secondarySelect: DimensionPath[];
+  primarySelect: IDimPath[];
+  secondarySelect: IDimPath[];
 };
 
 export const primaryOpsState = selectorFamily({
@@ -25,7 +25,7 @@ export const primaryOpsState = selectorFamily({
             [dimPath, get(dataSelectionByDimPathState(dimPath))] as const
         ),
       ].map(([path, ops]) => ({
-        path: path instanceof DimensionPath ? path : makeDimPath(path),
+        path: makeDimPath(path),
         ops,
       }));
 

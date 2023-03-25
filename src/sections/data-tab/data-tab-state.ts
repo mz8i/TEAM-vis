@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { atom, selector, selectorFamily } from 'recoil';
 
-import { DimensionPath, makeDimPath } from '../../data/dimension-paths';
+import { IDimPath, makeDimPath } from '../../data/dimension-paths';
 import {
   DataTabConfigInput,
   DataTabContentConfigInput,
@@ -16,8 +16,8 @@ export type DataTabContentConfig = Omit<
   DataTabContentConfigInput,
   'primarySelect' | 'secondarySelect'
 > & {
-  primarySelect: DimensionPath[];
-  secondarySelect: DimensionPath[];
+  primarySelect: IDimPath[];
+  secondarySelect: IDimPath[];
 };
 
 export type DataTabConfig = Omit<DataTabConfigInput, 'content'> & {
