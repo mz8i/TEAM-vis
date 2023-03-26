@@ -32,6 +32,7 @@ export function CustomLegend({
     setSelectedKey(dataKey === selectedKey ? null : dataKey);
   };
 
+  const items = [...payload].reverse();
   return (
     <Box
       onMouseLeave={() => setHoveredKey(null)}
@@ -39,7 +40,7 @@ export function CustomLegend({
       flexGrow={1}
     >
       <List disablePadding>
-        {payload?.map((x: Payload) => {
+        {items.map((x: Payload) => {
           const gkey = (x as any).dataKey;
           return (
             <ListItem
