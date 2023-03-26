@@ -4,6 +4,10 @@ import { useRecoilValue } from 'recoil';
 
 import { VariableConfig } from '../../../data/fetch/models/data-tab';
 import { interpolateDotFormatString } from '../../../utils/string-expression';
+import {
+  scenarioCompareState,
+  scenarioState,
+} from '../../scenario/scenario-state';
 import { dataSourceByNameState } from '../data-source-state';
 import { ParamSelection } from './ParamSelection';
 
@@ -11,6 +15,9 @@ export const VariableParametersSection: FC<{
   variableConfig: VariableConfig;
 }> = ({ variableConfig: { parameters, name } }) => {
   const dataSourceConfig = useRecoilValue(dataSourceByNameState(name));
+
+  const compareScenario = useRecoilValue(scenarioCompareState);
+  const selectedScenario = useRecoilValue(scenarioState);
 
   const paramSelections = Object.fromEntries(
     parameters.map((param) => [param, <ParamInlineInput param={param} />])
@@ -22,6 +29,12 @@ export const VariableParametersSection: FC<{
         dataSourceConfig.title,
         paramSelections,
         'jsx'
+      )}{' '}
+      &mdash;{' '}
+      {compareScenario ? (
+        <>Scenario Comparison</>
+      ) : (
+        <>Scenario: {selectedScenario.NA}</>
       )}
     </Typography>
   );
