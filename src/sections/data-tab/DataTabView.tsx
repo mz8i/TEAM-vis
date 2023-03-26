@@ -16,7 +16,6 @@ export const DataTabView: FC<{ slug: string }> = ({ slug }) => {
   const dataTab = useRecoilValue(tabBySlugState(slug));
 
   const variableConfig = dataTab.content.variable;
-  const varParams = variableConfig.parameters;
 
   const { primarySelect: primary, secondarySelect: secondary } = useRecoilValue(
     activeTabContentState
@@ -28,9 +27,7 @@ export const DataTabView: FC<{ slug: string }> = ({ slug }) => {
         {primary.length > 0 && <PrimarySelectSection dimPaths={primary} />}
       </SlotIn>
       <SlotIn slotId="variable-params">
-        {varParams.length > 0 && (
-          <VariableParametersSection variableConfig={variableConfig} />
-        )}
+        <VariableParametersSection variableConfig={variableConfig} />
       </SlotIn>
       <SlotIn slotId="secondary">
         {secondary.length > 0 && (

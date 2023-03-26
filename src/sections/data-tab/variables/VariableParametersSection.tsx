@@ -17,7 +17,7 @@ export const VariableParametersSection: FC<{
   );
 
   return (
-    <Typography variant="body1">
+    <Typography variant="body1" component="div">
       {interpolateDotFormatString(
         dataSourceConfig.title,
         paramSelections,
@@ -29,8 +29,8 @@ export const VariableParametersSection: FC<{
 
 function ParamInlineInput({ param }: { param: string }) {
   return (
-    <Box display="inline-block" alignItems="start">
-      <Suspense key={param} fallback={<Skeleton width={100} height="2em" />}>
+    <Box display="inline-block">
+      <Suspense key={param} fallback={<Skeleton width={100} height="100%" />}>
         <ParamSelection dimension={param} />
       </Suspense>
     </Box>

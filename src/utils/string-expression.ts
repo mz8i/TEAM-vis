@@ -2,7 +2,7 @@ import { re } from 're-template-tag';
 import { ReactNode } from 'react';
 import reactStringReplace from 'react-string-replace';
 
-const DOT_EXP_RE = re`[a-zA-Z_$][a-zA-z_$]*(\.[a-zA-Z_$][a-zA-z_$]*)*`;
+const DOT_EXP_RE = re`[a-zA-Z_$][a-zA-z_$]*(?:\.[a-zA-Z_$][a-zA-z_$]*)*`;
 
 /**
  * Parse an expression of the format X.Y[.Z] etc, that is used for interpolating a string
