@@ -18,6 +18,16 @@ export const metadataByDimensionState = selectorFamily({
       get(allDimensionsMetaState)[dimension],
 });
 
+export const dimensionMetadataByListState = selectorFamily({
+  key: 'dimensionMetadataByList',
+  get:
+    (dimensions: string[]) =>
+    ({ get }) =>
+      Object.fromEntries(
+        dimensions.map((dim) => [dim, get(metadataByDimensionState(dim))])
+      ),
+});
+
 export const domainStoreByDimensionState = selectorFamily<DomainStore, string>({
   key: 'domainStoreByDimension',
   get:

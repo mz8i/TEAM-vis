@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
-import { makeDimPath } from '../../../data/dimension-paths';
-import { LeafDimensionValue } from '../../../data/dimensions';
-import { DataOp } from '../../../data/transform/fact-processing';
+import { makeDimPath } from '../../../../data/dimension-paths';
+import { LeafDimensionValue } from '../../../../data/dimensions';
+import { DataOp } from '../../../../data/transform/fact-processing';
 import { getDefaultColorDimension } from './data-style-state';
 
 describe('chart style', () => {

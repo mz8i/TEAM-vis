@@ -15,7 +15,7 @@ import {
   FactTableParams,
   currentDataState,
 } from '../../fact-state';
-import { groupStyleMappingState } from '../data-style-state';
+import { groupStyleMappingState } from '../data-style/data-style-state';
 
 export const ScenarioComparisonDataViewParams = ({
   factTableParams,

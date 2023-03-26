@@ -2,6 +2,7 @@ import { Backdrop, Box, CircularProgress } from '@mui/material';
 
 import { useConcurrentValue } from '../../../utils/recoil/use-concurrent-value';
 import { currentDataViewParamsState } from '../data-view-state';
+import { DataStyleSelect } from './data-style/DataStyleSelect';
 import { useChartComponent } from './use-chart';
 
 export const DataChartSection = () => {
@@ -25,6 +26,9 @@ export const DataChartSection = () => {
           <CircularProgress sx={{ color: 'white' }} />
         </Backdrop>
       )}
+      <Box position="absolute" top={-50} right={1} width={250} m={0.5}>
+        <DataStyleSelect viewParams={dataViewParams.viewParams} />
+      </Box>
       <ChartComponent dataViewParams={dataViewParams} />
     </Box>
   );

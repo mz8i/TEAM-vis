@@ -15,7 +15,7 @@ import {
   currentDataState,
   factTableState,
 } from '../../fact-state';
-import { groupStyleMappingState } from '../data-style-state';
+import { groupStyleMappingState } from '../data-style/data-style-state';
 
 export const TimeSeriesDataViewParams = ({
   factTableParams,
