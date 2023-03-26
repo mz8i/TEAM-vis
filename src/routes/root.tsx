@@ -115,7 +115,7 @@ function Logos({ config }: { config: LogosConfig }) {
   return (
     <Box display="flex" flexWrap="wrap" alignItems={'center'}>
       {config.map((x) => (
-        <Logo {...x} />
+        <Logo key={x.img} {...x} />
       ))}
     </Box>
   );

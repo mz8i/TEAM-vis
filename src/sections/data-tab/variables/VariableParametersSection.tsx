@@ -20,7 +20,10 @@ export const VariableParametersSection: FC<{
   const selectedScenario = useRecoilValue(scenarioState);
 
   const paramSelections = Object.fromEntries(
-    parameters.map((param) => [param, <ParamInlineInput param={param} />])
+    parameters.map((param) => [
+      param,
+      <ParamInlineInput key={param} param={param} />,
+    ])
   );
 
   return (
