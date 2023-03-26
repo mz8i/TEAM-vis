@@ -1,14 +1,15 @@
 import { Backdrop, Box, CircularProgress } from '@mui/material';
 
-import { useConcurrentValue } from '../../../utils/recoil/use-concurrent-value';
-import { currentDataViewParamsState } from '../data-view-state';
+import { useDataViewParamsConcurrent } from '../DataViewParamsContext';
 import { DataStyleSelect } from './data-style/DataStyleSelect';
 import { useChartComponent } from './use-chart';
 
 export const DataChartSection = () => {
-  const { value: dataViewParams, loadingNew } = useConcurrentValue(
-    currentDataViewParamsState
-  );
+  const {
+    value: dataViewParams,
+    newValue: newDataViewParams,
+    loadingNew,
+  } = useDataViewParamsConcurrent();
 
   const ChartComponent = useChartComponent(dataViewParams.chartConfig.type);
 
@@ -27,7 +28,7 @@ export const DataChartSection = () => {
         </Backdrop>
       )}
       <Box position="absolute" top={-50} right={1} width={250} m={0.5}>
-        <DataStyleSelect viewParams={dataViewParams.viewParams} />
+        <DataStyleSelect viewParams={newDataViewParams.viewParams} />
       </Box>
       <ChartComponent dataViewParams={dataViewParams} />
     </Box>

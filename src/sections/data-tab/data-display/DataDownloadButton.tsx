@@ -5,8 +5,7 @@ import download from 'downloadjs';
 import { Suspense } from 'react';
 import { useRecoilValue } from 'recoil';
 
-import { useConcurrentValue } from '../../../utils/recoil/use-concurrent-value';
-import { currentDataViewParamsState } from '../data-view-state';
+import { useDataViewParamsConcurrent } from '../DataViewParamsContext';
 import { currentDataState } from '../fact-state';
 
 function prepareTableForCsv(table: IDataFrame) {
@@ -38,9 +37,9 @@ export const DataDownloadButton = () => {
 };
 
 function DownloadButtonImpl() {
-  const { value: currentDataParams, loadingNew } = useConcurrentValue(
-    currentDataViewParamsState
-  );
+  const { value: currentDataParams, loadingNew } =
+    useDataViewParamsConcurrent();
+
   const factTable = useRecoilValue(currentDataState(currentDataParams));
   return (
     <IconButton

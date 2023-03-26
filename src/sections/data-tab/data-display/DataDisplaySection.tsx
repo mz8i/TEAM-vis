@@ -6,15 +6,12 @@ import { Suspense, useState } from 'react';
 import { DataChartSection } from './DataChartSection';
 import { DataDownloadButton } from './DataDownloadButton';
 import { DataTableSection } from './DataTableSection';
-import { SetDataDisplayParams } from './SetDataDisplayParams';
 
 export const DataDisplaySection = () => {
   const [tab, setTab] = useState<'chart' | 'table'>('chart');
 
   return (
     <>
-      <SetDataDisplayParams />
-
       <TabContext value={tab}>
         <Box height="400px">
           <Box

@@ -14,6 +14,6 @@ export function useConcurrentValue<T>(state: RecoilValueReadOnly<T>) {
   return {
     value: valuePotentiallyDeferred,
     loadingNew: loadingNew,
-    newValue: loadingNew ? freshValue : undefined,
+    newValue: freshValue,
   };
 }
