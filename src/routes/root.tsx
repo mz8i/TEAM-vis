@@ -11,6 +11,7 @@ import { configState } from '../root-state';
 import { allDimensionsMetaState } from '../sections/data-tab/dimensions/dimensions-state';
 import { ScenarioPanel } from '../sections/scenario/ScenarioPanel';
 import AboutSidebar from '../text/AboutSidebar.mdx';
+import { AppLink } from '../utils/nav';
 import { StateSetter } from '../utils/recoil/StateSetter';
 import { MutableCheckerReturn } from '../utils/recoil/refine';
 import { useCheckedLoaderData } from '../utils/router';
@@ -66,12 +67,11 @@ export const RootRoute = () => {
                   components={{
                     a: ({ href, title, children }) =>
                       href ? (
-                        <Link
+                        <AppLink
                           textAlign="right"
                           width="100%"
                           display="block"
-                          component={RouterLink}
-                          to={href}
+                          href={href}
                           children={children}
                         />
                       ) : null,
