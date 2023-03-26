@@ -1,4 +1,6 @@
 import { re } from 're-template-tag';
+import { ReactNode } from 'react';
+import reactStringReplace from 'react-string-replace';
 
 const DOT_EXP_RE = re`[a-zA-Z_$][a-zA-z_$]*(\.[a-zA-Z_$][a-zA-z_$]*)*`;
 
@@ -21,12 +23,34 @@ export function parseDotFormatExpression(expression: string) {
   };
 }
 
-export function interpolateDotFormatString(text: string, context: any) {
+export function interpolateDotFormatString(
+  text: string,
+  context: any,
+  replacementType?: 'string'
+): string;
+export function interpolateDotFormatString(
+  text: string,
+  context: any,
+  replacementType: 'jsx'
+): ReactNode;
+export function interpolateDotFormatString(
+  text: string,
+  context: any,
+  replacementType: 'string' | 'jsx' = 'string'
+) {
   const reWithCurly = re`\{(${DOT_EXP_RE})\}`;
 
-  return text.replace(reWithCurly, (_, p1) => {
-    const exprFun = parseDotFormatExpression(p1);
+  if (replacementType === 'string') {
+    return text.replace(reWithCurly, (_, p1) => {
+      const exprFun = parseDotFormatExpression(p1);
 
-    return exprFun(context);
-  });
+      return exprFun(context);
+    });
+  } else {
+    return reactStringReplace(text, reWithCurly, (match) => {
+      const exprFun = parseDotFormatExpression(match);
+
+      return exprFun(context);
+    });
+  }
 }
