@@ -1,3 +1,4 @@
+import { Typography } from '@mui/material';
 import { useLayoutEffect, useMemo, useState } from 'react';
 import {
   Area,
@@ -111,7 +112,15 @@ export const TimeSeriesChart = ({
           }
         />
         <CartesianGrid strokeDasharray="2 2" />
-        <Tooltip content={<CustomTooltip />} />
+        <Tooltip
+          content={
+            <CustomTooltip
+              renderHeader={(label) => (
+                <Typography variant="subtitle2">Year: {label}</Typography>
+              )}
+            />
+          }
+        />
 
         {groups.map((group) => {
           const gkey = group.GroupKey;

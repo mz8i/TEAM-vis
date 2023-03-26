@@ -1,8 +1,8 @@
+import { Typography } from '@mui/material';
 import { useLayoutEffect, useMemo, useState } from 'react';
 import {
   Bar,
   BarChart,
-  ComposedChart,
   Legend,
   ResponsiveContainer,
   Tooltip,
@@ -31,9 +31,9 @@ function yearScen(yr: number, scen: string) {
 function processData(
   groups: ScenarioDataSeries[],
   scenarios: ScenarioValue[],
-  years: number[]
+  minYear: number,
+  snapshotYears: number[]
 ) {
-  const [minYear, ...snapshotYears] = years;
   const firstScenario = scenarios[0];
 
   const scenarioYears: [number, string][] = [[minYear, firstScenario.NA]];
@@ -68,7 +68,7 @@ function processData(
     const obj: any = {
       Year: yr,
       Scenario: scenLabel,
-      ScenarioYear: `${scenLabel}-${yr}`,
+      ScenarioYear: `${scenLabel}@@${yr}`,
     };
 
     for (const key of gKeys) {
@@ -94,8 +94,16 @@ export const ScenarioComparisonChart = ({
   scenarios,
   years,
 }: ScenarioComparisonChartProps) => {
+  const [minYear, ...snapshotYears] = years;
+  const middleSnapshotYear =
+    snapshotYears[Math.floor(snapshotYears.length / 2)];
+  const firstSnapshotYear = snapshotYears[0];
+
   const legendKeys = useMemo(() => groups.map((x) => x.GroupKey), [groups]);
-  const data = useMemo(() => processData(groups, scenarios, years), [groups]);
+  const data = useMemo(
+    () => processData(groups, scenarios, minYear, snapshotYears),
+    [groups]
+  );
 
   const [hoveredKey, setHoveredKey] = useState<string | null>(null);
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
@@ -106,24 +114,43 @@ export const ScenarioComparisonChart = ({
     }
   }, [selectedKey, legendKeys, setSelectedKey]);
 
+  function renderScenarioTick(tickProps: any) {
+    const { x, y, payload, fill } = tickProps;
+    const { value, offset } = payload;
+
+    let [scenario, year] = value.split('@@');
+    year = parseInt(year, 10);
+
+    if (year === minYear || year === middleSnapshotYear) {
+      return (
+        <text x={x} y={y + 7} textAnchor="middle" fill={fill}>
+          {scenario}
+        </text>
+      );
+    } else if (year === firstSnapshotYear) {
+      return <path d={`M${x - offset},${y + 15}v-25`} stroke={fill} />;
+    } else return <></>;
+  }
+
   return (
     <ResponsiveContainer width="100%" height="100%">
       <BarChart data={data}>
         <XAxis
           type="category"
-          dataKey="Year"
+          dataKey="ScenarioYear"
+          interval={0}
           allowDuplicatedCategory={true}
           tickLine={false}
-          tickFormatter={(yr) => (yr === 0 ? '' : yr)}
+          tickFormatter={(value) => value.split('@@')[1]}
         />
         <XAxis
           type="category"
-          dataKey="Scenario"
+          dataKey="ScenarioYear"
+          interval={0}
           axisLine={false}
           tickLine={false}
+          tick={renderScenarioTick}
           allowDuplicatedCategory={true}
-          height={20}
-          // scale="band"
           xAxisId="scenario"
         />
         <YAxis
@@ -135,7 +162,22 @@ export const ScenarioComparisonChart = ({
             })
           }
         />
-        <Tooltip content={<CustomTooltip />} cursor={false} />
+        <Tooltip
+          content={
+            <CustomTooltip
+              renderHeader={(label) => {
+                const [scenario, year] = label.split('@@');
+                return (
+                  <>
+                    <Typography variant="subtitle2">Year: {year}</Typography>
+                    <Typography variant="subtitle2">{scenario}</Typography>
+                  </>
+                );
+              }}
+            />
+          }
+          cursor={false}
+        />
 
         {groups.map((group) => {
           const gkey = group.GroupKey;

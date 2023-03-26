@@ -9,14 +9,20 @@ import {
   Typography,
 } from '@mui/material';
 import _ from 'lodash';
+import { ReactElement } from 'react';
 import { Flipped, Flipper } from 'react-flip-toolkit';
 import { Dot, TooltipProps } from 'recharts';
+
+export type CustomTooltipProps = TooltipProps<number, string> & {
+  renderHeader: (label: string) => ReactElement;
+};
 
 export const CustomTooltip = ({
   active,
   payload,
   label,
-}: TooltipProps<number, string>) => {
+  renderHeader,
+}: CustomTooltipProps) => {
   if (active && payload?.length) {
     const sorted = _.sortBy(payload, ({ value }) =>
       value == null ? -Infinity : -value
@@ -31,10 +37,7 @@ export const CustomTooltip = ({
           backgroundColor: 'rgba(255,255,255,0.85)',
         }}
       >
-        <Box m={1}>
-          {/* TODO: Remove hardcoded Year: string */}
-          <Typography variant="h6">Year: {label}</Typography>
-        </Box>
+        <Box m={1}>{renderHeader(label)}</Box>
 
         <Flipper flipKey={sorted.map((x) => x.value).join('+')}>
           <Table size="small">
