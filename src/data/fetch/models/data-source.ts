@@ -4,6 +4,7 @@ import { MutableCheckerReturn } from '../../../utils/recoil/refine';
 
 export const dataSourceChecker = object({
   pathSchema: string(),
+  title: string(),
 });
 
 export type DataSourceConfig = MutableCheckerReturn<typeof dataSourceChecker>;

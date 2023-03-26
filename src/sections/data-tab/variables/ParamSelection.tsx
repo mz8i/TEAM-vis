@@ -26,33 +26,22 @@ export const ParamSelection: FC<ParamSelectionProps> = ({ dimension }) => {
   const id = useId();
 
   return (
-    <FormControl fullWidth>
-      <InputLabel id={`${id}-label`}>{title}</InputLabel>
-      <Select
-        labelId={`${id}-label`}
-        id={id}
-        label={title}
-        //
+    <Select
+      id={id}
+      // data
+      value={selectedValue.AB}
+      onChange={(e) => setSelectedValue(domain.get(e.target.value, 'AB')!)}
+      //
 
-        // data
-        value={selectedValue.AB}
-        onChange={(e) => setSelectedValue(domain.get(e.target.value, 'AB')!)}
-        //
-
-        // style
-        variant="outlined"
-        size="small"
-        sx={{
-          minWidth: '100px',
-          borderRadius: '10px',
-        }}
-      >
-        {values.map((x) => (
-          <MenuItem key={x.AB} value={x.AB}>
-            {x.NA}
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
+      // style
+      variant="standard"
+      size="small"
+    >
+      {values.map((x) => (
+        <MenuItem key={x.AB} value={x.AB}>
+          {x.NA}
+        </MenuItem>
+      ))}
+    </Select>
   );
 };
