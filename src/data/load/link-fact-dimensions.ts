@@ -1,7 +1,8 @@
 import { IDataFrame } from 'data-forge';
 
 import { mapEntries } from '../../utils/helpers';
-import { DimensionMeta, DomainStore } from '../dimensions';
+import { DomainStore } from '../dimensions';
+import { DimensionMeta } from '../fetch/models/dimensions-meta';
 import { getLinkedDimensionStores } from './linked-dimensions';
 
 export function linkFactDimensions(

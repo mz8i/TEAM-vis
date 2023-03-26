@@ -1,10 +1,10 @@
 import {
-  DimensionMeta,
   DimensionValue,
   DomainStore,
   JoinDimensionValue,
   LeafDimensionValue,
 } from '../dimensions';
+import { DimensionMeta } from '../fetch/models/dimensions-meta';
 import { InputDimensionValue } from '../fetch/tables/dimensions';
 import { getLinkedDimensionStores } from './linked-dimensions';
 
