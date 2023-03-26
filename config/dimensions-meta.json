@@ -43,17 +43,30 @@
   "Hybrid": {
     "Slug": "Hybrid",
     "Name": "Hybrid",
-    "IsLeaf": true
+    "IsLeaf": true,
+    "Colors": {
+      "0": "#ff9b9b",
+      "1": "#69be99",
+      "2": "#65a1bd"
+    }
   },
   "SecondHandImport": {
     "Slug": "SecondHandImport",
     "Name": "New / Second-hand Import",
-    "IsLeaf": true
+    "IsLeaf": true,
+    "Colors": {
+      "0": "#ff9b9b",
+      "1": "#69be99"
+    }
   },
   "TransType": {
     "Slug": "TransType",
     "Name": "Passenger / Freight",
-    "IsLeaf": true
+    "IsLeaf": true,
+    "Colors": {
+      "P": "#105721",
+      "F": "#685530"
+    }
   },
   "Emission": {
     "Slug": "Emission",
