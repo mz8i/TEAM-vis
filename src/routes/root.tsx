@@ -1,9 +1,10 @@
 import { Box, Divider, Link, Stack, Toolbar, Typography } from '@mui/material';
-import { object } from '@recoiljs/refine';
+import { array, number, object, string } from '@recoiljs/refine';
 import { LoaderFunctionArgs, Outlet } from 'react-router';
 import { Link as RouterLink } from 'react-router-dom';
 
 import { AppRoot } from '../AppRoot';
+import { Logo } from '../components/Logo';
 import { loadJson } from '../data/fetch/load-file';
 import { configChecker } from '../data/fetch/models/config';
 import { allDimensionsMetaChecker } from '../data/fetch/models/dimensions-meta';
@@ -16,7 +17,19 @@ import { StateSetter } from '../utils/recoil/StateSetter';
 import { MutableCheckerReturn } from '../utils/recoil/refine';
 import { useCheckedLoaderData } from '../utils/router';
 
+const logosConfigChecker = array(
+  object({
+    img: string(),
+    tooltip: string(),
+    link: string(),
+    height: number(),
+  })
+);
+
+type LogosConfig = MutableCheckerReturn<typeof logosConfigChecker>;
+
 const rootLoaderChecker = object({
+  logos: logosConfigChecker,
   config: configChecker,
   allDimensionsMeta: allDimensionsMetaChecker,
 });
@@ -27,6 +40,7 @@ export const rootLoader = async ({
   request,
 }: LoaderFunctionArgs): Promise<RootLoaderData> => {
   return {
+    logos: await loadJson('/config/logos.json', { request }),
     config: await loadJson('/config/config.json', { request }),
     allDimensionsMeta: await loadJson('/config/dimensions-meta.json', {
       request,
@@ -35,7 +49,8 @@ export const rootLoader = async ({
 };
 
 export const RootRoute = () => {
-  const { config, allDimensionsMeta } = useCheckedLoaderData(rootLoaderChecker);
+  const { logos, config, allDimensionsMeta } =
+    useCheckedLoaderData(rootLoaderChecker);
 
   return (
     <AppRoot>
@@ -79,8 +94,8 @@ export const RootRoute = () => {
                 />
               </SidebarSection>
             </Box>
-            <Box height={200}>
-              <Typography>Logos</Typography>
+            <Box height={200} p={1}>
+              <Logos config={logos} />
             </Box>
           </Stack>
         </Box>
@@ -94,4 +109,14 @@ export const RootRoute = () => {
 
 function SidebarSection({ children }: any) {
   return <Box p={2}>{children}</Box>;
+}
+
+function Logos({ config }: { config: LogosConfig }) {
+  return (
+    <Box display="flex" flexWrap="wrap" alignItems={'center'}>
+      {config.map((x) => (
+        <Logo {...x} />
+      ))}
+    </Box>
+  );
 }
