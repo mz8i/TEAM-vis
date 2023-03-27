@@ -59,10 +59,10 @@ export const DataStyleSelect = ({ viewParams }: { viewParams: ViewParams }) => {
       >
         {dimensions.map((dim) => (
           <MenuItem key={dim} value={dim}>
+            {meta[dim].Name}
             <ColorPreview
               colors={Object.values(meta[dim].Colors ?? { a: '#cccccc' })}
             />
-            {meta[dim].Name}
           </MenuItem>
         ))}
       </Select>
@@ -72,9 +72,11 @@ export const DataStyleSelect = ({ viewParams }: { viewParams: ViewParams }) => {
 
 function ColorPreview({ colors }: { colors: string[] }) {
   return (
-    <Box display="inline-block" mr={1}>
-      <svg height={10} width={10}>
-        <Dot fill={colors[0]} r={5} cx={5} cy={5} />
+    <Box display="inline-block" mx={1}>
+      <svg height={10} width={colors.length * 7 + 5}>
+        {colors.map((c, i) => (
+          <Dot key={c} fill={c} r={5} cy={5} cx={5 + i * 7} />
+        ))}
       </svg>
     </Box>
   );
