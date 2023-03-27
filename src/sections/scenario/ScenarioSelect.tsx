@@ -30,6 +30,7 @@ export const ScenarioSelect = () => {
         }
         enterDelay={500}
         enterNextDelay={500}
+        disableInteractive
       >
         <Select
           labelId="scenario-select-label"

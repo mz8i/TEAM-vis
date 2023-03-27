@@ -5,11 +5,14 @@ import {
 } from '@mui/icons-material';
 import {
   Box,
+  Button,
   Checkbox,
   FormControl,
   FormControlLabel,
   FormGroup,
   FormLabel,
+  Stack,
+  Tooltip,
   Typography,
 } from '@mui/material';
 import { toString } from 'lodash';
@@ -66,44 +69,53 @@ export const FilterList = <T,>({
 
     return (
       <Flipped key={key} flipId={key}>
-        <FormControlLabel
-          disabled={disabled || !allowedLookup.has(v)}
-          control={
-            <Checkbox
-              // data
-              checked={disabled || selectedLookup.has(v)}
-              indeterminate={disabled}
-              indeterminateIcon={<CropFreeSharp />}
-              onChange={(e, checked) => handleChange(v, checked)}
-              //
+        <Tooltip
+          title="Double-click to select one"
+          enterNextDelay={2000}
+          enterDelay={1000}
+          disableInteractive
+        >
+          <FormControlLabel
+            disabled={disabled || !allowedLookup.has(v)}
+            onDoubleClick={(e) => onSelected?.([v])}
+            control={
+              <Checkbox
+                // data
+                checked={disabled || selectedLookup.has(v)}
+                indeterminate={disabled}
+                indeterminateIcon={<CropFreeSharp />}
+                onChange={(e, checked) => handleChange(v, checked)}
+                //
 
-              // style
-              icon={<CheckBoxOutlineBlankSharp />}
-              checkedIcon={<CheckBoxSharp />}
-              size="small"
-              sx={{
-                marginY: 0,
-                height: (theme) => theme.typography[labelVariant].lineHeight,
-              }}
-            />
-          }
-          label={
-            <Typography
-              variant={labelVariant}
-              color={
-                !disabled && shownLookup.has(v)
-                  ? 'text.secondary'
-                  : 'text.disabled'
-              }
-            >
-              {label}
-            </Typography>
-          }
-          //
+                // style
+                icon={<CheckBoxOutlineBlankSharp />}
+                checkedIcon={<CheckBoxSharp />}
+                size="small"
+                sx={{
+                  marginY: 0,
+                  height: (theme) => theme.typography[labelVariant].lineHeight,
+                }}
+              />
+            }
+            label={
+              <Typography
+                variant={labelVariant}
+                color={
+                  !disabled && shownLookup.has(v)
+                    ? 'text.secondary'
+                    : 'text.disabled'
+                }
+                sx={{ userSelect: 'none' }}
+              >
+                {label}
+              </Typography>
+            }
+            //
 
-          // style
-          sx={{ alignItems: 'flex-start', marginY: '0.2em' }}
-        />
+            // style
+            sx={{ alignItems: 'flex-start', marginY: '0.2em' }}
+          />
+        </Tooltip>
       </Flipped>
     );
   };
@@ -123,7 +135,7 @@ export const FilterList = <T,>({
         boxSizing: 'border-box',
         width: '100%',
         maxWidth: '400px',
-        height: '200px', //TODO: fix flexbox issues and remove hardcoded height
+        height: '250px', //TODO: fix flexbox issues and remove hardcoded height
         borderRadius: 2,
         position: 'relative',
         display: 'flex',
@@ -139,10 +151,31 @@ export const FilterList = <T,>({
           <FormLabel component="legend">{title}</FormLabel>
         </Box>
       )}
+
       <Box flexGrow={1} sx={{ overflowY: 'scroll' }}>
         <Flipper flipKey={sortedValues.join('-')}>
           <FormGroup>{sortedValues.map(renderOption)}</FormGroup>
         </Flipper>
+      </Box>
+      <Box position="sticky" borderTop="1px solid gainsboro">
+        <Stack direction="row" justifyContent="end">
+          <Button
+            size="small"
+            disabled={disabled}
+            sx={{ textTransform: 'none', padding: 0 }}
+            onClick={() => onSelected?.([...values])}
+          >
+            All
+          </Button>
+          <Button
+            size="small"
+            disabled={disabled}
+            sx={{ textTransform: 'none', padding: 0 }}
+            onClick={() => onSelected?.([])}
+          >
+            None
+          </Button>
+        </Stack>
       </Box>
     </FormControl>
   );

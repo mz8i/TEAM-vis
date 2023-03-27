@@ -46,6 +46,7 @@ export const ChipSelect = <T,>({
             title="Double-click to select one"
             enterDelay={1000}
             enterNextDelay={2000}
+            disableInteractive
           >
             <Chip
               label={label}
