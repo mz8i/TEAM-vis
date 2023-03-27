@@ -1,22 +1,27 @@
 {
   "NumVeh": {
     "pathSchema": "NumVeh__{VehCat.ID}",
-    "title": "{VehCat} vehicles stock"
+    "title": "{VehCat} vehicles stock",
+    "yAxisTitle": "No. vehicles"
   },
   "VehKM": {
     "pathSchema": "VehKM",
-    "title": "Total vehicle kilometres"
+    "title": "Total vehicle kilometres",
+    "yAxisTitle": "Vehicle-KM"
   },
   "GHG": {
     "pathSchema": "GHG__{EType.ID}",
-    "title": "Greenhouse Gases: {EType}"
+    "title": "Greenhouse Gases: {EType}",
+    "yAxisTitle": "Mt CO₂ eq."
   },
   "AP": {
     "pathSchema": "AP__{APEmission.AB}",
-    "title": "Air Pollutants: {APEmission} emissions"
+    "title": "Air Pollutants: {APEmission} emissions",
+    "yAxisTitle": "Tonnes"
   },
   "TD": {
     "pathSchema": "TD",
-    "title": "Distance per year per person"
+    "title": "Distance per year per person",
+    "yAxisTitle": "Kilometres"
   }
 }
