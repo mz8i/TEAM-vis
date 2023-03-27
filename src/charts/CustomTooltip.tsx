@@ -16,6 +16,7 @@ import { Dot, TooltipProps } from 'recharts';
 export type CustomTooltipProps = TooltipProps<number, string> & {
   renderHeader: (label: string) => ReactElement;
   numberFormat: (x: number) => string;
+  limitRows?: number;
 };
 
 export const CustomTooltip = ({
@@ -24,11 +25,16 @@ export const CustomTooltip = ({
   label,
   renderHeader,
   numberFormat,
+  limitRows,
 }: CustomTooltipProps) => {
   if (active && payload?.length) {
     const sorted = _.sortBy(payload, ({ value }) =>
       value == null ? -Infinity : -value
     );
+
+    const n = sorted.length;
+    const items = makeSummary(sorted, limitRows);
+    const shouldFlip = limitRows == null || n <= limitRows;
 
     const shapeSize = 12;
     return (
@@ -44,11 +50,29 @@ export const CustomTooltip = ({
         <Flipper flipKey={sorted.map((x) => x.value).join('+')}>
           <Table size="small">
             <TableBody>
-              {sorted.map(({ value, name, dataKey, color }) => {
+              {items.map(({ nMore, value, name, dataKey, color }) => {
+                if (nMore != null) {
+                  return (
+                    <TableRow>
+                      <TableCell></TableCell>
+                      <TableCell padding="none"></TableCell>
+                      <TableCell align="left">
+                        <Typography color="GrayText">
+                          {nMore} more...
+                        </Typography>
+                      </TableCell>
+                    </TableRow>
+                  );
+                }
                 if (value == null) return null;
 
                 return (
-                  <Flipped key={dataKey} flipId={dataKey}>
+                  <Flipped
+                    key={dataKey}
+                    flipId={dataKey}
+                    translate={shouldFlip}
+                    scale={shouldFlip}
+                  >
                     <TableRow>
                       <TableCell align="right">{numberFormat(value)}</TableCell>
                       <TableCell padding="none">
@@ -75,3 +99,19 @@ export const CustomTooltip = ({
 
   return null;
 };
+
+type Row<T> = T & { nMore?: number };
+function makeSummary<T>(items: T[], limit: number | undefined): Row<T>[] {
+  if (limit == null || items.length <= limit) return items as Row<T>[];
+
+  const n = items.length;
+  const bottom = 3;
+  const top = limit - bottom - 1;
+  const rest = n - bottom - top;
+
+  return [
+    ...items.slice(0, top),
+    { nMore: rest },
+    ...items.slice(-bottom),
+  ] as Row<T>[];
+}

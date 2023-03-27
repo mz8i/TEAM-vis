@@ -125,8 +125,13 @@ export const TimeSeriesChart = ({
                 <Typography variant="subtitle2">Year: {label}</Typography>
               )}
               numberFormat={numberFormat}
+              limitRows={15}
             />
           }
+          allowEscapeViewBox={{
+            x: true,
+            y: false,
+          }}
         />
 
         {groups.map((group) => {

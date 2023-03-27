@@ -182,8 +182,13 @@ export const ScenarioComparisonChart = ({
                 );
               }}
               numberFormat={numberFormat}
+              limitRows={15}
             />
           }
+          allowEscapeViewBox={{
+            x: true,
+            y: false,
+          }}
           cursor={false}
         />
 
