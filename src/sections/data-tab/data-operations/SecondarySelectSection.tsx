@@ -1,15 +1,18 @@
 import { Box, Stack } from '@mui/material';
-import { FC, Suspense, useMemo } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { FC, Suspense } from 'react';
+import { selectorFamily, useRecoilState, useRecoilValue } from 'recoil';
 
 import { SecondarySelect } from '../../../components/secondary-select/SecondarySelect';
 import { IDimPath, atPath } from '../../../data/dimension-paths';
-import { useConcurrentValue } from '../../../utils/recoil/use-concurrent-value';
+import { LeafDimensionValue } from '../../../data/dimensions';
+import { nullState } from '../../../utils/recoil/null-state';
+import { currentDataViewParamsState } from '../data-view-state';
 import {
+  domainStoreByDimensionState,
   leafStoreByDimensionState,
   metadataByDimensionState,
 } from '../dimensions/dimensions-state';
-import { DataViewParams, primaryFilteredTableState } from '../fact-state';
+import { ViewParams } from '../fact-ops-state';
 import { dataSelectionByDimPathState } from './data-operations-state';
 
 export const SecondarySelectSection: FC<{
@@ -28,38 +31,35 @@ export const SecondarySelectSection: FC<{
   );
 };
 
-function useValuesAfterPrimaryFilter(
-  path: IDimPath,
-  dataViewParams: DataViewParams
-) {
-  const { value: primaryFilteredTable, loadingNew } = useConcurrentValue(
-    primaryFilteredTableState(dataViewParams)
-  );
+// TODO: handle without hardcoding Tech dimension
+const allowedSecondaryAfterPrimaryState = selectorFamily({
+  key: 'allowedSecondaryAfterPrimary',
+  get:
+    ({ path, viewParams }: { path: IDimPath; viewParams: ViewParams }) =>
+    ({ get }) => {
+      const field = viewParams.primarySelect[0];
 
-  const allowedValues = useMemo(
-    () =>
-      primaryFilteredTable
-        .deflate((row) => atPath(row, path))
-        .distinct()
-        .toArray(),
-    [primaryFilteredTable]
-  );
+      if (field == null || field.joinList[0] !== 'Tech') return null;
 
-  return { allowedValues, loadingNew };
-}
+      const primarySelection = get(dataSelectionByDimPathState(field));
+
+      const technologies = get(domainStoreByDimensionState('Tech')).values;
+      const filteredTech = technologies.filter(
+        (t) =>
+          primarySelection.filter == null ||
+          primarySelection.filter.includes(atPath({ Tech: t }, field))
+      );
+
+      return Array.from(
+        new Set(filteredTech.map((t) => atPath({ Tech: t }, path)))
+      ) as LeafDimensionValue[];
+    },
+});
 
 function SecondarySubsection({ dimPath }: { dimPath: IDimPath }) {
   const dimension = dimPath.dimension;
   const domainStore = useRecoilValue(leafStoreByDimensionState(dimension));
   const values = domainStore.values;
-
-  // TODO: fix loading of allowed values
-
-  // const dataViewParams = useRecoilValue(currentDataViewParamsState);
-  // const { allowedValues, loadingNew } = useValuesAfterPrimaryFilter(
-  //   dimPath,
-  //   dataViewParams
-  // );
 
   const [selected, setSelected] = useRecoilState(
     dataSelectionByDimPathState(dimPath)
@@ -67,7 +67,16 @@ function SecondarySubsection({ dimPath }: { dimPath: IDimPath }) {
 
   const title = useRecoilValue(metadataByDimensionState(dimension)).Name;
 
-  const allowed = values; // loadingNew ? values : allowedValues;
+  const dataViewParams = useRecoilValue(currentDataViewParamsState);
+  const allowed =
+    useRecoilValue(
+      selected.aggregate
+        ? nullState
+        : allowedSecondaryAfterPrimaryState({
+            path: dimPath,
+            viewParams: dataViewParams.viewParams,
+          })
+    ) ?? values;
 
   const shown = allowed;
 
