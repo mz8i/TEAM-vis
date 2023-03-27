@@ -158,19 +158,36 @@ export const TimeSeriesChart = ({
             />
           );
         })}
-        {totalGroup && (
-          <Line
-            dataKey="Total"
-            name={totalGroup.GroupLabel}
-            strokeDasharray="5 5"
-            stroke="black"
-            dot={false}
-            isAnimationActive={false}
-            activeDot={false}
-            onMouseEnter={(e) => setChartHoveredKey(totalGroup.GroupKey)}
-            onMouseLeave={(e) => setChartHoveredKey(null)}
-          />
-        )}
+        {totalGroup &&
+          (() => {
+            const group = totalGroup;
+            const gkey = group.GroupKey;
+            const hovered = isHovered(gkey, hoveredKey);
+            const selected = isSelected(gkey, selectedKey);
+
+            const isOpaque = isFullOpacity(hovered, selected);
+
+            const fullOpacity = 0.9;
+
+            const style = groupStyleMapping(group);
+
+            return (
+              <Line
+                dataKey="Total"
+                name={totalGroup.GroupLabel}
+                strokeDasharray="5 5"
+                strokeOpacity={isOpaque ? fullOpacity : 0.5}
+                strokeWidth={isOpaque ? 2 : 1}
+                {...style}
+                stroke="black"
+                dot={false}
+                isAnimationActive={false}
+                activeDot={false}
+                onMouseEnter={(e) => setChartHoveredKey(totalGroup.GroupKey)}
+                onMouseLeave={(e) => setChartHoveredKey(null)}
+              />
+            );
+          })()}
         <Tooltip
           content={
             <CustomTooltip
