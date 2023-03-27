@@ -42,12 +42,12 @@ export const ChipSelect = <T,>({
 
         return (
           <Tooltip
+            key={label}
             title="Double-click to select one"
             enterDelay={1000}
             enterNextDelay={2000}
           >
             <Chip
-              key={label}
               label={label}
               variant={sel ? 'filled' : 'outlined'}
               sx={{
