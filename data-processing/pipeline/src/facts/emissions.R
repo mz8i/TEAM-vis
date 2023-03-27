@@ -1,43 +1,72 @@
 read_ed <- function(scenario_dir) {
-  read_csv(
-    scenario_dir %//% 'ED.csv',
-    col_types = cols_only(
-      Year = 'i',
-      TechID = 'i',
-      JSTypeID = 'i',
-      EmissionID = 'i',
-      ETypeID = 'c',
-      ED_Value = 'n',
-      ED_PFix = 'c',
-      ED_Unit = 'c'
+  read_xlsx(
+    scenario_dir %//% 'ED.xlsx',
+    col_types = c(
+      LCEIID = 'numeric',
+      TDVSID = 'numeric',
+      VEEMID = 'numeric',
+      ScenarioID = 'numeric',
+      CountryID = 'numeric',
+      Year = 'numeric',
+      TechID = 'numeric',
+      JSTypeID = 'numeric',
+      EmissionID = 'numeric',
+      ETypeID = 'text',
+      ED_Value = 'numeric',
+      ED_PFix = 'text',
+      ED_Unit = 'text'
     )
-  )
+  ) %>% 
+    select(
+      Year,
+      TechID,
+      JSTypeID,
+      EmissionID,
+      ETypeID,
+      ED_Value,
+      ED_PFix,
+      ED_Unit
+    )
 }
 
 preproc_ed <- function(ed) {
   ed %>%
+    mutate(Unit = paste0(ED_PFix, ED_Unit), .keep='unused') %>% 
     # sum over JSTypeID, we don't need it
     group_by(across(-c(JSTypeID, ED_Value))) %>% 
     summarise(
       ED_Value = sum(ED_Value)
     ) %>% 
-    mutate(Unit = paste0(ED_PFix, ED_Unit), .keep='unused') %>% 
     rename(Value = ED_Value)
 }
 
 read_et <- function(scenario_dir) {
-  read_csv(
-    scenario_dir %//% 'ET.csv',
-    col_types = cols_only(
-      Year = 'i',
-      TechID = 'i',
-      EmissionID = 'i',
-      ETypeID = 'c',
-      ET_Value = 'n',
-      ET_PFix = 'c',
-      ET_Unit = 'c'
+  read_xlsx(
+    scenario_dir %//% 'ET.xlsx',
+    col_types = c(
+      LCEIID = 'numeric',
+      TDVSID = 'numeric',
+      VEEMID = 'numeric',
+      ScenarioID = 'numeric',
+      CountryID = 'numeric',
+      Year = 'numeric',
+      TechID = 'numeric',
+      EmissionID = 'numeric',
+      ETypeID = 'text',
+      ET_Value = 'numeric',
+      ET_PFix = 'text',
+      ET_Unit = 'text'
     )
-  )
+  ) %>% 
+    select(
+      Year,
+      TechID,
+      EmissionID,
+      ETypeID,
+      ET_Value,
+      ET_PFix,
+      ET_Unit
+    )
 }
 
 preproc_et <- function(et) {
@@ -67,6 +96,7 @@ prepare_ghg <- function(emissions_df, emission_meta, scenario_id, scenario_dir, 
       etype <- sanitizeSlug(head$ETypeID)
       df %>% 
         verify_single_unit %>% 
+        select(-Unit) %>% 
         write_csv(
           fact_out_dir %//% str_glue("{scenario_id}__GHG__{etype}.csv"),
           na = ''
@@ -84,6 +114,7 @@ prepare_ap <- function(emissions_df, emission_meta, scenario_id, scenario_dir, f
       emission_ab <- sanitizeSlug(head$EmissionAB)
       df %>% 
         verify_single_unit %>% 
+        select(-Unit) %>% 
         write_csv(
           fact_out_dir %//% str_glue("{scenario_id}__AP__{emission_ab}.csv"),
           na = ''

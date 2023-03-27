@@ -1,16 +1,23 @@
 read_num_veh <- function(scenario_dir) {
   #' Specification for vehicle stock fact table
-  read_csv(
-    scenario_dir %//% 'Interface_VSM_NumVeh.csv',
-    col_types = cols_only(
-      # Scenario ID is wrong anyway
-      # ScenarioID = 'i',
-      Year = 'i',
-      TechID = 'i',
-      VehCatID = 'c',
-      NumVeh = 'n'
+  read_xlsx(
+    scenario_dir %//% 'Interface_VSM_NumVeh.xlsx',
+    col_types = c(
+      TDVSID = 'numeric',
+      ScenarioID = 'numeric',
+      CountryID = 'numeric',
+      Year = 'numeric',
+      TechID = 'numeric',
+      VehCatID = 'text',
+      NumVeh = 'numeric'
     )
-  )
+  ) %>% 
+    select(
+      Year,
+      TechID,
+      VehCatID,
+      NumVeh
+    )
 }
 
 prepare_num_veh <- function(scenario_id, scenario_dir, fact_out_dir, config) {

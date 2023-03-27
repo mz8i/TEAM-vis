@@ -3,6 +3,7 @@ library(readr, warn.conflicts = FALSE)
 library(testit)
 library(jsonlite)
 library(stringr)
+library(readxl)
 
 options(dplyr.summarise.inform = FALSE)
 

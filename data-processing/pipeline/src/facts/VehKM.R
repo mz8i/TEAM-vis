@@ -1,14 +1,25 @@
 read_veh_km <- function(scenario_dir) {
   #' Specification for the vehicle kilometres fact table
-  read_csv(
-    scenario_dir %//% 'Interface_VSM_VehKM.csv',
-    col_types = cols_only(
-      Year = 'i',
-      TechID = 'i',
-      JSTypeID = 'i',
-      VehKM = 'n',
+  read_xlsx(
+    scenario_dir %//% 'Interface_VSM_VehKM.xlsx',
+    col_types = c(
+      TDVSID = 'numeric',
+      ScenarioID = 'numeric',
+      CountryID = 'numeric',
+      Year = 'numeric',
+      TechID = 'numeric',
+      JSTypeID = 'numeric',
+      VehKM = 'numeric',
+      AveTripLength = 'numeric',
+      LoadFactor = 'numeric'
     )
-  )
+  ) %>% 
+    select(
+      Year,
+      TechID,
+      JSTypeID,
+      VehKM
+    )
 }
 
 prepare_veh_km <- function(scenario_id, scenario_dir, fact_out_dir, config) {
