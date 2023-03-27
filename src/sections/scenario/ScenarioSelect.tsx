@@ -22,7 +22,7 @@ export const ScenarioSelect = () => {
       >
         {allScenarios.values.map((sc) => (
           <MenuItem key={sc.AB} value={sc.AB}>
-            {sc.AB}
+            {sc.NA}
           </MenuItem>
         ))}
       </Select>
