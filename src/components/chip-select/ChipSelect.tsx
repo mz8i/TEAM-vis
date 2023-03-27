@@ -1,5 +1,5 @@
 import { Check, Clear } from '@mui/icons-material';
-import { Chip, Stack } from '@mui/material';
+import { Chip, Stack, Tooltip } from '@mui/material';
 import { toString } from 'lodash';
 import { MouseEvent, useCallback, useMemo } from 'react';
 
@@ -41,22 +41,28 @@ export const ChipSelect = <T,>({
         const label = getLabel(v);
 
         return (
-          <Chip
-            key={label}
-            label={label}
-            variant={sel ? 'filled' : 'outlined'}
-            sx={{
-              '&.MuiChip-filled': {
-                border: '1px solid transparent',
-              },
-            }}
-            color="primary"
-            role="switch"
-            aria-checked={sel}
-            onClick={(e) => handleClick(e, v)}
-            clickable
-            disabled={disabled}
-          />
+          <Tooltip
+            title="Double-click to select one"
+            enterDelay={1000}
+            enterNextDelay={2000}
+          >
+            <Chip
+              key={label}
+              label={label}
+              variant={sel ? 'filled' : 'outlined'}
+              sx={{
+                '&.MuiChip-filled': {
+                  border: '1px solid transparent',
+                },
+              }}
+              color="primary"
+              role="switch"
+              aria-checked={sel}
+              onClick={(e) => handleClick(e, v)}
+              clickable
+              disabled={disabled}
+            />
+          </Tooltip>
         );
       })}
       <Chip
