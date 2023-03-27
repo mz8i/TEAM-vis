@@ -31,7 +31,11 @@ export const SecondarySelect = <T,>({
     (disaggregate: boolean) => {
       onValue?.(
         produce(value, (draft) => {
-          draft.aggregate = !disaggregate;
+          const newAgg = !disaggregate;
+          draft.aggregate = newAgg;
+          if (newAgg) {
+            draft.filter = null;
+          }
         })
       );
     },
