@@ -54,7 +54,7 @@ export const DataStyleSelect = ({ viewParams }: { viewParams: ViewParams }) => {
         fullWidth
         variant="outlined"
         size="small"
-        value={selectedGroup.path.dimension}
+        value={selectedGroup?.path.dimension ?? ''}
         onChange={handleSelect}
       >
         {dimensions.map((dim) => (
