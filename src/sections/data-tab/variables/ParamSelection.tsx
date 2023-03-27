@@ -36,6 +36,18 @@ export const ParamSelection: FC<ParamSelectionProps> = ({ dimension }) => {
       // style
       variant="standard"
       size="small"
+      sx={{
+        '&.MuiInput-underline:before': {
+          borderBottomStyle: 'dotted',
+          borderBottomWidth: '1px',
+          borderBottomColor: (theme) => theme.palette.primary.main,
+        },
+        '&.MuiInput-underline:hover:before': {
+          borderBottomStyle: 'dotted',
+          borderBottomWidth: '2px',
+          borderBottomColor: (theme) => theme.palette.primary.main,
+        },
+      }}
     >
       {values.map((x) => (
         <MenuItem key={x.AB} value={x.AB}>
