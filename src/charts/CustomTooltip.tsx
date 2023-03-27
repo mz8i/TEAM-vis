@@ -1,3 +1,4 @@
+import { ArrowRight } from '@mui/icons-material';
 import {
   Box,
   Paper,
@@ -8,15 +9,18 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import _ from 'lodash';
+import _, { range } from 'lodash';
 import { ReactElement } from 'react';
 import { Flipped, Flipper } from 'react-flip-toolkit';
 import { Dot, TooltipProps } from 'recharts';
+import { Payload } from 'recharts/types/component/DefaultTooltipContent';
 
 export type CustomTooltipProps = TooltipProps<number, string> & {
   renderHeader: (label: string) => ReactElement;
   numberFormat: (x: number) => string;
   limitRows?: number;
+  selectedKey?: string;
+  hoveredKey?: string;
 };
 
 export const CustomTooltip = ({
@@ -26,14 +30,18 @@ export const CustomTooltip = ({
   renderHeader,
   numberFormat,
   limitRows,
+  selectedKey,
+  hoveredKey,
 }: CustomTooltipProps) => {
   if (active && payload?.length) {
     const sorted = _.sortBy(payload, ({ value }) =>
       value == null ? -Infinity : -value
     );
 
+    const keepKeys = [hoveredKey, selectedKey].filter(Boolean) as string[];
+    const keyFn = (x: Payload<number, string>) => x.dataKey as string;
     const n = sorted.length;
-    const items = makeSummary(sorted, limitRows);
+    const items = makeSummary(sorted, limitRows, keepKeys, keyFn);
     const shouldFlip = limitRows == null || n <= limitRows;
 
     const shapeSize = 12;
@@ -54,6 +62,7 @@ export const CustomTooltip = ({
                 if (nMore != null) {
                   return (
                     <TableRow>
+                      <TableCell padding="none"></TableCell>
                       <TableCell></TableCell>
                       <TableCell padding="none"></TableCell>
                       <TableCell align="left">
@@ -74,6 +83,14 @@ export const CustomTooltip = ({
                     scale={shouldFlip}
                   >
                     <TableRow>
+                      <TableCell padding="none" width="20px">
+                        {dataKey === hoveredKey && (
+                          <ArrowRight
+                            fontSize="small"
+                            sx={{ color: 'GrayText' }}
+                          />
+                        )}
+                      </TableCell>
                       <TableCell align="right">{numberFormat(value)}</TableCell>
                       <TableCell padding="none">
                         <svg height={shapeSize} width={shapeSize}>
@@ -85,7 +102,12 @@ export const CustomTooltip = ({
                           />
                         </svg>
                       </TableCell>
-                      <TableCell align="left">{name}</TableCell>
+                      <TableCell
+                        align="left"
+                        sx={{ fontWeight: dataKey === selectedKey ? 800 : 400 }}
+                      >
+                        {name}
+                      </TableCell>
                     </TableRow>
                   </Flipped>
                 );
@@ -101,17 +123,70 @@ export const CustomTooltip = ({
 };
 
 type Row<T> = T & { nMore?: number };
-function makeSummary<T>(items: T[], limit: number | undefined): Row<T>[] {
+function makeSummary<T>(
+  items: T[],
+  limit: number | undefined,
+  keepKeys?: string[],
+  keyFn?: (x: T) => string
+): Row<T>[] {
+  if (keepKeys != null && keepKeys.length > 2)
+    throw new Error(
+      'Tooltip summary currently only supports up to 2 special rows'
+    );
+
   if (limit == null || items.length <= limit) return items as Row<T>[];
 
+  let specialIndicesToKeep: number[] = [];
+
+  if (keyFn != null && keepKeys != null && keepKeys.length > 0) {
+    specialIndicesToKeep = items
+      .map((x, i) => [keyFn(x), i] as const)
+      .filter(([key]) => keepKeys.includes(key))
+      .map(([, i]) => i);
+  }
+
   const n = items.length;
+
+  const idealBottom = 3;
+  const idealTop = limit - idealBottom - 1;
+
+  // if some special indices fall into the top/bottom standard ranges, we can ignore them for now
+  const specialIndicesNotInTopBottom = specialIndicesToKeep.filter(
+    (i) => i >= idealTop && i < n - idealBottom
+  );
+  const specialMiddleSize = specialIndicesNotInTopBottom.length * 2 + 1;
+
   const bottom = 3;
-  const top = limit - bottom - 1;
+  const top = limit - bottom - specialMiddleSize;
   const rest = n - bottom - top;
 
-  return [
-    ...items.slice(0, top),
-    { nMore: rest },
-    ...items.slice(-bottom),
-  ] as Row<T>[];
+  // create a sorted array of indices that should be visible
+  const indicesToKeep = [
+    ...range(0, top),
+    ...specialIndicesNotInTopBottom,
+    ...range(n - bottom - 1, n - 1),
+  ];
+
+  const finalRows: Row<T>[] = [];
+
+  let previousIndex = null;
+  for (const index of indicesToKeep) {
+    if (previousIndex != null) {
+      const gapSize = index - previousIndex - 1;
+
+      // if there was a gap of just one, simply add that item because it's not worth adding an "N more..." row here
+      if (gapSize == 1) {
+        finalRows.push(items[index - 1] as Row<T>);
+      } else if (gapSize > 1) {
+        finalRows.push({ nMore: gapSize } as Row<T>);
+      }
+    }
+
+    // add current item
+    finalRows.push(items[index] as Row<T>);
+
+    previousIndex = index;
+  }
+
+  return finalRows;
 }

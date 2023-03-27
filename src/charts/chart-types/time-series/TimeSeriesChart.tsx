@@ -85,7 +85,15 @@ export const TimeSeriesChart = ({
   yAxisTitle,
   yAxisNumberFormat,
 }: TimeSeriesChartProps) => {
-  const keys = useMemo(() => groups.map((x) => x.GroupKey), [groups]);
+  const allGroups = useMemo(() => {
+    const ag = [...groups];
+    if (totalGroup != null) {
+      ag.push(totalGroup);
+    }
+    return ag;
+  }, [groups, totalGroup]);
+
+  const keys = useMemo(() => allGroups.map((x) => x.GroupKey), [allGroups]);
   const data = useMemo(
     () => processData(groups, totalGroup),
     [groups, totalGroup]
@@ -97,6 +105,7 @@ export const TimeSeriesChart = ({
   );
   const [hoveredKey, setHoveredKey] = useState<string | null>(null);
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
+  const [chartHoveredKey, setChartHoveredKey] = useState<string | null>(null);
 
   useLayoutEffect(() => {
     if (selectedKey && !keys.includes(selectedKey)) {
@@ -118,21 +127,6 @@ export const TimeSeriesChart = ({
           </Label>
         </YAxis>
         <CartesianGrid strokeDasharray="2 2" />
-        <Tooltip
-          content={
-            <CustomTooltip
-              renderHeader={(label) => (
-                <Typography variant="subtitle2">Year: {label}</Typography>
-              )}
-              numberFormat={numberFormat}
-              limitRows={15}
-            />
-          }
-          allowEscapeViewBox={{
-            x: true,
-            y: false,
-          }}
-        />
 
         {groups.map((group) => {
           const gkey = group.GroupKey;
@@ -157,6 +151,9 @@ export const TimeSeriesChart = ({
               strokeWidth={isOpaque ? 2 : 0}
               isAnimationActive={false}
               legendType="rect"
+              onMouseEnter={(e) => setChartHoveredKey(group.GroupKey)}
+              onMouseLeave={(e) => setChartHoveredKey(null)}
+              activeDot={false}
               {...style}
             />
           );
@@ -169,8 +166,28 @@ export const TimeSeriesChart = ({
             stroke="black"
             dot={false}
             isAnimationActive={false}
+            activeDot={false}
+            onMouseEnter={(e) => setChartHoveredKey(totalGroup.GroupKey)}
+            onMouseLeave={(e) => setChartHoveredKey(null)}
           />
         )}
+        <Tooltip
+          content={
+            <CustomTooltip
+              renderHeader={(label) => (
+                <Typography variant="subtitle2">Year: {label}</Typography>
+              )}
+              numberFormat={numberFormat}
+              limitRows={15}
+              selectedKey={selectedKey ?? undefined}
+              hoveredKey={chartHoveredKey ?? undefined}
+            />
+          }
+          allowEscapeViewBox={{
+            x: true,
+            y: false,
+          }}
+        />
 
         <Legend
           wrapperStyle={{

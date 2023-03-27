@@ -114,6 +114,7 @@ export const ScenarioComparisonChart = ({
 
   const [hoveredKey, setHoveredKey] = useState<string | null>(null);
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
+  const [chartHoveredKey, setChartHoveredKey] = useState<string | null>(null);
 
   useLayoutEffect(() => {
     if (selectedKey && !legendKeys.includes(selectedKey)) {
@@ -183,6 +184,8 @@ export const ScenarioComparisonChart = ({
               }}
               numberFormat={numberFormat}
               limitRows={15}
+              selectedKey={selectedKey ?? undefined}
+              hoveredKey={chartHoveredKey ?? undefined}
             />
           }
           allowEscapeViewBox={{
@@ -216,6 +219,8 @@ export const ScenarioComparisonChart = ({
               strokeWidth={isOpaque ? 2 : 0}
               isAnimationActive={false}
               legendType="rect"
+              onMouseEnter={(e) => setChartHoveredKey(group.GroupKey)}
+              onMouseLeave={(e) => setChartHoveredKey(null)}
               {...style}
             />
           );
