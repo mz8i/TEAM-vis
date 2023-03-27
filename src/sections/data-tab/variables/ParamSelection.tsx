@@ -37,6 +37,15 @@ export const ParamSelection: FC<ParamSelectionProps> = ({ dimension }) => {
       variant="standard"
       size="small"
       sx={{
+        '& .MuiInputBase-input': {
+          paddingRight: '18px !important',
+        },
+        '& .MuiSvgIcon-root': {
+          width: '24px',
+          marginRight: '-4px',
+          marginTop: '-2px',
+          color: 'gray',
+        },
         '&.MuiInput-underline:before': {
           borderBottomStyle: 'dotted',
           borderBottomWidth: '1px',
