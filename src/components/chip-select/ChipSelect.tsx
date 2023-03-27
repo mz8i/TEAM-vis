@@ -29,7 +29,7 @@ export const ChipSelect = <T,>({
         onSelected?.(toggleInArray(selected, v));
       }
     },
-    [selected]
+    [selected, onSelected]
   );
 
   const selectedSet = useMemo(() => new Set(selected), [selected]);
