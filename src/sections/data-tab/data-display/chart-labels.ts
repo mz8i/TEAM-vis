@@ -34,7 +34,6 @@ export function useNumberFormat(
     const val = divisor == null ? x : x / divisor;
     const suffix = divisor == null ? '' : ` ${divisorText ?? ''}`;
 
-    console.log(ctx, digits, val, suffix);
     return (
       val.toLocaleString(undefined, {
         minimumFractionDigits: digits,
