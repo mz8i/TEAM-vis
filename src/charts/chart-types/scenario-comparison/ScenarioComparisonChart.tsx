@@ -225,8 +225,8 @@ export const ScenarioComparisonChart = ({
                 setSelectedKey(gkey === selectedKey ? null : gkey);
                 e.stopPropagation();
               }}
-              fill={isOpaque ? style.fill : '#aaaaaa'}
-              stroke={isOpaque ? style.stroke : '#aaaaaa'}
+              fill={isOpaque ? style.fill ?? '#3182bd' : '#aaaaaa'}
+              stroke={isOpaque ? style.stroke ?? '#3182bd' : '#aaaaaa'}
             />
           );
         })}
