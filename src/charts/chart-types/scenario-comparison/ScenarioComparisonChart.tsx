@@ -202,7 +202,7 @@ export const ScenarioComparisonChart = ({
 
           const isOpaque = isFullOpacity(hovered, selected);
 
-          const fullOpacity = 0.9;
+          const fullOpacity = 1;
           const inactiveOpacity = 0.3;
 
           const style = groupStyleMapping(group);
@@ -216,7 +216,7 @@ export const ScenarioComparisonChart = ({
               barSize={70}
               fillOpacity={isOpaque ? fullOpacity : inactiveOpacity}
               strokeOpacity={isOpaque ? fullOpacity : 0.5}
-              strokeWidth={isOpaque ? 2 : 1}
+              strokeWidth={isOpaque ? 2 : 0}
               isAnimationActive={false}
               legendType="rect"
               onMouseEnter={(e) => setChartHoveredKey(group.GroupKey)}

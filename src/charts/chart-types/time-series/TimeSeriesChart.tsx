@@ -148,7 +148,7 @@ export const TimeSeriesChart = ({
               name={group.GroupLabel}
               fillOpacity={isOpaque ? fullOpacity : inactiveOpacity}
               strokeOpacity={isOpaque ? fullOpacity : 0.5}
-              strokeWidth={isOpaque ? 2 : 0.5}
+              strokeWidth={isOpaque ? 2 : 0}
               isAnimationActive={false}
               legendType="rect"
               onMouseEnter={(e) => setChartHoveredKey(gkey)}
@@ -182,7 +182,7 @@ export const TimeSeriesChart = ({
                 name={totalGroup.GroupLabel}
                 strokeDasharray="5 5"
                 strokeOpacity={isOpaque ? fullOpacity : 0.5}
-                strokeWidth={isOpaque ? 2 : 1}
+                strokeWidth={isOpaque ? 2 : 0}
                 stroke={'black'}
                 dot={false}
                 isAnimationActive={false}
