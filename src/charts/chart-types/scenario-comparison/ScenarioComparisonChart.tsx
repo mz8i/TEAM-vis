@@ -142,7 +142,7 @@ export const ScenarioComparisonChart = ({
 
   return (
     <ResponsiveContainer width="100%" height="100%">
-      <BarChart data={data}>
+      <BarChart data={data} onClick={() => setSelectedKey(null)}>
         <XAxis
           type="category"
           dataKey="ScenarioYear"
@@ -216,12 +216,17 @@ export const ScenarioComparisonChart = ({
               barSize={70}
               fillOpacity={isOpaque ? fullOpacity : inactiveOpacity}
               strokeOpacity={isOpaque ? fullOpacity : 0.5}
-              strokeWidth={isOpaque ? 2 : 0}
+              strokeWidth={isOpaque ? 2 : 1}
               isAnimationActive={false}
               legendType="rect"
               onMouseEnter={(e) => setChartHoveredKey(group.GroupKey)}
               onMouseLeave={(e) => setChartHoveredKey(null)}
-              {...style}
+              onClick={(x, y, e) => {
+                setSelectedKey(gkey === selectedKey ? null : gkey);
+                e.stopPropagation();
+              }}
+              fill={isOpaque ? style.fill : '#aaaaaa'}
+              stroke={isOpaque ? style.stroke : '#aaaaaa'}
             />
           );
         })}

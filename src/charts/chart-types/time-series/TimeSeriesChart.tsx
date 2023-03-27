@@ -115,7 +115,7 @@ export const TimeSeriesChart = ({
 
   return (
     <ResponsiveContainer width="100%" height="100%">
-      <ComposedChart data={data}>
+      <ComposedChart data={data} onClick={() => setSelectedKey(null)}>
         <XAxis dataKey="Year" axisLine={false} ticks={yearTicks} />
         <YAxis
           width={120}
@@ -142,19 +142,26 @@ export const TimeSeriesChart = ({
 
           return (
             <Area
-              key={group.GroupKey}
-              dataKey={group.GroupKey}
+              key={gkey}
+              dataKey={gkey}
               stackId="areas"
               name={group.GroupLabel}
               fillOpacity={isOpaque ? fullOpacity : inactiveOpacity}
               strokeOpacity={isOpaque ? fullOpacity : 0.5}
-              strokeWidth={isOpaque ? 2 : 0}
+              strokeWidth={isOpaque ? 2 : 0.5}
               isAnimationActive={false}
               legendType="rect"
-              onMouseEnter={(e) => setChartHoveredKey(group.GroupKey)}
+              onMouseEnter={(e) => setChartHoveredKey(gkey)}
               onMouseLeave={(e) => setChartHoveredKey(null)}
+              onClick={
+                ((_: any, e: any) => {
+                  setSelectedKey(gkey === selectedKey ? null : gkey);
+                  e.stopPropagation();
+                }) as any
+              }
               activeDot={false}
-              {...style}
+              fill={isOpaque ? style.fill : '#aaaaaa'}
+              stroke={isOpaque ? style.stroke : '#aaaaaa'}
             />
           );
         })}
@@ -169,8 +176,6 @@ export const TimeSeriesChart = ({
 
             const fullOpacity = 0.9;
 
-            const style = groupStyleMapping(group);
-
             return (
               <Line
                 dataKey="Total"
@@ -178,13 +183,16 @@ export const TimeSeriesChart = ({
                 strokeDasharray="5 5"
                 strokeOpacity={isOpaque ? fullOpacity : 0.5}
                 strokeWidth={isOpaque ? 2 : 1}
-                {...style}
-                stroke="black"
+                stroke={'black'}
                 dot={false}
                 isAnimationActive={false}
                 activeDot={false}
-                onMouseEnter={(e) => setChartHoveredKey(totalGroup.GroupKey)}
-                onMouseLeave={(e) => setChartHoveredKey(null)}
+                onMouseEnter={() => setChartHoveredKey(gkey)}
+                onMouseLeave={() => setChartHoveredKey(null)}
+                onClick={(_, e) => {
+                  setSelectedKey(gkey === selectedKey ? null : gkey);
+                  e.stopPropagation();
+                }}
               />
             );
           })()}
