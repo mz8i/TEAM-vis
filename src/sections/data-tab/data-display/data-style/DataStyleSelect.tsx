@@ -1,6 +1,8 @@
+import { Close } from '@mui/icons-material';
 import {
   Box,
   FormControl,
+  IconButton,
   InputLabel,
   MenuItem,
   Select,
@@ -9,11 +11,12 @@ import {
 import useId from '@mui/material/utils/useId';
 import { useCallback } from 'react';
 import { Dot } from 'recharts';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 
 import { dimensionMetadataByListState } from '../../dimensions/dimensions-state';
 import { ViewParams } from '../../fact-ops-state';
 import {
+  isSelectedStyleSetState,
   selectedStyleState,
   styleGroupsState,
   useCheckDataStyle,
@@ -25,6 +28,10 @@ export const DataStyleSelect = ({ viewParams }: { viewParams: ViewParams }) => {
   const [selectedGroup, setSelectedGroup] = useRecoilState(
     selectedStyleState(viewParams)
   );
+  const resetSelectedGroup = useResetRecoilState(
+    selectedStyleState(viewParams)
+  );
+  const isSet = useRecoilValue(isSelectedStyleSetState(viewParams));
 
   const handleSelect = useCallback(
     (e: SelectChangeEvent) => {
@@ -56,6 +63,17 @@ export const DataStyleSelect = ({ viewParams }: { viewParams: ViewParams }) => {
         size="small"
         value={selectedGroup?.path.dimension ?? ''}
         onChange={handleSelect}
+        endAdornment={
+          isSet ? (
+            <IconButton
+              title="Reset to default"
+              onClick={() => resetSelectedGroup()}
+              sx={{ marginRight: 2, padding: 0 }}
+            >
+              <Close fontSize="small" />
+            </IconButton>
+          ) : null
+        }
       >
         {dimensions.map((dim) => (
           <MenuItem key={dim} value={dim}>

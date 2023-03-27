@@ -1,5 +1,6 @@
 import { useLayoutEffect } from 'react';
 import {
+  DefaultValue,
   atomFamily,
   selectorFamily,
   useRecoilValue,
@@ -34,9 +35,42 @@ export const defaultStyleGroupState = selectorFamily({
     },
 });
 
-export const selectedStyleState = atomFamily({
-  key: 'selectedStyle',
+const selectedStyleStateImpl = atomFamily({
+  key: 'selectedStyleImpl',
   default: defaultStyleGroupState,
+});
+
+const isSelectedStyleSetStateImpl = atomFamily({
+  key: 'isSelectedStyleSetImpl',
+  default: false,
+});
+
+export const isSelectedStyleSetState = selectorFamily({
+  key: 'isSelectedStyleSet',
+  get:
+    (viewParams: ViewParams) =>
+    ({ get }) =>
+      get(isSelectedStyleSetStateImpl(viewParams)),
+});
+
+export const selectedStyleState = selectorFamily({
+  key: 'selectedStyle',
+  get:
+    (viewParams: ViewParams) =>
+    ({ get }) => {
+      return get(selectedStyleStateImpl(viewParams));
+    },
+  set:
+    (viewParams: ViewParams) =>
+    ({ set, reset }, newValue) => {
+      if (newValue instanceof DefaultValue) {
+        reset(selectedStyleStateImpl(viewParams));
+        set(isSelectedStyleSetStateImpl(viewParams), false);
+      } else {
+        set(selectedStyleStateImpl(viewParams), newValue);
+        set(isSelectedStyleSetStateImpl(viewParams), true);
+      }
+    },
 });
 
 export function useCheckDataStyle(viewParams: ViewParams) {
@@ -47,7 +81,7 @@ export function useCheckDataStyle(viewParams: ViewParams) {
   );
 
   useLayoutEffect(() => {
-    if (!allowedGroups.includes(selectedGroup)) {
+    if (!allowedGroups.map((x) => x.path).includes(selectedGroup.path)) {
       resetSelectedGroup();
     }
   }, [allowedGroups, selectedGroup]);
