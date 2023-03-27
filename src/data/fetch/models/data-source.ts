@@ -1,4 +1,4 @@
-import { dict, number, object, string } from '@recoiljs/refine';
+import { dict, number, object, string, voidable } from '@recoiljs/refine';
 
 import { MutableCheckerReturn } from '../../../utils/recoil/refine';
 
@@ -7,6 +7,8 @@ export const dataSourceChecker = object({
   title: string(),
   yAxisTitle: string(),
   numberFractionalDigits: number(),
+  numberDivisor: voidable(number()),
+  numberDivisorText: voidable(string()),
 });
 
 export type DataSourceConfig = MutableCheckerReturn<typeof dataSourceChecker>;

@@ -20,11 +20,19 @@ export function useNumberFormat(dataViewParams: DataViewParams) {
   const dataSourceConfig = useDataSourceConfig(dataViewParams);
 
   const nDigits = dataSourceConfig.numberFractionalDigits;
+  const divisor = dataSourceConfig.numberDivisor;
+  const divisorText = dataSourceConfig.numberDivisorText;
 
-  return (x: number) =>
-    x.toLocaleString(undefined, {
-      minimumFractionDigits: nDigits,
-      maximumFractionDigits: nDigits,
-      useGrouping: true,
-    });
+  return (x: number) => {
+    const val = divisor == null ? x : x / divisor;
+    const suffix = divisor == null ? '' : ` ${divisorText ?? ''}`;
+
+    return (
+      val.toLocaleString(undefined, {
+        minimumFractionDigits: nDigits,
+        maximumFractionDigits: nDigits,
+        useGrouping: true,
+      }) + suffix
+    );
+  };
 }
