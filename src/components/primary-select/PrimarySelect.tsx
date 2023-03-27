@@ -30,6 +30,9 @@ export const PrimarySelect = <T,>({
       onChange?.(
         produce(value, (draft) => {
           draft.aggregate = checked;
+          if (checked) {
+            draft.filter = null;
+          }
         })
       );
     },
@@ -62,7 +65,7 @@ export const PrimarySelect = <T,>({
           icon={<FunctionsRounded fontSize="small" />}
           checked={aggregate}
           onToggle={handleAggregate}
-          color="secondary"
+          color={aggregate ? 'primary' : 'default'}
         />
       )}
     </Stack>

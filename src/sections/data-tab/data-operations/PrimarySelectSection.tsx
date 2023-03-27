@@ -35,7 +35,7 @@ function PrimarySubsection({ dimPath }: { dimPath: IDimPath }) {
       value={selected}
       onChange={setSelected}
       getLabel={(x) => x.NA}
-      allowAggregate={false}
+      allowAggregate={true}
     />
   );
 }
