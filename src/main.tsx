@@ -15,6 +15,8 @@ import { RootRoute, rootLoader } from './routes/root';
 
 import './index.css';
 
+import { AppRoot } from './AppRoot';
+
 const router = createHashRouter(
   createRoutesFromElements(
     <Route loader={rootLoader} element={<RootRoute />}>
@@ -34,6 +36,8 @@ const router = createHashRouter(
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <AppRoot>
+      <RouterProvider router={router} />
+    </AppRoot>
   </React.StrictMode>
 );

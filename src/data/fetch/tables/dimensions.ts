@@ -8,7 +8,7 @@ import {
 } from '@recoiljs/refine';
 
 import { MutableCheckerReturn } from '../../../utils/recoil/refine';
-import { loadCsv } from '../load-file';
+import { queryCsv } from '../load-file';
 
 export type InputDimensionValue = {
   ID: string;
@@ -30,7 +30,7 @@ type DimensionValueList = MutableCheckerReturn<
 >;
 
 export async function loadDimensionValues(dimension: string) {
-  const data = await loadCsv(`data/tables/dimensions/${dimension}.csv`);
+  const data = await queryCsv(`data/tables/dimensions/${dimension}.csv`);
   const valueList = assertion(dimensionValueListChecker)(
     data
   ) as DimensionValueList;

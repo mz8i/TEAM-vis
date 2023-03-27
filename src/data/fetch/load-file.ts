@@ -1,49 +1,78 @@
-import axios from 'axios';
-import Papa, { ParseRemoteConfig } from 'papaparse';
+import Papa, { ParseWorkerConfig } from 'papaparse';
+import wretchLib from 'wretch';
+import AbortAddon from 'wretch/addons/abort';
+
+import { queryClient } from '../../query-client';
 
 const BASE_URL = import.meta.env.BASE_URL;
+export const wretch = wretchLib(BASE_URL, {}).addon(AbortAddon());
 
-const axiosInstance = axios.create({
-  baseURL: BASE_URL,
-});
-
-interface LoadOptions {
-  request?: Request;
-}
-
-export async function loadJson<T = unknown>(
+async function loadJson<T = unknown>(
   path: string,
-  { request }: LoadOptions
+  signal?: AbortSignal
 ): Promise<T> {
-  const res = await axiosInstance.get(path, {
-    signal: request?.signal,
-  });
-
-  return await res.data;
+  return wretch.options({ signal }).get(path).json();
 }
 
-export async function loadCsv(
-  path: string,
-  options: Partial<ParseRemoteConfig> = {}
-): Promise<unknown[]> {
-  const res = await axiosInstance.get(path, {
-    responseType: 'text',
-  });
+async function queryFile(
+  url: string,
+  signal: AbortSignal | undefined,
+  fileFunction: (url: string, signal?: AbortSignal) => Promise<any>
+) {
+  if (signal != null) {
+    signal.onabort = () => {
+      queryClient.cancelQueries({
+        queryKey: [url],
+      });
+    };
+  }
 
-  return new Promise((resolve, reject) => {
-    Papa.parse(res.data, {
+  return await queryClient.fetchQuery(
+    [url],
+    ({ queryKey: [url], signal }) => fileFunction(url, signal),
+    {
+      staleTime: Infinity,
+    }
+  );
+}
+
+export async function queryJson(
+  url: string,
+  signal?: AbortSignal
+): Promise<any> {
+  return queryFile(url, signal, loadJson);
+}
+
+async function loadCsv(
+  path: string,
+  options: Partial<ParseWorkerConfig> = {},
+  signal?: AbortSignal
+): Promise<any> {
+  const res = await wretch.options({ signal }).get(path).text();
+
+  return new Promise<any>((resolve, reject) => {
+    Papa.parse(res, {
       header: true,
       skipEmptyLines: true,
       worker: true,
+      download: false,
 
       complete(results) {
         resolve(results.data);
       },
-      error(error) {
-        reject(error);
+      error(err: any) {
+        reject(err);
       },
 
       ...options,
     });
   });
+}
+
+export async function queryCsv(
+  url: string,
+  options: Partial<ParseWorkerConfig> = {},
+  signal?: AbortSignal
+) {
+  return queryFile(url, signal, (url, signal) => loadCsv(url, options, signal));
 }

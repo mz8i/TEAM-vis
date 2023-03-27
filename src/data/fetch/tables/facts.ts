@@ -3,7 +3,7 @@ import { DataFrame, IDataFrame } from 'data-forge';
 import { interpolateDotFormatString } from '../../../utils/string-expression';
 import { DimensionValue } from '../../dimensions';
 import { ScenarioValue } from '../../scenario';
-import { loadCsv } from '../load-file';
+import { queryCsv } from '../load-file';
 import { DataSourceConfig } from '../models/data-source';
 
 export async function loadFactTable(
@@ -18,7 +18,7 @@ export async function loadFactTable(
 
   const filePath = `data/tables/facts/${scenario.ID}__${pathSchemaFormatted}.csv`;
 
-  const data = await loadCsv(filePath);
+  const data = await queryCsv(filePath);
   return (
     new DataFrame(data)
       .generateSeries({

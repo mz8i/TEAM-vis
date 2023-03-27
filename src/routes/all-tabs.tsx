@@ -4,7 +4,7 @@ import { object } from '@recoiljs/refine';
 import { Outlet, useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 
-import { loadJson } from '../data/fetch/load-file';
+import { queryJson } from '../data/fetch/load-file';
 import { allDataSourcesChecker } from '../data/fetch/models/data-source';
 import { allDataTabsChecker } from '../data/fetch/models/data-tab';
 import { allDataSourcesState } from '../sections/data-tab/data-source-state';
@@ -24,8 +24,8 @@ export const dataViewLoader: TypedLoaderFunction<DataViewData> = async ({
   request,
 }) => {
   return {
-    dataTabs: await loadJson('/config/data-tabs.json', { request }),
-    dataSources: await loadJson('/config/data-sources.json', { request }),
+    dataTabs: await queryJson('/config/data-tabs.json', request.signal),
+    dataSources: await queryJson('/config/data-sources.json', request.signal),
   };
 };
 

@@ -1,11 +1,11 @@
 import { Box, Divider, Link, Stack, Toolbar, Typography } from '@mui/material';
 import { array, number, object, string } from '@recoiljs/refine';
+import { useQuery } from '@tanstack/react-query';
 import { LoaderFunctionArgs, Outlet } from 'react-router';
 import { Link as RouterLink } from 'react-router-dom';
 
-import { AppRoot } from '../AppRoot';
 import { Logo } from '../components/Logo';
-import { loadJson } from '../data/fetch/load-file';
+import { queryJson } from '../data/fetch/load-file';
 import { configChecker } from '../data/fetch/models/config';
 import { allDimensionsMetaChecker } from '../data/fetch/models/dimensions-meta';
 import { configState } from '../root-state';
@@ -40,22 +40,29 @@ export const rootLoader = async ({
   request,
 }: LoaderFunctionArgs): Promise<RootLoaderData> => {
   return {
-    logos: await loadJson('/config/logos.json', { request }),
-    config: await loadJson('/config/config.json', { request }),
-    allDimensionsMeta: await loadJson('/config/dimensions-meta.json', {
-      request,
-    }),
+    logos: await queryJson('/config/logos.json', request.signal),
+    config: await queryJson('/config/config.json', request.signal),
+    allDimensionsMeta: await queryJson(
+      '/config/dimensions-meta.json',
+      request.signal
+    ),
   };
 };
 
 export const RootRoute = () => {
-  const { logos, config, allDimensionsMeta } =
-    useCheckedLoaderData(rootLoaderChecker);
+  const { data: logos } = useQuery(['/config/logos.json']);
+  const { data: config } = useQuery(['/config/config.json']);
+  const { data: allDimensionsMeta } = useQuery([
+    '/config/dimensions-meta.json',
+  ]);
 
   return (
-    <AppRoot>
-      <StateSetter value={config} state={configState} />
-      <StateSetter value={allDimensionsMeta} state={allDimensionsMetaState} />
+    <>
+      <StateSetter value={config as any} state={configState} />
+      <StateSetter
+        value={allDimensionsMeta as any}
+        state={allDimensionsMetaState}
+      />
       <Box display="flex" flexDirection="row" justifyContent="stretch">
         <Box height="100vh" width="400px" bgcolor="whitesmoke">
           <Stack direction="column" height="100%" divider={<Divider />}>
@@ -95,7 +102,7 @@ export const RootRoute = () => {
               </SidebarSection>
             </Box>
             <Box height={200} p={1}>
-              <Logos config={logos} />
+              <Logos config={logos as any} />
             </Box>
           </Stack>
         </Box>
@@ -103,7 +110,7 @@ export const RootRoute = () => {
           <Outlet />
         </Box>
       </Box>
-    </AppRoot>
+    </>
   );
 };
 
