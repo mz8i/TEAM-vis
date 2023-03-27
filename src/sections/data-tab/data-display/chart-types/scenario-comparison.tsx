@@ -15,6 +15,7 @@ import {
   FactTableParams,
   currentDataState,
 } from '../../fact-state';
+import { useYAxisTitle } from '../chart-labels';
 import { groupStyleMappingState } from '../data-style/data-style-state';
 
 export const ScenarioComparisonDataViewParams = ({
@@ -67,12 +68,15 @@ export function ScenarioComparisonDisplay({
 
   const config = useConfig();
 
+  const yAxisTitle = useYAxisTitle(dataViewParams);
+
   return (
     <ScenarioComparisonChart
       groups={data}
       groupStyleMapping={groupStyleMapping}
       scenarios={scenarios.values}
       years={[config.minYear, ...config.snapshotYears]}
+      yAxisTitle={yAxisTitle}
     />
   );
 }

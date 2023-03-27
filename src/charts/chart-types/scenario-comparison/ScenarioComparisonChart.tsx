@@ -1,8 +1,9 @@
 import { Typography } from '@mui/material';
-import { useLayoutEffect, useMemo, useState } from 'react';
+import { ReactNode, useLayoutEffect, useMemo, useState } from 'react';
 import {
   Bar,
   BarChart,
+  Label,
   Legend,
   ResponsiveContainer,
   Tooltip,
@@ -86,6 +87,7 @@ export interface ScenarioComparisonChartProps {
   groupStyleMapping: (g: ScenarioDataSeries) => any;
   scenarios: ScenarioValue[];
   years: number[];
+  yAxisTitle?: ReactNode;
 }
 
 export const ScenarioComparisonChart = ({
@@ -93,6 +95,7 @@ export const ScenarioComparisonChart = ({
   groupStyleMapping,
   scenarios,
   years,
+  yAxisTitle,
 }: ScenarioComparisonChartProps) => {
   const [minYear, ...snapshotYears] = years;
   const middleSnapshotYear =
@@ -161,7 +164,11 @@ export const ScenarioComparisonChart = ({
               maximumFractionDigits: 0,
             })
           }
-        />
+        >
+          <Label position="insideLeft" angle={-90}>
+            {yAxisTitle}
+          </Label>
+        </YAxis>
         <Tooltip
           content={
             <CustomTooltip

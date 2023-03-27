@@ -15,6 +15,7 @@ import {
   currentDataState,
   factTableState,
 } from '../../fact-state';
+import { useYAxisTitle } from '../chart-labels';
 import { groupStyleMappingState } from '../data-style/data-style-state';
 
 export const TimeSeriesDataViewParams = ({
@@ -113,11 +114,14 @@ export function TimeSeriesDisplay({
     [factTable]
   );
 
+  const yAxisTitle = useYAxisTitle(dataViewParams);
+
   return (
     <TimeSeriesChart
       groups={data}
       groupStyleMapping={groupStyleMapping}
       totalGroup={totalData ?? undefined}
+      yAxisTitle={yAxisTitle}
     />
   );
 }

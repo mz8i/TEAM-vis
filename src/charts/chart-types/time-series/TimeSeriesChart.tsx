@@ -1,10 +1,10 @@
 import { Typography } from '@mui/material';
-import { useLayoutEffect, useMemo, useState } from 'react';
+import { ReactNode, useLayoutEffect, useMemo, useState } from 'react';
 import {
   Area,
-  AreaChart,
   CartesianGrid,
   ComposedChart,
+  Label,
   Legend,
   Line,
   ResponsiveContainer,
@@ -72,12 +72,14 @@ export interface TimeSeriesChartProps {
   groups: TSDataSeries[];
   groupStyleMapping: (g: TSDataSeries) => any;
   totalGroup?: TSDataSeries;
+  yAxisTitle?: ReactNode;
 }
 
 export const TimeSeriesChart = ({
   groups,
   groupStyleMapping,
   totalGroup,
+  yAxisTitle,
 }: TimeSeriesChartProps) => {
   const keys = useMemo(() => groups.map((x) => x.GroupKey), [groups]);
   const data = useMemo(
@@ -110,7 +112,11 @@ export const TimeSeriesChart = ({
               maximumFractionDigits: 0,
             })
           }
-        />
+        >
+          <Label position="insideLeft" angle={-90}>
+            {yAxisTitle}
+          </Label>
+        </YAxis>
         <CartesianGrid strokeDasharray="2 2" />
         <Tooltip
           content={
