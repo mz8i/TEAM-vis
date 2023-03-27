@@ -116,6 +116,7 @@ export function TimeSeriesDisplay({
 
   const yAxisTitle = useYAxisTitle(dataViewParams);
   const numberFormat = useNumberFormat(dataViewParams);
+  const yAxisNumberFormat = useNumberFormat(dataViewParams, 'axis');
 
   return (
     <TimeSeriesChart
@@ -124,6 +125,7 @@ export function TimeSeriesDisplay({
       totalGroup={totalData ?? undefined}
       yAxisTitle={yAxisTitle}
       numberFormat={numberFormat}
+      yAxisNumberFormat={yAxisNumberFormat}
     />
   );
 }

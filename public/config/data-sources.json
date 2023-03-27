@@ -10,6 +10,7 @@
     "title": "Total vehicle kilometres",
     "yAxisTitle": "Vehicle-KM",
     "numberFractionalDigits": 2,
+    "yAxisFractionalDigits": 0,
     "numberDivisor": 1000000,
     "numberDivisorText": "mln"
   },

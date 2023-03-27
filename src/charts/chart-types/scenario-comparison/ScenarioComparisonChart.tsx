@@ -89,6 +89,7 @@ export interface ScenarioComparisonChartProps {
   years: number[];
   numberFormat: (x: number) => string;
   yAxisTitle?: ReactNode;
+  yAxisNumberFormat?: (x: number) => string;
 }
 
 export const ScenarioComparisonChart = ({
@@ -98,6 +99,7 @@ export const ScenarioComparisonChart = ({
   years,
   numberFormat,
   yAxisTitle,
+  yAxisNumberFormat,
 }: ScenarioComparisonChartProps) => {
   const [minYear, ...snapshotYears] = years;
   const middleSnapshotYear =
@@ -158,7 +160,11 @@ export const ScenarioComparisonChart = ({
           allowDuplicatedCategory={true}
           xAxisId="scenario"
         />
-        <YAxis width={120} axisLine={false} tickFormatter={numberFormat}>
+        <YAxis
+          width={120}
+          axisLine={false}
+          tickFormatter={yAxisNumberFormat ?? numberFormat}
+        >
           <Label position="insideLeft" angle={-90}>
             {yAxisTitle}
           </Label>

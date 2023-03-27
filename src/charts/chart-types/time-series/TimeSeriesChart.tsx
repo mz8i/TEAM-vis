@@ -74,6 +74,7 @@ export interface TimeSeriesChartProps {
   numberFormat: (x: number) => string;
   totalGroup?: TSDataSeries;
   yAxisTitle?: ReactNode;
+  yAxisNumberFormat?: (x: number) => string;
 }
 
 export const TimeSeriesChart = ({
@@ -82,6 +83,7 @@ export const TimeSeriesChart = ({
   numberFormat,
   totalGroup,
   yAxisTitle,
+  yAxisNumberFormat,
 }: TimeSeriesChartProps) => {
   const keys = useMemo(() => groups.map((x) => x.GroupKey), [groups]);
   const data = useMemo(
@@ -106,7 +108,11 @@ export const TimeSeriesChart = ({
     <ResponsiveContainer width="100%" height="100%">
       <ComposedChart data={data}>
         <XAxis dataKey="Year" axisLine={false} ticks={yearTicks} />
-        <YAxis width={120} axisLine={false} tickFormatter={numberFormat}>
+        <YAxis
+          width={120}
+          axisLine={false}
+          tickFormatter={yAxisNumberFormat ?? numberFormat}
+        >
           <Label position="insideLeft" angle={-90}>
             {yAxisTitle}
           </Label>

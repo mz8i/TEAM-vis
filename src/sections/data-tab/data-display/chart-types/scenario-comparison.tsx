@@ -70,6 +70,7 @@ export function ScenarioComparisonDisplay({
 
   const yAxisTitle = useYAxisTitle(dataViewParams);
   const numberFormat = useNumberFormat(dataViewParams);
+  const yAxisNumberFormat = useNumberFormat(dataViewParams, 'axis');
 
   return (
     <ScenarioComparisonChart
@@ -79,6 +80,7 @@ export function ScenarioComparisonDisplay({
       years={[config.minYear, ...config.snapshotYears]}
       yAxisTitle={yAxisTitle}
       numberFormat={numberFormat}
+      yAxisNumberFormat={yAxisNumberFormat}
     />
   );
 }

@@ -7,6 +7,7 @@ export const dataSourceChecker = object({
   title: string(),
   yAxisTitle: string(),
   numberFractionalDigits: number(),
+  yAxisFractionalDigits: voidable(number()),
   numberDivisor: voidable(number()),
   numberDivisorText: voidable(string()),
 });
