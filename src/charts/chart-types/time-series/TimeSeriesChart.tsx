@@ -71,6 +71,7 @@ function processData(
 export interface TimeSeriesChartProps {
   groups: TSDataSeries[];
   groupStyleMapping: (g: TSDataSeries) => any;
+  numberFormat: (x: number) => string;
   totalGroup?: TSDataSeries;
   yAxisTitle?: ReactNode;
 }
@@ -78,6 +79,7 @@ export interface TimeSeriesChartProps {
 export const TimeSeriesChart = ({
   groups,
   groupStyleMapping,
+  numberFormat,
   totalGroup,
   yAxisTitle,
 }: TimeSeriesChartProps) => {
@@ -104,15 +106,7 @@ export const TimeSeriesChart = ({
     <ResponsiveContainer width="100%" height="100%">
       <ComposedChart data={data}>
         <XAxis dataKey="Year" axisLine={false} ticks={yearTicks} />
-        <YAxis
-          width={120}
-          axisLine={false}
-          tickFormatter={(x: number) =>
-            x.toLocaleString(undefined, {
-              maximumFractionDigits: 0,
-            })
-          }
-        >
+        <YAxis width={120} axisLine={false} tickFormatter={numberFormat}>
           <Label position="insideLeft" angle={-90}>
             {yAxisTitle}
           </Label>
@@ -124,6 +118,7 @@ export const TimeSeriesChart = ({
               renderHeader={(label) => (
                 <Typography variant="subtitle2">Year: {label}</Typography>
               )}
+              numberFormat={numberFormat}
             />
           }
         />

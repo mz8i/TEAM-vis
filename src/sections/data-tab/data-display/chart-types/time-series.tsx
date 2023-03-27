@@ -15,7 +15,7 @@ import {
   currentDataState,
   factTableState,
 } from '../../fact-state';
-import { useYAxisTitle } from '../chart-labels';
+import { useNumberFormat, useYAxisTitle } from '../chart-labels';
 import { groupStyleMappingState } from '../data-style/data-style-state';
 
 export const TimeSeriesDataViewParams = ({
@@ -115,6 +115,7 @@ export function TimeSeriesDisplay({
   );
 
   const yAxisTitle = useYAxisTitle(dataViewParams);
+  const numberFormat = useNumberFormat(dataViewParams);
 
   return (
     <TimeSeriesChart
@@ -122,6 +123,7 @@ export function TimeSeriesDisplay({
       groupStyleMapping={groupStyleMapping}
       totalGroup={totalData ?? undefined}
       yAxisTitle={yAxisTitle}
+      numberFormat={numberFormat}
     />
   );
 }

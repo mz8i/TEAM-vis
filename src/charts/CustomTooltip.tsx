@@ -15,6 +15,7 @@ import { Dot, TooltipProps } from 'recharts';
 
 export type CustomTooltipProps = TooltipProps<number, string> & {
   renderHeader: (label: string) => ReactElement;
+  numberFormat: (x: number) => string;
 };
 
 export const CustomTooltip = ({
@@ -22,6 +23,7 @@ export const CustomTooltip = ({
   payload,
   label,
   renderHeader,
+  numberFormat,
 }: CustomTooltipProps) => {
   if (active && payload?.length) {
     const sorted = _.sortBy(payload, ({ value }) =>
@@ -48,14 +50,7 @@ export const CustomTooltip = ({
                 return (
                   <Flipped key={dataKey} flipId={dataKey}>
                     <TableRow>
-                      <TableCell align="right">
-                        {/* TODO: remove hardcoded number formatting */}
-                        {value.toLocaleString(undefined, {
-                          maximumFractionDigits: 2,
-                          minimumFractionDigits: 2,
-                          useGrouping: true,
-                        })}
-                      </TableCell>
+                      <TableCell align="right">{numberFormat(value)}</TableCell>
                       <TableCell padding="none">
                         <svg height={shapeSize} width={shapeSize}>
                           <Dot

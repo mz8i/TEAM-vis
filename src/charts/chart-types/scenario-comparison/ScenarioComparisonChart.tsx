@@ -87,6 +87,7 @@ export interface ScenarioComparisonChartProps {
   groupStyleMapping: (g: ScenarioDataSeries) => any;
   scenarios: ScenarioValue[];
   years: number[];
+  numberFormat: (x: number) => string;
   yAxisTitle?: ReactNode;
 }
 
@@ -95,6 +96,7 @@ export const ScenarioComparisonChart = ({
   groupStyleMapping,
   scenarios,
   years,
+  numberFormat,
   yAxisTitle,
 }: ScenarioComparisonChartProps) => {
   const [minYear, ...snapshotYears] = years;
@@ -156,15 +158,7 @@ export const ScenarioComparisonChart = ({
           allowDuplicatedCategory={true}
           xAxisId="scenario"
         />
-        <YAxis
-          width={120}
-          axisLine={false}
-          tickFormatter={(x: number) =>
-            x.toLocaleString(undefined, {
-              maximumFractionDigits: 0,
-            })
-          }
-        >
+        <YAxis width={120} axisLine={false} tickFormatter={numberFormat}>
           <Label position="insideLeft" angle={-90}>
             {yAxisTitle}
           </Label>
@@ -181,6 +175,7 @@ export const ScenarioComparisonChart = ({
                   </>
                 );
               }}
+              numberFormat={numberFormat}
             />
           }
           cursor={false}
