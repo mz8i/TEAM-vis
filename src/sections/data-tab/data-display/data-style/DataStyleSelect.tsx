@@ -51,6 +51,13 @@ export const DataStyleSelect = ({ viewParams }: { viewParams: ViewParams }) => {
   const labelId = `${id}-label`;
   const title = 'Color by';
 
+  const sanitizedSelection =
+    selectedGroup &&
+    (styleGroups.map((x) => x.path).includes(selectedGroup.path)
+      ? selectedGroup
+      : null);
+  const value = sanitizedSelection?.path.dimension ?? '';
+
   return (
     <FormControl fullWidth>
       <InputLabel id={labelId}>{title}</InputLabel>
@@ -61,7 +68,7 @@ export const DataStyleSelect = ({ viewParams }: { viewParams: ViewParams }) => {
         fullWidth
         variant="outlined"
         size="small"
-        value={selectedGroup?.path.dimension ?? ''}
+        value={value}
         onChange={handleSelect}
         endAdornment={
           isSet ? (

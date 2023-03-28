@@ -81,7 +81,10 @@ export function useCheckDataStyle(viewParams: ViewParams) {
   );
 
   useLayoutEffect(() => {
-    if (!allowedGroups.map((x) => x.path).includes(selectedGroup.path)) {
+    if (
+      selectedGroup == null ||
+      !allowedGroups.map((x) => x.path).includes(selectedGroup.path)
+    ) {
       resetSelectedGroup();
     }
   }, [allowedGroups, selectedGroup]);
