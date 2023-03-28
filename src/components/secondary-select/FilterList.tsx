@@ -15,7 +15,7 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import { toString } from 'lodash';
+import _, { toString } from 'lodash';
 import { useCallback, useMemo } from 'react';
 import { Flipped, Flipper } from 'react-flip-toolkit';
 
@@ -67,6 +67,8 @@ export const FilterList = <T,>({
     const label = getLabel(v);
     const key = getKey(v);
 
+    const controlDisabled = disabled || !allowedLookup.has(v);
+
     return (
       <Flipped key={key} flipId={key}>
         <Tooltip
@@ -76,8 +78,13 @@ export const FilterList = <T,>({
           disableInteractive
         >
           <FormControlLabel
-            disabled={disabled || !allowedLookup.has(v)}
-            onDoubleClick={(e) => onSelected?.([v])}
+            disabled={controlDisabled}
+            onDoubleClick={
+              controlDisabled
+                ? undefined
+                : (e) =>
+                    onSelected?.(_.union(_.difference(selected, allowed), [v]))
+            }
             control={
               <Checkbox
                 // data
@@ -157,25 +164,40 @@ export const FilterList = <T,>({
           <FormGroup>{sortedValues.map(renderOption)}</FormGroup>
         </Flipper>
       </Box>
-      <Box position="sticky" borderTop="1px solid gainsboro">
-        <Stack direction="row" justifyContent="end">
-          <Button
-            size="small"
-            disabled={disabled}
-            sx={{ textTransform: 'none', padding: 0 }}
-            onClick={() => onSelected?.([...values])}
-          >
-            All
-          </Button>
-          <Button
-            size="small"
-            disabled={disabled}
-            sx={{ textTransform: 'none', padding: 0 }}
-            onClick={() => onSelected?.([])}
-          >
-            None
-          </Button>
-        </Stack>
+      <Box
+        position="sticky"
+        minHeight="1.5em"
+        borderTop="1px solid gainsboro"
+        display="flex"
+        flexDirection="row"
+        justifyContent={disabled ? 'end' : 'space-between'}
+      >
+        {!disabled && (
+          <>
+            <Typography variant="subtitle2" component="div" color="GrayText">
+              {_.intersection(selected, allowed).length}/{allowed.length}
+            </Typography>
+
+            <Stack direction="row" justifyContent="end">
+              <Button
+                size="small"
+                disabled={disabled}
+                sx={{ textTransform: 'none', padding: 0 }}
+                onClick={() => onSelected?.(_.union(selected, allowed))}
+              >
+                All
+              </Button>
+              <Button
+                size="small"
+                disabled={disabled}
+                sx={{ textTransform: 'none', padding: 0 }}
+                onClick={() => onSelected?.(_.difference(selected, allowed))}
+              >
+                None
+              </Button>
+            </Stack>
+          </>
+        )}
       </Box>
     </FormControl>
   );
