@@ -20,12 +20,17 @@ function Outline({ ...props }: any) {
 export const ScenarioPanel = () => {
   return (
     <Box position="relative">
-      <Typography variant="h5">Scenario</Typography>
+      <Typography variant="h5" gutterBottom>
+        Scenario
+      </Typography>
+      <Typography variant="body2" paragraph>
+        Choose a single scenario, or compare all scenarios.
+      </Typography>
       <Suspense>
         <Box position="absolute" top={3} right={0}>
           <ScenarioCompare />
         </Box>
-        <Outline mt={3} height="200px">
+        <Outline mt={1}>
           <Stack direction="column" spacing={2}>
             <ScenarioSelect />
             <ScenarioDescription />

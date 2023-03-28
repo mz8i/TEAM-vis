@@ -64,7 +64,13 @@ export const RootRoute = () => {
         state={allDimensionsMetaState}
       />
       <Box display="flex" flexDirection="row" justifyContent="stretch">
-        <Box height="100vh" width="400px" bgcolor="whitesmoke">
+        <Box
+          minHeight="100vh"
+          height="100%"
+          width="400px"
+          flexShrink={0}
+          bgcolor="whitesmoke"
+        >
           <Stack direction="column" height="100%" divider={<Divider />}>
             <Toolbar>
               <Typography variant="h3" fontWeight={600}>
@@ -73,11 +79,11 @@ export const RootRoute = () => {
                   component={RouterLink}
                   to="/"
                 >
-                  TEAM
+                  TEAM-Kenya
                 </Link>
               </Typography>
             </Toolbar>
-            <Box height={300}>
+            <Box height={250}>
               <SidebarSection>
                 <ScenarioPanel />
               </SidebarSection>
@@ -106,7 +112,7 @@ export const RootRoute = () => {
             </Box>
           </Stack>
         </Box>
-        <Box sx={{ width: 'calc(100vw-400px)', height: '100vh' }}>
+        <Box sx={{ minWidth: '1400px', height: '100vh' }}>
           <Outlet />
         </Box>
       </Box>

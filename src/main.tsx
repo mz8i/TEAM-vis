@@ -15,11 +15,23 @@ import { RootRoute, rootLoader } from './routes/root';
 
 import './index.css';
 
+import { Container, Typography } from '@mui/material';
+
 import { AppRoot } from './AppRoot';
+
+export const GenericError = () => (
+  <Container maxWidth="md">
+    <Typography paragraph>An unexpected error occurred.</Typography>
+  </Container>
+);
 
 const router = createHashRouter(
   createRoutesFromElements(
-    <Route loader={rootLoader} element={<RootRoute />}>
+    <Route
+      loader={rootLoader}
+      element={<RootRoute />}
+      errorElement={<GenericError />}
+    >
       <Route
         path="/"
         loader={() => {
@@ -27,8 +39,16 @@ const router = createHashRouter(
         }}
       ></Route>
       <Route path="about" element={<AboutRoute />} />
-      <Route loader={dataViewLoader} element={<AllTabsRoute />}>
-        <Route path=":tab" element={<DataTabRoute />} />
+      <Route
+        loader={dataViewLoader}
+        element={<AllTabsRoute />}
+        errorElement={<GenericError />}
+      >
+        <Route
+          path=":tab"
+          element={<DataTabRoute />}
+          errorElement={<GenericError />}
+        />
       </Route>
     </Route>
   )
