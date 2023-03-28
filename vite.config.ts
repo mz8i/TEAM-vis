@@ -13,7 +13,7 @@ export default defineConfig({
       filter: (url) => url.startsWith('http://192'),
     }),
   ],
-  base: '/TEAM-vis/',
+  base: '/team-kenya/',
   server: {
     open: true,
     host: '0.0.0.0',
