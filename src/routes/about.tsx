@@ -1,12 +1,21 @@
 import { Container, Toolbar, Typography } from '@mui/material';
+import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
+import { LoaderFunctionArgs, useLoaderData } from 'react-router';
 
-import AboutPage from '../text/AboutPage.mdx';
+import { queryText } from '../data/fetch/load-file';
 import { AppLink } from '../utils/nav';
 
+export function aboutRouteLoader({ request }: LoaderFunctionArgs) {
+  return queryText('/text/AboutPage.md', request.signal);
+}
+
 export const AboutRoute = () => {
+  const markdown = useLoaderData() as string;
+
   return (
     <Container maxWidth="md">
-      <AboutPage
+      <ReactMarkdown
+        children={markdown}
         components={{
           h1: ({ children }) => (
             <Toolbar disableGutters>

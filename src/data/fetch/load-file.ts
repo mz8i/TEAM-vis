@@ -36,6 +36,17 @@ async function queryFile(
   );
 }
 
+async function loadText(url: string, signal?: AbortSignal) {
+  return wretch.options({ signal }).get(url).text();
+}
+
+export async function queryText(
+  url: string,
+  signal?: AbortSignal
+): Promise<string> {
+  return queryFile(url, signal, loadText);
+}
+
 export async function queryJson(
   url: string,
   signal?: AbortSignal

@@ -31,6 +31,7 @@
     "react-dom": "^18.2.0",
     "react-error-boundary": "^3.1.4",
     "react-flip-toolkit": "^7.0.17",
+    "react-markdown": "^8.0.7",
     "react-reverse-portal": "^2.1.1",
     "react-router": "^6.8.1",
     "react-router-dom": "^6.8.1",

@@ -1,21 +1,20 @@
 import { Box, Divider, Link, Stack, Toolbar, Typography } from '@mui/material';
 import { array, number, object, string } from '@recoiljs/refine';
 import { useQuery } from '@tanstack/react-query';
+import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
 import { LoaderFunctionArgs, Outlet } from 'react-router';
 import { Link as RouterLink } from 'react-router-dom';
 
 import { Logo } from '../components/Logo';
-import { queryJson } from '../data/fetch/load-file';
+import { queryJson, queryText } from '../data/fetch/load-file';
 import { configChecker } from '../data/fetch/models/config';
 import { allDimensionsMetaChecker } from '../data/fetch/models/dimensions-meta';
 import { configState } from '../root-state';
 import { allDimensionsMetaState } from '../sections/data-tab/dimensions/dimensions-state';
 import { ScenarioPanel } from '../sections/scenario/ScenarioPanel';
-import AboutSidebar from '../text/AboutSidebar.mdx';
 import { AppLink } from '../utils/nav';
 import { StateSetter } from '../utils/recoil/StateSetter';
 import { MutableCheckerReturn } from '../utils/recoil/refine';
-import { useCheckedLoaderData } from '../utils/router';
 
 const logosConfigChecker = array(
   object({
@@ -32,6 +31,7 @@ const rootLoaderChecker = object({
   logos: logosConfigChecker,
   config: configChecker,
   allDimensionsMeta: allDimensionsMetaChecker,
+  aboutMarkdown: string(),
 });
 
 type RootLoaderData = MutableCheckerReturn<typeof rootLoaderChecker>;
@@ -46,6 +46,7 @@ export const rootLoader = async ({
       '/config/dimensions-meta.json',
       request.signal
     ),
+    aboutMarkdown: await queryText('/text/AboutSidebar.md', request.signal),
   };
 };
 
@@ -55,6 +56,7 @@ export const RootRoute = () => {
   const { data: allDimensionsMeta } = useQuery([
     '/config/dimensions-meta.json',
   ]);
+  const { data: aboutMarkdown } = useQuery<string>(['/text/AboutSidebar.md']);
 
   return (
     <>
@@ -72,14 +74,14 @@ export const RootRoute = () => {
           bgcolor="whitesmoke"
         >
           <Stack direction="column" height="100%" divider={<Divider />}>
-            <Toolbar>
+            <Toolbar sx={{ mb: '-1px' }}>
               <Typography variant="h3" fontWeight={600}>
                 <Link
                   sx={{ textDecoration: 'none' }}
                   component={RouterLink}
                   to="/"
                 >
-                  TEAM-Kenya
+                  TEAM Kenya
                 </Link>
               </Typography>
             </Toolbar>
@@ -91,7 +93,8 @@ export const RootRoute = () => {
             <Box flexGrow={1}>
               <SidebarSection>
                 <Typography variant="h5">About</Typography>
-                <AboutSidebar
+                <ReactMarkdown
+                  children={aboutMarkdown!}
                   components={{
                     a: ({ href, title, children }) =>
                       href ? (
