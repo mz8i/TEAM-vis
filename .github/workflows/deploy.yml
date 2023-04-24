@@ -70,9 +70,9 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: data
-          path: data-output.tar.gz
+          path: data-artifact
       - name: Extract Data
-        run: tar xzf data-output.tar.gz --directory=dist/data
+        run: tar xzf data-artifact/data-output.tar.gz --directory=dist/data
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@4.1.4
