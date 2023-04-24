@@ -35,11 +35,13 @@ jobs:
           TEAM_OUT_DIR: ${{ github.workspace }}/data-processing/data-output
         working-directory: data-processing/pipeline
         run: Rscript run.R
+      - name: Compress output files
+        run: tar czf data-output.tar.gz --directory=data-processing/data-output .
       - name: Upload data artifact
         uses: actions/upload-artifact@v3
         with:
           name: data
-          path: data-processing/data-output/
+          path: data-output.tar.gz
 
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -68,7 +70,9 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: data
-          path: dist/data
+          path: data-output.tar.gz
+      - name: Extract Data
+        run: tar xzf data-output.tar.gz --directory=dist/data
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@4.1.4
