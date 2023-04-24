@@ -31,8 +31,8 @@ jobs:
 
       - name: Run pipeline
         env:
-          TEAM_IN_DIR: ${{ env.GITHUB_WORKSPACE }}/data-processing/data-input
-          TEAM_OUT_DIR: ${{ env.GITHUB_WORKSPACE }}/data-processing/data-output
+          TEAM_IN_DIR: ${{ github.workspace }}/data-processing/data-input
+          TEAM_OUT_DIR: ${{ github.workspace }}/data-processing/data-output
         working-directory: data-processing/pipeline
         run: Rscript run.R
       - name: Upload data artifact
