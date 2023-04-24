@@ -39,7 +39,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: data
-          path: data-processsing/data-output/
+          path: data-processing/data-output/
 
   build-and-deploy:
     runs-on: ubuntu-latest
